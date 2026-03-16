@@ -1,0 +1,7 @@
+interface:
+  display_name: "Speckit PRD Workflow"
+  short_description: "Run Speckit from the PRD with an intake checklist."
+  default_prompt: "Use $speckit-prd-workflow to extract requirements from docs/prd.md, prepare the startup checklist, and continue the local Speckit workflow."
+
+policy:
+  allow_implicit_invocation: true
