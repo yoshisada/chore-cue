@@ -22,7 +22,7 @@ services:
       -c hot_standby=on
       -c max_connections=256
     volumes:
-      - ./.docker/pgdb:/var/lib/postgresql/data
+      - pgdb-data:/var/lib/postgresql/data
       - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   migrate:
@@ -73,3 +73,6 @@ services:
       - ZERO_UPSTREAM_MAX_CONNS=32
     ports:
       - "4948:4848"
+
+volumes:
+  pgdb-data:
