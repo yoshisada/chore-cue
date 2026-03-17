@@ -23,3 +23,7 @@ Feature specs must prefer the smallest coherent cross-platform workflow that sol
 ## 6. Write Testable Product Specs
 
 Every new specification must include user-visible scenarios, explicit functional requirements, at least one key entity, and measurable or falsifiable success criteria. Placeholder language such as `TBD` is not sufficient once a feature enters active specification work.
+
+## 7. Maintain Coverage Discipline
+
+The repository must maintain at least 80% automated test coverage at all times. Any change that would drop effective coverage below that threshold must add or update tests as part of the same work before it is considered complete.

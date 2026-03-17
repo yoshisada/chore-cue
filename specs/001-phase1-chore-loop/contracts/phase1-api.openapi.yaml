@@ -1,0 +1,276 @@
+openapi: 3.1.0
+info:
+  title: ChoreCue Phase 1 API Contract
+  version: 0.1.0
+  description: >
+    Contract for the Phase 1 shared chore loop. This defines the minimum backend
+    interfaces required to create chores, review due states, record completions,
+    and send polite bumps for a very small household.
+servers:
+  - url: https://api.chorecue.local
+paths:
+  /households/{householdId}/chores:
+    get:
+      summary: List chores for a household grouped by due state
+      parameters:
+        - $ref: '#/components/parameters/HouseholdId'
+      responses:
+        '200':
+          description: Household chore summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChoreListResponse'
+    post:
+      summary: Create a new chore
+      parameters:
+        - $ref: '#/components/parameters/HouseholdId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChoreRequest'
+      responses:
+        '201':
+          description: Chore created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chore'
+  /households/{householdId}/chores/{choreId}:
+    patch:
+      summary: Update or archive an existing chore
+      parameters:
+        - $ref: '#/components/parameters/HouseholdId'
+        - $ref: '#/components/parameters/ChoreId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateChoreRequest'
+      responses:
+        '200':
+          description: Chore updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chore'
+  /households/{householdId}/chores/{choreId}/completions:
+    post:
+      summary: Mark a chore complete
+      parameters:
+        - $ref: '#/components/parameters/HouseholdId'
+        - $ref: '#/components/parameters/ChoreId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - completedByMemberId
+              properties:
+                completedByMemberId:
+                  type: string
+      responses:
+        '201':
+          description: Completion recorded and chore due state refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chore'
+  /households/{householdId}/chores/{choreId}/bumps:
+    post:
+      summary: Send a polite bump for a chore
+      parameters:
+        - $ref: '#/components/parameters/HouseholdId'
+        - $ref: '#/components/parameters/ChoreId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - senderMemberId
+              properties:
+                senderMemberId:
+                  type: string
+      responses:
+        '201':
+          description: Bump accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BumpEvent'
+        '429':
+          description: Daily bump limit reached for sender
+components:
+  parameters:
+    HouseholdId:
+      name: householdId
+      in: path
+      required: true
+      schema:
+        type: string
+    ChoreId:
+      name: choreId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    ChoreListResponse:
+      type: object
+      required:
+        - overdue
+        - due
+        - upcoming
+      properties:
+        overdue:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chore'
+        due:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chore'
+        upcoming:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chore'
+    Chore:
+      type: object
+      required:
+        - choreId
+        - title
+        - category
+        - assigneeMemberId
+        - recurrenceRule
+        - status
+      properties:
+        choreId:
+          type: string
+        title:
+          type: string
+        description:
+          type:
+            - string
+            - 'null'
+        category:
+          type: string
+        assigneeMemberId:
+          type: string
+        photoAssetId:
+          type:
+            - string
+            - 'null'
+        lastCompletedAt:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        nextDueAt:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        dueBucket:
+          type: string
+          enum: [overdue, due, upcoming]
+        status:
+          type: string
+          enum: [active, archived]
+        recurrenceRule:
+          $ref: '#/components/schemas/RecurrenceRule'
+    RecurrenceRule:
+      type: object
+      required:
+        - ruleType
+      properties:
+        ruleType:
+          type: string
+          enum: [interval_days, weekly_day, daily_time]
+        intervalDays:
+          type:
+            - integer
+            - 'null'
+          minimum: 1
+        dayOfWeek:
+          type:
+            - string
+            - 'null'
+          enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday, null]
+        timeOfDay:
+          type:
+            - string
+            - 'null'
+          description: Local household time in HH:MM format
+    CreateChoreRequest:
+      type: object
+      required:
+        - title
+        - category
+        - assigneeMemberId
+        - recurrenceRule
+      properties:
+        title:
+          type: string
+        description:
+          type:
+            - string
+            - 'null'
+        category:
+          type: string
+        assigneeMemberId:
+          type: string
+        photoAssetId:
+          type:
+            - string
+            - 'null'
+        recurrenceRule:
+          $ref: '#/components/schemas/RecurrenceRule'
+    UpdateChoreRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type:
+            - string
+            - 'null'
+        category:
+          type: string
+        assigneeMemberId:
+          type: string
+        photoAssetId:
+          type:
+            - string
+            - 'null'
+        recurrenceRule:
+          $ref: '#/components/schemas/RecurrenceRule'
+        status:
+          type: string
+          enum: [active, archived]
+    BumpEvent:
+      type: object
+      required:
+        - bumpEventId
+        - choreId
+        - senderMemberId
+        - recipientMemberId
+        - sentAt
+      properties:
+        bumpEventId:
+          type: string
+        choreId:
+          type: string
+        senderMemberId:
+          type: string
+        recipientMemberId:
+          type: string
+        sentAt:
+          type: string
+          format: date-time
