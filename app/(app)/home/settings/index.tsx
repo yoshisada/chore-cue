@@ -40,7 +40,7 @@ export function ProfileSettingsPage() {
   const Container = isWeb ? YStack : ScrollView
 
   return (
-    <Container flex={1} {...(!isWeb && { contentContainerStyle: { paddingBottom: insets.bottom + 40 } })}>
+    <Container flex={1} bg="$background" {...(!isWeb && { contentContainerStyle: { paddingBottom: insets.bottom + 40 } })}>
       <PageContainer>
         <YStack gap="$6" py="$5">
           {/* Hero — profile card */}
