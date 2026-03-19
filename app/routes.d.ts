@@ -16,12 +16,12 @@ declare module 'one' {
         | `/(app)/home/(tabs)`
         | `/(app)/home/(tabs)/feed`
         | `/(app)/home/(tabs)/feed/`
+        | `/(app)/home/(tabs)/members`
         | `/(app)/home/feed`
         | `/(app)/home/feed/`
+        | `/(app)/home/members`
         | `/(app)/home/settings`
         | `/(app)/home/settings/`
-        | `/(app)/home/settings/blocked-users`
-        | `/(app)/home/settings/edit-profile`
         | `/_sitemap`
         | `/auth`
         | `/auth/login`
@@ -30,12 +30,12 @@ declare module 'one' {
         | `/home/(tabs)`
         | `/home/(tabs)/feed`
         | `/home/(tabs)/feed/`
+        | `/home/(tabs)/members`
         | `/home/feed`
         | `/home/feed/`
+        | `/home/members`
         | `/home/settings`
         | `/home/settings/`
-        | `/home/settings/blocked-users`
-        | `/home/settings/edit-profile`
       DynamicRoutes: 
         | `/(app)/auth/signup/${OneRouter.SingleRoutePart<T>}`
         | `/auth/signup/${OneRouter.SingleRoutePart<T>}`

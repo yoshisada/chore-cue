@@ -17,7 +17,6 @@ import { ThemeSwitch } from '~/interface/theme/ThemeSwitch'
 import { NavigationTabs } from './NavigationTabs'
 
 export const MainHeader = () => {
-  const { user } = useAuth()
   return (
     <ScrollHeader>
       <PageContainer>
@@ -43,27 +42,6 @@ export const MainHeader = () => {
               </View>
             </XStack>
 
-            <XStack gap="$2.5" items="center" display="none" $md={{ display: 'flex' }}>
-              {user && (
-                <Button circular cursor="pointer">
-                  <Avatar
-                    disableBorder
-                    size={28}
-                    image={user.image}
-                    name={user.name ?? 'User'}
-                  />
-                </Button>
-              )}
-
-              <ThemeSwitch />
-              <Button
-                circular
-                onPress={() => router.push('/home/settings')}
-                icon={<GearIcon size={18} />}
-                aria-label="Settings"
-              />
-            </XStack>
-
             <MainHeaderMenu />
           </XStack>
         </YStack>
@@ -86,7 +64,8 @@ export const MainHeaderMenu = memo(() => {
       <Button
         variant="transparent"
         circular
-        icon={<ListIcon size="$1" />}
+        minHeight={0}
+        icon={<ListIcon size="$1" color="$color" />}
         aria-label="Menu"
         onPress={() => setOpen(true)}
         $md={{ display: 'none' }}
@@ -119,11 +98,12 @@ export const MainHeaderMenu = memo(() => {
             <YStack flex={1} p="$3" gap="$2">
               <XStack
                 p="$3"
-                rounded="$4"
                 gap="$3"
                 items="center"
-                hoverStyle={{ bg: '$color3' }}
-                pressStyle={{ bg: '$color4' }}
+                borderBottomWidth={1}
+                borderBottomColor="$borderColor"
+                hoverStyle={{ bg: '$color2' }}
+                pressStyle={{ bg: '$color3' }}
                 cursor="pointer"
                 onPress={() => {
                   setOpen(false)
@@ -131,21 +111,22 @@ export const MainHeaderMenu = memo(() => {
                 }}
               >
                 <GearIcon />
-                <H3 size="$3">Settings</H3>
+                <H3 size="$3" fontFamily="$body">Settings</H3>
               </XStack>
 
               <XStack
                 p="$3"
-                rounded="$4"
                 gap="$3"
                 items="center"
-                hoverStyle={{ bg: '$color3' }}
-                pressStyle={{ bg: '$color4' }}
+                borderBottomWidth={1}
+                borderBottomColor="$borderColor"
+                hoverStyle={{ bg: '$color2' }}
+                pressStyle={{ bg: '$color3' }}
                 cursor="pointer"
                 onPress={handleLogout}
               >
                 <DoorIcon />
-                <H3 size="$3">Logout</H3>
+                <H3 size="$3" fontFamily="$body">Logout</H3>
               </XStack>
             </YStack>
 

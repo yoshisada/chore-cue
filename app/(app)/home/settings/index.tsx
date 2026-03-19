@@ -1,160 +1,130 @@
-import { Link, type Href } from 'one'
-import { Linking } from 'react-native'
-import { isWeb, ScrollView, SizableText, View, XStack, YStack } from 'tamagui'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { ScrollView, Separator, SizableText, XStack, YStack, isWeb } from 'tamagui'
 
-import { APP_NAME_LOWERCASE, DOMAIN } from '~/constants/app'
+import { APP_NAME_LOWERCASE } from '~/constants/app'
+import { useAuth } from '~/features/auth/client/authClient'
+import { useHouseholdContext } from '~/features/auth/client/useHouseholdContext'
 import { useLogout } from '~/features/auth/useLogout'
-import { CaretRightIcon } from '~/interface/icons/phosphor/CaretRightIcon'
-import { DoorIcon } from '~/interface/icons/phosphor/DoorIcon'
-import { UserIcon } from '~/interface/icons/phosphor/UserIcon'
-import { PageLayout } from '~/interface/pages/PageLayout'
-import { SepHeading } from '~/interface/text/Headings'
+import { Avatar } from '~/interface/avatars/Avatar'
+import { Button } from '~/interface/buttons/Button'
+import { PageContainer } from '~/interface/layout/PageContainer'
+import { H1 } from '~/interface/text/Headings'
+import { ThemeSwitch, useToggleTheme } from '~/interface/theme/ThemeSwitch'
 
-import type { IconComponent } from '~/interface/icons/types'
-
-interface SettingItem {
-  id: string
-  title: string
-  icon?: IconComponent
-  onPress?: () => void
-  href?: Href
-  external?: boolean
-}
-
-interface SettingSection {
-  title: string
-  items: SettingItem[]
-}
-
-function SettingRow({ item }: { item: SettingItem }) {
-  const Icon = item.icon
-
-  const content = (
-    <XStack
-      cursor="pointer"
-      height={56}
-      px="$4"
-      items="center"
-      justify="space-between"
-      hoverStyle={{ bg: '$color2' }}
-      {...(item.onPress && { onPress: item.onPress })}
+function SectionLabel({ children }: { children: string }) {
+  return (
+    <SizableText
+      fontFamily="$body"
+      size="$2"
+      fontWeight="600"
+      letterSpacing={3}
+      textTransform="uppercase"
+      color="$color8"
     >
-      <XStack gap="$3" items="center" flex={1}>
-        {Icon && (
-          <View width={24} items="center" justify="center">
-            <Icon size={20} color="$color11" />
-          </View>
-        )}
-        <SizableText size="$5">{item.title}</SizableText>
-      </XStack>
-      <CaretRightIcon size={16} color="$color8" />
-    </XStack>
+      {children}
+    </SizableText>
   )
-
-  if (item.onPress) {
-    return content
-  }
-
-  if (item.href) {
-    if (item.external && !isWeb) {
-      return (
-        <XStack
-          cursor="pointer"
-          height={56}
-          px="$4"
-          items="center"
-          justify="space-between"
-          hoverStyle={{ bg: '$color2' }}
-          onPress={() => Linking.openURL(`https://${DOMAIN}${item.href as string}`)}
-        >
-          <XStack gap="$3" items="center" flex={1}>
-            {Icon && (
-              <View width={24} items="center" justify="center">
-                <Icon size={20} color="$color11" />
-              </View>
-            )}
-            <SizableText size="$5">{item.title}</SizableText>
-          </XStack>
-          <CaretRightIcon size={16} color="$color8" />
-        </XStack>
-      )
-    }
-
-    return (
-      <Link href={item.href} target={item.external ? '_blank' : undefined} asChild>
-        {content}
-      </Link>
-    )
-  }
-
-  return null
 }
 
 export function ProfileSettingsPage() {
+  const insets = useSafeAreaInsets()
+  const { user } = useAuth()
+  const household = useHouseholdContext()
   const { logout } = useLogout()
+  const { setting } = useToggleTheme()
 
-  const sections: SettingSection[] = [
-    {
-      title: 'Account',
-      items: [
-        {
-          id: 'profile',
-          title: 'Edit Profile',
-          icon: UserIcon,
-          href: '/home/settings/edit-profile',
-        },
-      ],
-    },
-    {
-      title: 'Other',
-      items: [
-        {
-          id: 'logout',
-          title: 'Log Out',
-          icon: DoorIcon,
-          onPress: logout,
-        },
-      ],
-    },
-  ]
+  const displayName = user?.name || user?.username || 'User'
+  const email = user?.email || ''
+  const themeLabel = setting === 'system' ? 'System' : setting === 'dark' ? 'Dark' : 'Light'
+
+  const Container = isWeb ? YStack : ScrollView
 
   return (
-    <PageLayout useImage>
-      <ScrollView
-        flex={1}
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior="automatic"
-      >
-        <YStack flex={1} flexBasis="auto" pb="$10">
-          {sections.map((section) => (
-            <YStack key={section.title} mb="$6" ml="$4">
-              <SepHeading>{section.title}</SepHeading>
-              <YStack>
-                {section.items.map((item) => (
-                  <SettingRow key={item.id} item={item} />
-                ))}
-              </YStack>
+    <Container flex={1} {...(!isWeb && { contentContainerStyle: { paddingBottom: insets.bottom + 40 } })}>
+      <PageContainer>
+        <YStack gap="$6" py="$5">
+          {/* Hero — profile card */}
+          <YStack gap="$1">
+            <H1 size="$8">
+              Your{' '}
+              <SizableText
+                fontFamily="$heading"
+                size="$8"
+                fontWeight="700"
+                fontStyle="italic"
+                color="$color12"
+              >
+                Profile
+              </SizableText>
+            </H1>
+          </YStack>
+
+          <XStack
+            borderTopWidth={2}
+            borderTopColor="$color12"
+            pt="$5"
+            gap="$4"
+            items="center"
+          >
+            <Avatar image={user?.image} name={displayName} size="xl" />
+            <YStack flex={1} gap="$1">
+              <SizableText fontFamily="$heading" size="$6" fontWeight="600">
+                {displayName}
+              </SizableText>
+              {email ? (
+                <SizableText fontFamily="$body" size="$2" color="$color8">
+                  {email}
+                </SizableText>
+              ) : null}
+              <SizableText fontFamily="$body" size="$2" color="$color8">
+                {household.householdId}
+              </SizableText>
             </YStack>
-          ))}
+          </XStack>
 
-          <LogoAndVersion />
+          {/* Appearance */}
+          <YStack gap="$3">
+            <SectionLabel>Appearance</SectionLabel>
+            <Separator />
+            <XStack
+              justify="space-between"
+              items="center"
+              py="$2"
+            >
+              <YStack gap="$1">
+                <SizableText fontFamily="$body" size="$5">
+                  Theme
+                </SizableText>
+                <SizableText fontFamily="$body" size="$2" color="$color8">
+                  {themeLabel}
+                </SizableText>
+              </YStack>
+              <ThemeSwitch size="$3" />
+            </XStack>
+          </YStack>
+
+          {/* Account */}
+          <YStack gap="$3">
+            <SectionLabel>Account</SectionLabel>
+            <Separator />
+            <YStack pt="$2">
+              <Button variant="outlined" onPress={logout}>
+                Log out
+              </Button>
+            </YStack>
+          </YStack>
+
+          {/* Footer */}
+          <YStack items="center" pt="$8" pb="$4">
+            <SizableText fontFamily="$heading" size="$2" color="$color8" fontWeight="600">
+              {APP_NAME_LOWERCASE}
+            </SizableText>
+            <SizableText fontFamily="$body" size="$1" color="$color8">
+              v1.0.0
+            </SizableText>
+          </YStack>
         </YStack>
-      </ScrollView>
-    </PageLayout>
-  )
-}
-
-function LogoAndVersion() {
-  return (
-    <YStack items="center" pb={100} pt="$4">
-      <XStack items="center" gap="$2">
-        <SizableText color="$color10" fontWeight="bold">
-          {APP_NAME_LOWERCASE}
-        </SizableText>
-      </XStack>
-      <SizableText size="$1" color="$color10" mt="$2">
-        v1.0.0
-      </SizableText>
-    </YStack>
+      </PageContainer>
+    </Container>
   )
 }

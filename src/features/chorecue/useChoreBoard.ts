@@ -4,10 +4,12 @@ import {
   addChoreToBoard,
   archiveChoreInBoard,
   beginEditForBoard,
+  collectAllTags,
   completeChoreInBoard,
   createSections,
   emptyComposer,
   emptyEditorState,
+  filterByTags,
   initialChores,
   saveEditedChore,
   sendBumpForBoard,
@@ -21,9 +23,12 @@ export function useChoreBoard() {
   const [composer, setComposer] = useState<ChoreComposerState>(emptyComposer)
   const [editor, setEditor] = useState<ChoreEditorState>(emptyEditorState)
   const [bumpCount, setBumpCount] = useState(2)
+  const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set())
 
   const sorted = useMemo(() => sortVisibleChores(chores), [chores])
-  const sections = useMemo(() => createSections(sorted), [sorted])
+  const allTags = useMemo(() => collectAllTags(sorted), [sorted])
+  const filtered = useMemo(() => filterByTags(sorted, selectedTags), [sorted, selectedTags])
+  const sections = useMemo(() => createSections(filtered), [filtered])
 
   function updateComposer<Key extends keyof ChoreComposerState>(
     key: Key,
@@ -105,8 +110,26 @@ export function useChoreBoard() {
     }))
   }
 
+  function toggleTag(tag: string) {
+    setSelectedTags((current) => {
+      const next = new Set(current)
+      if (next.has(tag)) {
+        next.delete(tag)
+      } else {
+        next.add(tag)
+      }
+      return next
+    })
+  }
+
+  function clearTagFilter() {
+    setSelectedTags(new Set())
+  }
+
   return {
     sections,
+    allTags,
+    selectedTags,
     composer,
     editor,
     bumpCount,
@@ -122,5 +145,7 @@ export function useChoreBoard() {
     clearComposerPhoto,
     attachEditorPhoto,
     clearEditorPhoto,
+    toggleTag,
+    clearTagFilter,
   }
 }

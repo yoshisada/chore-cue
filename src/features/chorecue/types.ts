@@ -4,7 +4,7 @@ export type RecurrenceSummary = 'Every N days' | 'Weekly' | 'Daily time'
 export interface ChoreCard {
   id: string
   title: string
-  category: string
+  tags: string[]
   assigneeName: string
   recurrenceSummary: RecurrenceSummary
   dueBucket: DueBucket
@@ -17,7 +17,7 @@ export interface ChoreCard {
 
 export interface ChoreComposerState {
   title: string
-  category: string
+  tags: string[]
   assigneeName: string
   recurrenceSummary: RecurrenceSummary
   photoLabel: string

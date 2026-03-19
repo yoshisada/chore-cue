@@ -7,6 +7,7 @@ import {
   GestureHandlerRootView,
 } from 'react-native-gesture-handler'
 import Animated, {
+  runOnJS,
   SlideInUp,
   useAnimatedReaction,
   useAnimatedStyle,
@@ -15,7 +16,6 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { scheduleOnRN } from 'react-native-worklets'
 import {
   SizableText,
   Theme,
@@ -160,7 +160,7 @@ const ToastBanner = memo(({ toast, onHide }: ToastBannerProps) => {
           { damping: 20, stiffness: 300 },
           (finished) => {
             if (finished) {
-              scheduleOnRN(hide)
+              runOnJS(hide)()
             }
           }
         )
@@ -206,12 +206,11 @@ const ToastBanner = memo(({ toast, onHide }: ToastBannerProps) => {
             <Pressable onPress={handlePress} style={{ flex: 1 }}>
               <YStack
                 flex={1}
-                bg="$color2"
-                rounded="$6"
+                bg="$background"
                 borderWidth={1}
-                borderColor="$color4"
+                borderColor="$borderColor"
                 justify="center"
-                px="$4"
+                px="$5"
                 py="$3"
                 gap="$1"
               >

@@ -46,8 +46,21 @@ export const ZERO_SERVER_URL = (() => {
   ) {
     // Default to production URL if not set
     return import.meta.env.VITE_PUBLIC_ZERO_SERVER || 'https://zero.tamagui.dev'
-  } else {
-    return import.meta.env.VITE_PUBLIC_ZERO_SERVER || 'http://localhost:4948'
+  }
+
+  const explicit = import.meta.env.VITE_PUBLIC_ZERO_SERVER
+  if (explicit) {
+    return explicit
+  }
+
+  // On native (Expo Go / device), use same host as Metro but port 4948 so the device
+  // can reach the Zero server on the host (localhost on device would be the device itself).
+  try {
+    const u = new URL(serverUrl)
+    u.port = '4948'
+    return u.toString()
+  } catch {
+    return 'http://localhost:4948'
   }
 })()
 

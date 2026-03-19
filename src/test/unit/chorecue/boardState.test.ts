@@ -4,11 +4,13 @@ import {
   addChoreToBoard,
   archiveChoreInBoard,
   beginEditForBoard,
+  collectAllTags,
   completeChoreInBoard,
   createSections,
   dueSortValue,
   emptyComposer,
   emptyEditorState,
+  filterByTags,
   initialChores,
   saveEditedChore,
   sendBumpForBoard,
@@ -46,7 +48,7 @@ describe('boardState', () => {
     const next = addChoreToBoard(initialChores, {
       ...emptyComposer,
       title: '  Mop bathroom  ',
-      category: '  Bathroom  ',
+      tags: ['Bathroom'],
       assigneeName: 'Alex',
       recurrenceSummary: 'Weekly',
       photoLabel: 'bathroom.png',
@@ -54,18 +56,28 @@ describe('boardState', () => {
 
     expect(next[0]).toMatchObject({
       title: 'Mop bathroom',
-      category: 'Bathroom',
+      tags: ['Bathroom'],
       dueBucket: 'due',
       photoLabel: 'bathroom.png',
       canBump: false,
     })
   })
 
-  it('does not add an invalid chore', () => {
+  it('does not add a chore with empty title', () => {
     const next = addChoreToBoard(initialChores, {
       ...emptyComposer,
       title: '   ',
-      category: '',
+      tags: ['Kitchen'],
+    })
+
+    expect(next).toEqual(initialChores)
+  })
+
+  it('does not add a chore with no tags', () => {
+    const next = addChoreToBoard(initialChores, {
+      ...emptyComposer,
+      title: 'Clean fridge',
+      tags: [],
     })
 
     expect(next).toEqual(initialChores)
@@ -117,7 +129,7 @@ describe('boardState', () => {
     const result = saveEditedChore(initialChores, {
       choreId: 'chore-2',
       title: 'Wipe counters deeply',
-      category: 'Deep Clean',
+      tags: ['Deep clean'],
       assigneeName: 'Sam',
       recurrenceSummary: 'Every N days',
       photoLabel: '',
@@ -125,7 +137,7 @@ describe('boardState', () => {
 
     expect(result.chores.find((item) => item.id === 'chore-2')).toMatchObject({
       title: 'Wipe counters deeply',
-      category: 'Deep Clean',
+      tags: ['Deep clean'],
       assigneeName: 'Sam',
       recurrenceSummary: 'Every N days',
       photoLabel: null,
@@ -138,7 +150,7 @@ describe('boardState', () => {
     const result = archiveChoreInBoard(initialChores, 'chore-1', {
       choreId: 'chore-1',
       title: 'Take out compost',
-      category: 'Kitchen',
+      tags: ['Kitchen', 'Quick'],
       assigneeName: 'Sam',
       recurrenceSummary: 'Every N days',
       photoLabel: 'compost-bin.jpg',
@@ -149,5 +161,31 @@ describe('boardState', () => {
       canBump: false,
     })
     expect(result.editor).toEqual(emptyEditorState)
+  })
+
+  it('collectAllTags returns sorted unique tags from all chores', () => {
+    const tags = collectAllTags(initialChores)
+    expect(tags).toEqual(['Daily', 'Deep clean', 'Kitchen', 'Living room', 'Quick'])
+  })
+
+  it('collectAllTags returns empty array for no chores', () => {
+    expect(collectAllTags([])).toEqual([])
+  })
+
+  it('filterByTags returns all chores when no tags selected', () => {
+    const result = filterByTags(initialChores, new Set())
+    expect(result).toEqual(initialChores)
+  })
+
+  it('filterByTags returns chores matching any selected tag', () => {
+    const result = filterByTags(initialChores, new Set(['Kitchen']))
+    expect(result).toHaveLength(2)
+    expect(result.map((c) => c.id)).toEqual(['chore-1', 'chore-2'])
+  })
+
+  it('filterByTags excludes chores with no matching tags', () => {
+    const result = filterByTags(initialChores, new Set(['Deep clean']))
+    expect(result).toHaveLength(1)
+    expect(result[0]?.id).toBe('chore-3')
   })
 })

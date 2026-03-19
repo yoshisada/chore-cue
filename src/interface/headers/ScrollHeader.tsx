@@ -34,25 +34,24 @@ export const ScrollHeader = ({ children }: { children: ReactNode }) => {
     >
       <XStack width="100%" position="relative" maxW={1200}>
         <XStack
-          transition="medium"
+          transition="luxurySlow"
           flex={1}
           overflow="hidden"
           contain="paint"
           $md={{
-            rounded: '$10',
             y: 0,
             shadowColor: 'transparent',
             ...(isScrolled && {
               y: 6,
-              shadowColor: '$shadow4',
-              shadowRadius: 8,
+              shadowColor: '$shadowColor',
+              shadowRadius: 6,
               shadowOffset: { height: 2, width: 0 },
             }),
           }}
         >
           <YStack
             position="absolute"
-            transition="medium"
+            transition="luxurySlow"
             inset={0}
             style={{
               ...(isScrolled && {
@@ -63,11 +62,10 @@ export const ScrollHeader = ({ children }: { children: ReactNode }) => {
           />
 
           <YStack
-            opacity={isScrolled ? 0.85 : 0}
+            opacity={isScrolled ? 0.92 : 0}
             position="absolute"
             inset={0}
-            bg="$color2"
-            $md={{ rounded: '$10' }}
+            bg="$background"
           />
 
           <XStack z={1} width="100%" items="center">

@@ -4,39 +4,70 @@ export const Button = styled(TamaguiButton, {
   render: 'button',
   borderWidth: 0,
   cursor: 'pointer',
+  fontFamily: '$body',
+  textTransform: 'uppercase',
+  letterSpacing: 2,
+  minHeight: 48,
+  transition: 'luxurySlow',
 
   focusVisibleStyle: {
     outlineWidth: 2,
     outlineStyle: 'solid',
-    outlineColor: '$color8',
+    outlineColor: '$color10',
   },
 
   variants: {
     variant: {
       default: {
-        bg: '$color3',
-        hoverStyle: { bg: '$color4' },
-        pressStyle: { bg: '$color2', opacity: 0.8 },
+        bg: '$color12',
+        color: '$color1',
+        hoverStyle: {
+          bg: '$color10',
+          color: '$color1',
+        },
+        pressStyle: {
+          bg: '$color11',
+          color: '$color1',
+          opacity: 0.95,
+        },
       },
       outlined: {
         bg: 'transparent',
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: '$color6',
-        hoverStyle: { borderColor: '$color8' },
-        pressStyle: { borderColor: '$color4', opacity: 0.8 },
+        hoverStyle: {
+          bg: '$color3',
+          borderColor: '$color8',
+        },
+        pressStyle: {
+          bg: '$color2',
+          borderColor: '$color6',
+          opacity: 0.9,
+        },
       },
       transparent: {
         bg: 'transparent',
+        letterSpacing: 0,
+        textTransform: 'none',
         hoverStyle: { bg: '$color2' },
         pressStyle: { bg: '$color1', opacity: 0.8 },
       },
       floating: {
-        bg: '$color4',
-        shadowColor: '$shadow2',
-        shadowRadius: 5,
-        shadowOffset: { height: 2, width: 0 },
-        hoverStyle: { bg: '$color5' },
-        pressStyle: { bg: '$color3', opacity: 0.9 },
+        bg: '$color12',
+        color: '$color1',
+        shadowColor: '$shadowColor',
+        shadowRadius: 8,
+        shadowOffset: { height: 3, width: 0 },
+        hoverStyle: {
+          bg: '$color10',
+          color: '$color1',
+          shadowRadius: 12,
+        },
+        pressStyle: {
+          bg: '$color11',
+          color: '$color1',
+          opacity: 0.95,
+        },
       },
     },
   } as const,

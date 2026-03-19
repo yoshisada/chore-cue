@@ -3,6 +3,7 @@ import { useMedia, XStack, View } from 'tamagui'
 
 import { Pressable } from '~/interface/buttons/Pressable'
 import { HouseIcon } from '~/interface/icons/phosphor/HouseIcon'
+import { UsersThreeIcon } from '~/interface/icons/phosphor/UsersThreeIcon'
 import { UserCircleIcon } from '~/interface/icons/phosphor/UserCircleIcon'
 
 import type { Href } from 'one'
@@ -15,6 +16,7 @@ type TabRoute = {
 
 const routes: TabRoute[] = [
   { name: 'home', href: '/home/feed', icon: HouseIcon },
+  { name: 'members', href: '/home/members', icon: UsersThreeIcon },
   { name: 'profile', href: '/home/settings', icon: UserCircleIcon },
 ]
 
@@ -36,11 +38,12 @@ export function NavigationTabs() {
             <Pressable
               px="$4"
               py="$2"
-              rounded="$4"
-              bg={isActive ? '$color3' : 'transparent'}
+              bg="transparent"
+              borderBottomWidth={isActive ? 2 : 0}
+              borderBottomColor={isActive ? '$color12' : 'transparent'}
               hoverStyle={{ bg: '$color2' }}
             >
-              <Icon size={iconSize} color={isActive ? '$color12' : '$color10'} />
+              <Icon size={iconSize} color={isActive ? '$color12' : '$color8'} />
             </Pressable>
           </Link>
         )

@@ -156,29 +156,29 @@
 - [X] T063 [P] Add or update the unit test script to run coverage consistently from `package.json`
 - [X] T064 [P] Add unit coverage for household context derivation in `src/test/unit/auth/useHouseholdContext.test.ts`
 - [X] T065 [P] Add unit coverage for server-side household context derivation in `src/test/unit/auth/ensureHouseholdContext.test.ts`
-- [ ] T066 Create reusable ChoreCue fixture builders for household members, chores, and board state in `src/test/unit/chorecue/fixtures.ts`
-- [ ] T067 [P] Add reusable render helpers for the root Takeout app test environment in `src/test/unit/chorecue/renderHelpers.tsx`
-- [ ] T068 [P] Add unit coverage for default board state and section ordering in `src/test/unit/chorecue/useChoreBoard.test.ts`
-- [ ] T069 [P] Add unit coverage for create-chore state transitions in `src/test/unit/chorecue/useChoreBoard.create.test.ts`
-- [ ] T070 [P] Add unit coverage for complete-chore state transitions in `src/test/unit/chorecue/useChoreBoard.complete.test.ts`
-- [ ] T071 [P] Add unit coverage for due-bucket grouping and archive filtering in `src/test/unit/chorecue/useChoreBoard.sections.test.ts`
-- [ ] T072 [P] Add unit coverage for bump-count and bump-label state transitions in `src/test/unit/chorecue/useChoreBoard.bump.test.ts`
-- [ ] T073 [P] Add unit coverage for edit and archive flows in `src/test/unit/chorecue/useChoreBoard.edit-archive.test.ts`
-- [ ] T074 [P] Add component coverage for the create form and initial board rendering in `src/test/unit/chorecue/ChoreHomePage.create.test.tsx`
-- [ ] T075 [P] Add component coverage for completion controls and refreshed labels in `src/test/unit/chorecue/ChoreHomePage.complete.test.tsx`
-- [ ] T076 [P] Add component coverage for section ordering, metadata rendering, and empty-state handling in `src/test/unit/chorecue/ChoreHomePage.sections.test.tsx`
-- [ ] T077 [P] Add component coverage for bump buttons, disabled states, and reminder labels in `src/test/unit/chorecue/ChoreHomePage.bump.test.tsx`
-- [ ] T078 [P] Add component coverage for edit-mode UI and archive actions in `src/test/unit/chorecue/ChoreHomePage.edit-archive.test.tsx`
-- [ ] T079 [P] Add unit coverage for optional photo attachment and clear-photo behavior in `src/test/unit/chorecue/PhotoInput.test.tsx`
-- [ ] T080 Add feed-route rendering coverage to ensure `app/(app)/home/(tabs)/feed/index.tsx` mounts ChoreCue instead of the Takeout todo demo in `src/test/unit/chorecue/feed-route.test.tsx`
-- [ ] T081 [P] Add shared interaction helpers for ChoreCue board flows in `src/test/integration/chorecue/helpers.ts`
-- [ ] T082 Add integration coverage for chore creation through the active board UI in `src/test/integration/chorecue/chore-create.spec.ts`
-- [ ] T083 Add integration coverage for completing chores from the active board UI in `src/test/integration/chorecue/chore-complete.spec.ts`
-- [ ] T084 Add integration coverage for due-state scanning on the active feed screen in `src/test/integration/chorecue/chore-sections.spec.ts`
-- [ ] T085 Add integration coverage for bump-limit behavior on the active board UI in `src/test/integration/chorecue/chore-bump-limit.spec.ts`
-- [ ] T086 Add integration coverage for edit, archive, and photo-clear flows in `src/test/integration/chorecue/chore-edit-archive-photo.spec.ts`
+- [X] T066 Create reusable ChoreCue fixture builders for household members, chores, and board state in `src/test/unit/chorecue/fixtures.ts`
+- [X] T067 [P] Add reusable render helpers for the root Takeout app test environment in `src/test/unit/chorecue/renderHelpers.tsx`
+- [X] T068 [P] Add unit coverage for default board state and section ordering in `src/test/unit/chorecue/useChoreBoard.test.ts`
+- [X] T069 [P] Add unit coverage for create-chore state transitions in `src/test/unit/chorecue/useChoreBoard.create.test.ts`
+- [X] T070 [P] Add unit coverage for complete-chore state transitions in `src/test/unit/chorecue/useChoreBoard.complete.test.ts`
+- [X] T071 [P] Add unit coverage for due-bucket grouping and archive filtering in `src/test/unit/chorecue/useChoreBoard.sections.test.ts`
+- [X] T072 [P] Add unit coverage for bump-count and bump-label state transitions in `src/test/unit/chorecue/useChoreBoard.bump.test.ts`
+- [X] T073 [P] Add unit coverage for edit and archive flows in `src/test/unit/chorecue/useChoreBoard.edit-archive.test.ts`
+- [X] T074 [P] Add component coverage for the create form and initial board rendering in `src/test/unit/chorecue/ChoreHomePage.create.test.tsx`
+- [X] T075 [P] Add component coverage for completion controls and refreshed labels in `src/test/unit/chorecue/ChoreHomePage.complete.test.tsx`
+- [X] T076 [P] Add component coverage for section ordering, metadata rendering, and empty-state handling in `src/test/unit/chorecue/ChoreHomePage.sections.test.tsx`
+- [X] T077 [P] Add component coverage for bump buttons, disabled states, and reminder labels in `src/test/unit/chorecue/ChoreHomePage.bump.test.tsx`
+- [X] T078 [P] Add component coverage for edit-mode UI and archive actions in `src/test/unit/chorecue/ChoreHomePage.edit-archive.test.tsx`
+- [X] T079 [P] Add unit coverage for optional photo attachment and clear-photo behavior in `src/test/unit/chorecue/PhotoInput.test.tsx`
+- [X] T080 Add feed-route rendering coverage to ensure `app/(app)/home/(tabs)/feed/index.tsx` mounts ChoreCue instead of the Takeout todo demo in `src/test/unit/chorecue/feed-route.test.tsx`
+- [X] T081 [P] Add shared interaction helpers for ChoreCue board flows in `src/test/integration/chorecue/helpers.ts`
+- [X] T082 Add integration coverage for chore creation through the active board UI in `src/test/integration/chorecue/chore-create.spec.ts`
+- [X] T083 Add integration coverage for completing chores from the active board UI in `src/test/integration/chorecue/chore-complete.spec.ts`
+- [X] T084 Add integration coverage for due-state scanning on the active feed screen in `src/test/integration/chorecue/chore-sections.spec.ts`
+- [X] T085 Add integration coverage for bump-limit behavior on the active board UI in `src/test/integration/chorecue/chore-bump-limit.spec.ts`
+- [X] T086 Add integration coverage for edit, archive, and photo-clear flows in `src/test/integration/chorecue/chore-edit-archive-photo.spec.ts`
 - [X] T087 Run unit coverage and record the measured threshold result in `specs/001-phase1-chore-loop/quickstart-validation.md`
-- [ ] T088 Run the full relevant test suite and confirm coverage stays at or above 80% using `package.json` scripts and `src/test/vitest.config.ts`
+- [X] T088 Run the full relevant test suite and confirm coverage stays at or above 80% using `package.json` scripts and `src/test/vitest.config.ts`
 
 ---
 

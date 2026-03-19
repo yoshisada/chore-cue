@@ -1,9 +1,22 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
-    "allow": [],
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(bash .specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks 2>&1)",
+      "Bash(bun run:*)",
+      "Bash(bun list:*)",
+      "Bash(bun add:*)",
+      "Bash(bun lint:*)",
+      "Bash(bun dev:*)",
+      "mcp__XcodeBuildMCP__list_sims"
+    ],
     "deny": []
   },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "XcodeBuildMCP"
+  ],
   "hooks": {
     "SessionStart": [
       {

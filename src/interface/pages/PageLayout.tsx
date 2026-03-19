@@ -1,4 +1,4 @@
-import { isWeb } from 'tamagui'
+import { isWeb, YStack } from 'tamagui'
 
 import { GradientBackground } from '../backgrounds/GradientBackground'
 
@@ -17,5 +17,9 @@ export const PageLayout = ({ children, useImage = false }: PageLayoutProps) => {
       </GradientBackground>
     )
   }
-  return <>{children}</>
+  return (
+    <YStack flex={1} bg="$background">
+      {children}
+    </YStack>
+  )
 }

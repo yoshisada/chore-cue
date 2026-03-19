@@ -29,6 +29,7 @@ export default defineConfig({
       include: [
         'src/features/chorecue/boardState.ts',
         'src/features/auth/householdContext.ts',
+        'src/features/members/memberState.ts',
       ],
       thresholds: {
         lines: 80,

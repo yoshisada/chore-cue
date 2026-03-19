@@ -4,7 +4,7 @@ export const initialChores: ChoreCard[] = [
   {
     id: 'chore-1',
     title: 'Take out compost',
-    category: 'Kitchen',
+    tags: ['Kitchen', 'Quick'],
     assigneeName: 'Sam',
     recurrenceSummary: 'Every N days',
     dueBucket: 'overdue',
@@ -17,7 +17,7 @@ export const initialChores: ChoreCard[] = [
   {
     id: 'chore-2',
     title: 'Wipe kitchen counters',
-    category: 'Kitchen',
+    tags: ['Kitchen', 'Daily'],
     assigneeName: 'Alex',
     recurrenceSummary: 'Daily time',
     dueBucket: 'due',
@@ -30,7 +30,7 @@ export const initialChores: ChoreCard[] = [
   {
     id: 'chore-3',
     title: 'Vacuum living room',
-    category: 'Living room',
+    tags: ['Living room', 'Deep clean'],
     assigneeName: 'Sam',
     recurrenceSummary: 'Weekly',
     dueBucket: 'upcoming',
@@ -44,7 +44,7 @@ export const initialChores: ChoreCard[] = [
 
 export const emptyComposer: ChoreComposerState = {
   title: '',
-  category: '',
+  tags: [],
   assigneeName: 'Sam',
   recurrenceSummary: 'Every N days',
   photoLabel: '',
@@ -82,7 +82,7 @@ export function createSections(chores: ChoreCard[]) {
 }
 
 export function addChoreToBoard(chores: ChoreCard[], composer: ChoreComposerState): ChoreCard[] {
-  if (!composer.title.trim() || !composer.category.trim()) {
+  if (!composer.title.trim() || composer.tags.length === 0) {
     return chores
   }
 
@@ -90,7 +90,7 @@ export function addChoreToBoard(chores: ChoreCard[], composer: ChoreComposerStat
     {
       id: `chore-${chores.length + 1}`,
       title: composer.title.trim(),
-      category: composer.category.trim(),
+      tags: [...composer.tags],
       assigneeName: composer.assigneeName,
       recurrenceSummary: composer.recurrenceSummary,
       dueBucket: 'due',
@@ -154,7 +154,7 @@ export function beginEditForBoard(chores: ChoreCard[], choreId: string): ChoreEd
   return {
     choreId: chore.id,
     title: chore.title,
-    category: chore.category,
+    tags: [...chore.tags],
     assigneeName: chore.assigneeName,
     recurrenceSummary: chore.recurrenceSummary,
     photoLabel: chore.photoLabel ?? '',
@@ -175,7 +175,7 @@ export function saveEditedChore(
         ? {
             ...chore,
             title: editor.title.trim() || chore.title,
-            category: editor.category.trim() || chore.category,
+            tags: editor.tags.length > 0 ? [...editor.tags] : chore.tags,
             assigneeName: editor.assigneeName,
             recurrenceSummary: editor.recurrenceSummary,
             photoLabel: editor.photoLabel || null,
@@ -185,6 +185,21 @@ export function saveEditedChore(
     ),
     editor: emptyEditorState,
   }
+}
+
+export function collectAllTags(chores: ChoreCard[]): string[] {
+  const tags = new Set<string>()
+  for (const chore of chores) {
+    for (const tag of chore.tags) {
+      tags.add(tag)
+    }
+  }
+  return [...tags].sort((a, b) => a.localeCompare(b))
+}
+
+export function filterByTags(chores: ChoreCard[], selectedTags: Set<string>): ChoreCard[] {
+  if (selectedTags.size === 0) return chores
+  return chores.filter((chore) => chore.tags.some((tag) => selectedTags.has(tag)))
 }
 
 export function archiveChoreInBoard(

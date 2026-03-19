@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Circle, styled, YStack, type CircleProps } from 'tamagui'
+import { styled, View, YStack, type ViewProps } from 'tamagui'
 
 import { Image } from '~/interface/image/Image'
 
@@ -20,7 +20,7 @@ function getSimpleSize(size: number | SimpleSize): number {
   return simpleSizes[size] ?? 28
 }
 
-export type AvatarProps = Omit<CircleProps, 'size'> & {
+export type AvatarProps = Omit<ViewProps, 'size'> & {
   image: string | null | undefined
   name?: string
   size?: number | SimpleSize
@@ -53,26 +53,19 @@ export const Avatar = memo(
         width={size}
         height={size}
         position="relative"
-        rounded={100}
         {...(!disableBorder && {
-          outlineColor: '$color02',
+          outlineColor: '$borderColor',
           outlineOffset: 1,
           outlineWidth: 0.5,
           outlineStyle: 'solid',
         })}
       >
-        <SelectableCircle
+        <SelectableSquare
           active={active || false}
           pressable={!!rest.onPress && !active}
-          size={size}
+          width={size}
+          height={size}
           overflow="hidden"
-          className={
-            typeof isOnline === 'undefined'
-              ? ''
-              : isBig
-                ? 'avatar-cutout-big'
-                : 'avatar-cutout-small'
-          }
           {...rest}
         >
           {image ? (
@@ -86,14 +79,15 @@ export const Avatar = memo(
           ) : (
             <UserIcon size={size / 2} />
           )}
-        </SelectableCircle>
+        </SelectableSquare>
 
         {typeof isOnline === 'boolean' ? (
-          <Circle
+          <View
             position="absolute"
             b={-1.1 * scale + (isBig ? 4.5 : 0)}
             r={-1.1 * scale + (isBig ? 4.5 : 0)}
-            size={7 * scale}
+            width={7 * scale}
+            height={7 * scale}
             opacity={1}
             bg={isOnline ? '$green10' : '$color4'}
           />
@@ -103,19 +97,21 @@ export const Avatar = memo(
   }
 )
 
-const SelectableCircle = styled(Circle, {
+const SelectableSquare = styled(View, {
   select: 'none',
-  bg: '$background02',
+  bg: '$color3',
+  items: 'center',
+  justify: 'center',
 
   variants: {
     active: {
       true: {
-        outlineColor: '#fff',
+        outlineColor: '$color12',
         outlineWidth: 2,
         outlineStyle: 'solid',
 
         pressStyle: {
-          outlineColor: '#ccc',
+          outlineColor: '$color8',
         },
       },
     },
@@ -129,7 +125,7 @@ const SelectableCircle = styled(Circle, {
         },
 
         pressStyle: {
-          outlineColor: '#fff',
+          outlineColor: '$color12',
           outlineWidth: 2,
           outlineStyle: 'solid',
         },
