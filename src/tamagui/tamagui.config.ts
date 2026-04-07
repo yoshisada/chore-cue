@@ -3,27 +3,27 @@ import { createTamagui } from 'tamagui'
 
 import { animationsRoot } from './animationsRoot'
 import { fonts } from './fonts'
-import { luxuryEditorialThemes } from './themes/luxuryEditorial'
+import { playfulHouseholdThemes } from './themes/playfulHousehold'
 
-// Override radius tokens to zero for editorial rectangular aesthetic
+// Rounded radius tokens for playful household aesthetic
 const tokens = {
   ...defaultConfig.tokens,
   radius: {
     ...defaultConfig.tokens.radius,
     0: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
-    8: 0,
-    9: 0,
-    10: 0,
-    11: 0,
-    12: 0,
-    true: 0,
+    1: 2,
+    2: 4,
+    3: 6,
+    4: 8,
+    5: 10,
+    6: 12,
+    7: 12,
+    8: 14,
+    9: 16,
+    10: 18,
+    11: 18,
+    12: 20,
+    true: 10,
   },
 }
 
@@ -35,8 +35,8 @@ export const config = createTamagui({
   // tamagui optimization - reduce bundle size by avoiding themes js on client
   // tamagui will hydrate it from CSS which improves lighthouse scores
   themes: process.env.VITE_ENVIRONMENT === 'client'
-    ? ({} as typeof luxuryEditorialThemes)
-    : luxuryEditorialThemes,
+    ? ({} as typeof playfulHouseholdThemes)
+    : playfulHouseholdThemes,
 })
 
 export type Conf = typeof config

@@ -4,17 +4,18 @@ import { animations as v5Animations } from '@tamagui/config/v5-reanimated'
 export const animationsRoot = createAnimations({
   ...v5Animations.animations,
 
-  // Luxury editorial timing presets
-  luxurySlow: {
-    type: 'timing',
-    duration: 500,
+  // Playful household timing presets
+  playfulBounce: {
+    type: 'spring',
+    damping: 12,
+    stiffness: 150,
   },
-  luxuryMedium: {
+  playfulMedium: {
     type: 'timing',
-    duration: 700,
+    duration: 300,
   },
-  luxuryCinematic: {
+  playfulQuick: {
     type: 'timing',
-    duration: 1500,
+    duration: 150,
   },
 })

@@ -21,8 +21,8 @@
 
 **Purpose**: Verify current state and confirm test baseline before making changes
 
-- [ ] T001 Run `bun run test:unit` and `bun run test:unit:coverage` to establish passing baseline
-- [ ] T002 [P] Run `bun run test:integration` to establish passing integration test baseline
+- [X] T001 Run `bun run test:unit` and `bun run test:unit:coverage` to establish passing baseline
+- [X] T002 [P] Run `bun run test:integration` to establish passing integration test baseline
 
 ---
 
@@ -32,17 +32,17 @@
 
 **Owner**: impl-theme
 
-- [ ] T003 Create `src/tamagui/themes/playfulHousehold.ts` — define warm palette constants, 12-step light/dark color scales, all semantic tokens (background, color, border, shadow, accent, placeholder) for both light and dark variants, plus `choreStateColors` and `memberAccentColors` exports per `contracts/interfaces.md` Contract 6 and Contract 7
-- [ ] T004 Update `src/tamagui/fonts.ts` — change heading font `family` from Playfair Display to Inter, update `face` map from PlayfairDisplay weights to Inter weights, change `weight[3]` from `'400'` to `'300'` per Contract 3
-- [ ] T005 [P] Update `src/features/fonts/useFonts.native.ts` — remove all `@expo-google-fonts/playfair-display` imports, keep all Inter imports, rename `useLuxuryFonts` to `usePlayfulFonts`
-- [ ] T006 [P] Update `src/tamagui/animationsRoot.ts` (CSS) — replace `luxurySlow`, `luxuryMedium`, `luxuryCinematic` with `playfulBounce`, `playfulMedium`, `playfulQuick` per Contract 4 timing values
-- [ ] T007 [P] Update `src/tamagui/animationsRoot.native.ts` (Reanimated) — replace luxury presets with playful presets per Contract 4 Reanimated values
-- [ ] T008 Update `src/tamagui/tamagui.config.ts` — import `playfulHouseholdThemes` from new theme file (replacing `luxuryEditorialThemes`), restore radius tokens to rounded values per Contract 2 (0 through 12 and true)
-- [ ] T009 Grep for `useLuxuryFonts` across the codebase and update all call sites to `usePlayfulFonts`
-- [ ] T010 Grep for `luxurySlow`, `luxuryMedium`, `luxuryCinematic` across all source files and confirm zero remaining references (should be caught by T006/T007 but verify)
-- [ ] T011 Grep for `Playfair`, `playfair`, `PlayfairDisplay` across all source files and confirm zero remaining references
-- [ ] T012 Remove `@expo-google-fonts/playfair-display` from `package.json` dependencies and run `bun install`
-- [ ] T013 Regenerate `src/tamagui/tamagui.generated.css` by running `bun dev` and capturing the updated CSS output
+- [X] T003 Create `src/tamagui/themes/playfulHousehold.ts` — define warm palette constants, 12-step light/dark color scales, all semantic tokens (background, color, border, shadow, accent, placeholder) for both light and dark variants, plus `choreStateColors` and `memberAccentColors` exports per `contracts/interfaces.md` Contract 6 and Contract 7
+- [X] T004 Update `src/tamagui/fonts.ts` — change heading font `family` from Playfair Display to Inter, update `face` map from PlayfairDisplay weights to Inter weights, change `weight[3]` from `'400'` to `'300'` per Contract 3
+- [X] T005 [P] Update `src/features/fonts/useFonts.native.ts` — remove all `@expo-google-fonts/playfair-display` imports, keep all Inter imports, rename `useLuxuryFonts` to `usePlayfulFonts`
+- [X] T006 [P] Update `src/tamagui/animationsRoot.ts` (CSS) — replace `luxurySlow`, `luxuryMedium`, `luxuryCinematic` with `playfulBounce`, `playfulMedium`, `playfulQuick` per Contract 4 timing values
+- [X] T007 [P] Update `src/tamagui/animationsRoot.native.ts` (Reanimated) — replace luxury presets with playful presets per Contract 4 Reanimated values
+- [X] T008 Update `src/tamagui/tamagui.config.ts` — import `playfulHouseholdThemes` from new theme file (replacing `luxuryEditorialThemes`), restore radius tokens to rounded values per Contract 2 (0 through 12 and true)
+- [X] T009 Grep for `useLuxuryFonts` across the codebase and update all call sites to `usePlayfulFonts`
+- [X] T010 Grep for `luxurySlow`, `luxuryMedium`, `luxuryCinematic` across all source files and confirm zero remaining references (should be caught by T006/T007 but verify)
+- [X] T011 Grep for `Playfair`, `playfair`, `PlayfairDisplay` across all source files and confirm zero remaining references
+- [X] T012 Remove `@expo-google-fonts/playfair-display` from `package.json` dependencies and run `bun install`
+- [X] T013 Regenerate `src/tamagui/tamagui.generated.css` by running `bun dev` and capturing the updated CSS output
 
 **Checkpoint**: Theme foundation ready — all tokens, fonts, radii, and animation presets in place. impl-components can begin.
 

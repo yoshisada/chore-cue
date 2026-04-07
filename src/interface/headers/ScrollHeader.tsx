@@ -34,7 +34,7 @@ export const ScrollHeader = ({ children }: { children: ReactNode }) => {
     >
       <XStack width="100%" position="relative" maxW={1200}>
         <XStack
-          transition="luxurySlow"
+          transition="playfulQuick"
           flex={1}
           overflow="hidden"
           contain="paint"
@@ -51,7 +51,7 @@ export const ScrollHeader = ({ children }: { children: ReactNode }) => {
         >
           <YStack
             position="absolute"
-            transition="luxurySlow"
+            transition="playfulQuick"
             inset={0}
             style={{
               ...(isScrolled && {

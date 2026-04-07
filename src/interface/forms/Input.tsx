@@ -15,7 +15,7 @@ export const Input = styled(TamaguiInput, {
   borderRadius: 0,
   placeholderTextColor: '$color8',
   fontFamily: '$body',
-  transition: 'luxurySlow',
+  transition: 'playfulQuick',
 
   focusVisibleStyle: {
     outlineWidth: 0,

@@ -34,7 +34,7 @@ export function ThemeSwitch({ size = '$2' }: { size?: SizeTokens }) {
     <View items="center" gap="$1">
       <Button
         onPress={onPress}
-        transition="luxurySlow"
+        transition="playfulQuick"
         variant="transparent"
         minHeight={0}
         pressStyle={{ scale: 0.9, opacity: 0.8 }}

@@ -8,7 +8,7 @@ export const Button = styled(TamaguiButton, {
   textTransform: 'uppercase',
   letterSpacing: 2,
   minHeight: 48,
-  transition: 'luxurySlow',
+  transition: 'playfulQuick',
 
   focusVisibleStyle: {
     outlineWidth: 2,

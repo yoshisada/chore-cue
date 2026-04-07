@@ -12,29 +12,28 @@ const mono = createSystemFont({
 })
 
 const heading = createFont({
-  family: '"Playfair Display", "Georgia", "Times New Roman", serif',
+  family: '"Inter", system-ui, -apple-system, sans-serif',
   size: baseFonts.heading.size,
   lineHeight: {
-    // Tighter line heights for editorial feel
-    1: 16,
-    2: 20,
-    3: 24,
-    4: 28,
-    5: 32,
-    6: 36,
-    7: 42,
-    8: 48,
-    9: 56,
-    10: 64,
-    11: 72,
-    12: 84,
-    13: 96,
-    14: 112,
-    15: 128,
-    16: 144,
+    1: 18,
+    2: 22,
+    3: 26,
+    4: 30,
+    5: 34,
+    6: 38,
+    7: 44,
+    8: 52,
+    9: 60,
+    10: 68,
+    11: 78,
+    12: 90,
+    13: 102,
+    14: 116,
+    15: 132,
+    16: 148,
   },
   weight: {
-    3: '400', // Regular (Playfair Display has no 300 weight)
+    3: '300', // Light (Inter supports 300)
     4: '400', // Regular
     5: '500', // Medium
     6: '600', // SemiBold
@@ -42,11 +41,11 @@ const heading = createFont({
   },
   letterSpacing: baseFonts.heading.letterSpacing,
   face: {
-    300: { normal: 'PlayfairDisplay_400Regular', italic: 'PlayfairDisplay_400Regular_Italic' },
-    400: { normal: 'PlayfairDisplay_400Regular', italic: 'PlayfairDisplay_400Regular_Italic' },
-    500: { normal: 'PlayfairDisplay_500Medium', italic: 'PlayfairDisplay_500Medium_Italic' },
-    600: { normal: 'PlayfairDisplay_600SemiBold', italic: 'PlayfairDisplay_600SemiBold_Italic' },
-    700: { normal: 'PlayfairDisplay_700Bold', italic: 'PlayfairDisplay_700Bold_Italic' },
+    300: { normal: 'Inter_300Light' },
+    400: { normal: 'Inter_400Regular' },
+    500: { normal: 'Inter_500Medium' },
+    600: { normal: 'Inter_600SemiBold' },
+    700: { normal: 'Inter_700Bold' },
   },
 })
 
