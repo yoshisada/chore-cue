@@ -4,6 +4,7 @@ export const Pressable = styled(View, {
   hitSlop: 10,
   transition: 'playfulQuick',
   pressStyle: {
-    opacity: 0.7,
+    scale: 0.97,
+    opacity: 0.85,
   },
 })

@@ -4,6 +4,8 @@ import { H3, Separator, Sheet, Spacer, View, XStack, YStack } from 'tamagui'
 
 import { useAuth } from '~/features/auth/client/authClient'
 import { useLogout } from '~/features/auth/useLogout'
+import { useMemberBoard } from '~/features/members/useMemberBoard'
+import { memberAccentColors } from '~/tamagui/themes/playfulHousehold'
 import { Logo } from '~/interface/app/Logo'
 import { Avatar } from '~/interface/avatars/Avatar'
 import { Button } from '~/interface/buttons/Button'
@@ -17,6 +19,8 @@ import { ThemeSwitch } from '~/interface/theme/ThemeSwitch'
 import { NavigationTabs } from './NavigationTabs'
 
 export const MainHeader = () => {
+  const { members } = useMemberBoard()
+
   return (
     <ScrollHeader>
       <PageContainer>
@@ -26,6 +30,17 @@ export const MainHeader = () => {
               <Link href="/" aria-label="Home">
                 <Logo height={20} />
               </Link>
+              <XStack gap="$1" ml="$2">
+                {members.slice(0, 4).map((member, index) => (
+                  <Avatar
+                    key={member.id}
+                    image={null}
+                    name={member.name}
+                    size="sm"
+                    accentColor={memberAccentColors[index % memberAccentColors.length]}
+                  />
+                ))}
+              </XStack>
             </XStack>
 
             <Spacer flex={1} />

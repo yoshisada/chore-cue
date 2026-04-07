@@ -29,6 +29,7 @@ export type AvatarProps = Omit<ViewProps, 'size'> & {
   disableBorder?: boolean
   gradient?: boolean
   gradientColors?: string[]
+  accentColor?: string
 }
 
 export const Avatar = memo(
@@ -41,6 +42,7 @@ export const Avatar = memo(
     disableBorder,
     gradient,
     gradientColors,
+    accentColor,
     ...rest
   }: AvatarProps) => {
     const size = getSimpleSize(sizeIn)
@@ -53,10 +55,11 @@ export const Avatar = memo(
         width={size}
         height={size}
         position="relative"
+        borderRadius={9999}
         {...(!disableBorder && {
-          outlineColor: '$borderColor',
+          outlineColor: accentColor ?? '$borderColor',
           outlineOffset: 1,
-          outlineWidth: 0.5,
+          outlineWidth: accentColor ? 2 : 0.5,
           outlineStyle: 'solid',
         })}
       >
@@ -66,6 +69,7 @@ export const Avatar = memo(
           width={size}
           height={size}
           overflow="hidden"
+          borderRadius={9999}
           {...rest}
         >
           {image ? (

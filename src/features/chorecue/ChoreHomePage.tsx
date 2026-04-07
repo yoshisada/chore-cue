@@ -10,20 +10,35 @@ import {
   XStack,
   YStack,
   isWeb,
+  useThemeName,
 } from 'tamagui'
 
 import { Button } from '~/interface/buttons/Button'
 import { Input } from '~/interface/forms/Input'
+import { Avatar } from '~/interface/avatars/Avatar'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { H1, H3 } from '~/interface/text/Headings'
 import { useHouseholdContext } from '~/features/auth/client/useHouseholdContext'
+import { choreStateColors, memberAccentColors } from '~/tamagui/themes/playfulHousehold'
 
 import { useMemberBoard } from '~/features/members/useMemberBoard'
 
+import { CheckIcon } from './components/CheckIcon'
 import { PhotoInput } from './components/PhotoInput'
 import { PhotoThumbnail } from './components/PhotoThumbnail'
 import { useChoreBoard } from './useChoreBoard'
-import type { ChoreCard, ChoreComposerState, ChoreEditorState, RecurrenceSummary } from './types'
+import type { ChoreCard, ChoreComposerState, ChoreEditorState, DueBucket, RecurrenceSummary } from './types'
+
+function useStateColor(bucket: DueBucket): string {
+  const themeName = useThemeName()
+  const mode = themeName.startsWith('dark') ? 'dark' : 'light'
+  return choreStateColors[mode][bucket]
+}
+
+function getMemberAccentColor(name: string, memberNames: string[]): string {
+  const index = memberNames.indexOf(name)
+  return memberAccentColors[(index >= 0 ? index : 0) % memberAccentColors.length]
+}
 
 const recurrenceOptions: RecurrenceSummary[] = ['Every N days', 'Weekly', 'Daily time']
 
@@ -103,34 +118,37 @@ function SectionLabel({
 function SectionHeader({
   title,
   count,
-  accent,
+  stateColor,
 }: {
   title: string
   count: number
-  accent?: boolean
+  stateColor?: string
 }) {
   return (
     <XStack
       justify="space-between"
       items="center"
-      borderTopWidth={2}
-      borderTopColor={accent ? '$accentColor' : '$borderColor'}
       pt="$4"
       pb="$2"
     >
-      <SizableText
-        fontFamily="$heading"
-        size="$5"
-        fontWeight="600"
-        color={accent ? '$accentColor' : '$color'}
-      >
-        {title}
-      </SizableText>
+      <XStack items="center" gap="$2">
+        {stateColor && (
+          <View width={8} height={8} borderRadius={4} bg={stateColor} />
+        )}
+        <SizableText
+          fontFamily="$heading"
+          size="$5"
+          fontWeight="600"
+          color="$color"
+        >
+          {title}
+        </SizableText>
+      </XStack>
       <View
         bg="$color3"
         px="$2"
         py="$1"
-        borderRadius={0}
+        borderRadius="$2"
       >
         <SizableText fontFamily="$body" size="$1" color="$color8">
           {count}
@@ -142,32 +160,54 @@ function SectionHeader({
 
 function ChoreCardItem({
   item,
+  memberNames,
   onComplete,
   onBump,
   onEdit,
   onArchive,
 }: {
   item: ChoreCard
+  memberNames: string[]
   onComplete: (choreId: string) => void
   onBump: (choreId: string) => void
   onEdit: (choreId: string) => void
   onArchive: (choreId: string) => void
 }) {
+  const stateColor = useStateColor(item.dueBucket)
+  const accentColor = getMemberAccentColor(item.assigneeName, memberNames)
+  const [justCompleted, setJustCompleted] = useState(false)
+
+  const handleComplete = () => {
+    setJustCompleted(true)
+    onComplete(item.id)
+    setTimeout(() => setJustCompleted(false), 500)
+  }
+
   return (
     <XStack
-      borderTopWidth={1}
-      borderTopColor="$borderColor"
-      py="$4"
-      gap="$4"
-      hoverStyle={{
-        bg: '$color2',
-      }}
+      borderRadius="$4"
+      borderLeftWidth={4}
+      borderLeftColor={stateColor}
+      bg={`${stateColor}10`}
+      p="$3"
+      gap="$3"
+      items="center"
+      transition="playfulQuick"
+      hoverStyle={{ bg: '$color2', scale: 1.01 }}
+      pressStyle={{ scale: 0.98, opacity: 0.9 }}
     >
-      <YStack flex={1} gap="$2">
+      <Avatar
+        image={null}
+        name={item.assigneeName}
+        size="md"
+        accentColor={accentColor}
+      />
+
+      <YStack flex={1} gap="$1">
         <XStack items="baseline" gap="$2" flexWrap="wrap">
-          <H3 size="$6">{item.title}</H3>
+          <H3 size="$5">{item.title}</H3>
           <SizableText fontFamily="$body" size="$2" color="$color8">
-            · {item.dueLabel}
+            {item.dueLabel}
           </SizableText>
         </XStack>
 
@@ -177,8 +217,19 @@ function ChoreCardItem({
         </SizableText>
 
         <XStack gap="$2" pt="$1" flexWrap="wrap">
-          <Button size="$3" onPress={() => onComplete(item.id)}>
-            Complete
+          <Button size="$3" onPress={handleComplete}>
+            {justCompleted ? (
+              <View
+                animation="playfulBounce"
+                enterStyle={{ scale: 0, opacity: 0 }}
+                scale={1}
+                opacity={1}
+              >
+                <CheckIcon size={16} />
+              </View>
+            ) : (
+              'Complete'
+            )}
           </Button>
           <Button size="$3" variant="outlined" onPress={() => onEdit(item.id)}>
             Edit
@@ -207,7 +258,8 @@ function ChoreCardItem({
 function Section({
   title,
   items,
-  accent,
+  stateColor,
+  memberNames,
   onComplete,
   onBump,
   onEdit,
@@ -215,7 +267,8 @@ function Section({
 }: {
   title: string
   items: ChoreCard[]
-  accent?: boolean
+  stateColor?: string
+  memberNames: string[]
   onComplete: (choreId: string) => void
   onBump: (choreId: string) => void
   onEdit: (choreId: string) => void
@@ -226,19 +279,75 @@ function Section({
   }
 
   return (
-    <YStack>
-      <SectionHeader title={title} count={items.length} accent={accent} />
+    <YStack gap="$2">
+      <SectionHeader title={title} count={items.length} stateColor={stateColor} />
 
       {items.map((item) => (
         <ChoreCardItem
           key={item.id}
           item={item}
+          memberNames={memberNames}
           onComplete={onComplete}
           onBump={onBump}
           onEdit={onEdit}
           onArchive={onArchive}
         />
       ))}
+    </YStack>
+  )
+}
+
+function ChoreSections({
+  sections,
+  memberNames,
+  onComplete,
+  onBump,
+  onEdit,
+  onArchive,
+}: {
+  sections: { overdue: ChoreCard[]; due: ChoreCard[]; upcoming: ChoreCard[] }
+  memberNames: string[]
+  onComplete: (choreId: string) => void
+  onBump: (choreId: string) => void
+  onEdit: (choreId: string) => void
+  onArchive: (choreId: string) => void
+}) {
+  const overdueColor = useStateColor('overdue')
+  const dueColor = useStateColor('due')
+  const upcomingColor = useStateColor('upcoming')
+
+  return (
+    <YStack gap="$6">
+      <Section
+        title="Overdue"
+        items={sections.overdue}
+        stateColor={overdueColor}
+        memberNames={memberNames}
+        onComplete={onComplete}
+        onBump={onBump}
+        onEdit={onEdit}
+        onArchive={onArchive}
+      />
+      <Section
+        title="Due Soon"
+        items={sections.due}
+        stateColor={dueColor}
+        memberNames={memberNames}
+        onComplete={onComplete}
+        onBump={onBump}
+        onEdit={onEdit}
+        onArchive={onArchive}
+      />
+      <Section
+        title="Upcoming"
+        items={sections.upcoming}
+        stateColor={upcomingColor}
+        memberNames={memberNames}
+        onComplete={onComplete}
+        onBump={onBump}
+        onEdit={onEdit}
+        onArchive={onArchive}
+      />
     </YStack>
   )
 }
@@ -326,7 +435,6 @@ export const ChoreHomePage = memo(() => {
                   fontFamily="$heading"
                   size="$8"
                   fontWeight="700"
-                  fontStyle="italic"
                   color="$accentColor"
                 >
                   {household.householdName}
@@ -546,8 +654,8 @@ export const ChoreHomePage = memo(() => {
           {/* Chore sections */}
           {hasNoChores ? (
             <YStack
-              borderTopWidth={2}
-              borderTopColor="$borderColor"
+              borderRadius="$4"
+              bg="$color2"
               pt="$8"
               pb="$6"
               items="center"
@@ -556,7 +664,6 @@ export const ChoreHomePage = memo(() => {
               <SizableText
                 fontFamily="$heading"
                 size="$7"
-                fontStyle="italic"
                 color="$color8"
                 textAlign="center"
               >
@@ -573,33 +680,14 @@ export const ChoreHomePage = memo(() => {
               </Paragraph>
             </YStack>
           ) : (
-            <YStack gap="$6">
-              <Section
-                title="Overdue"
-                items={sections.overdue}
-                accent
-                onComplete={completeChore}
-                onBump={sendBump}
-                onEdit={handleBeginEdit}
-                onArchive={archiveChore}
-              />
-              <Section
-                title="Due Soon"
-                items={sections.due}
-                onComplete={completeChore}
-                onBump={sendBump}
-                onEdit={handleBeginEdit}
-                onArchive={archiveChore}
-              />
-              <Section
-                title="Upcoming"
-                items={sections.upcoming}
-                onComplete={completeChore}
-                onBump={sendBump}
-                onEdit={handleBeginEdit}
-                onArchive={archiveChore}
-              />
-            </YStack>
+            <ChoreSections
+              sections={sections}
+              memberNames={memberNames}
+              onComplete={completeChore}
+              onBump={sendBump}
+              onEdit={handleBeginEdit}
+              onArchive={archiveChore}
+            />
           )}
         </YStack>
       </PageContainer>

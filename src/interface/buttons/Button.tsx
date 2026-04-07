@@ -5,15 +5,18 @@ export const Button = styled(TamaguiButton, {
   borderWidth: 0,
   cursor: 'pointer',
   fontFamily: '$body',
-  textTransform: 'uppercase',
-  letterSpacing: 2,
   minHeight: 48,
+  borderRadius: '$4',
   transition: 'playfulQuick',
 
   focusVisibleStyle: {
     outlineWidth: 2,
     outlineStyle: 'solid',
     outlineColor: '$accentColor',
+  },
+
+  pressStyle: {
+    scale: 0.97,
   },
 
   variants: {
@@ -28,7 +31,7 @@ export const Button = styled(TamaguiButton, {
         pressStyle: {
           bg: '$accentBackground',
           color: '$accentForeground',
-          opacity: 0.95,
+          scale: 0.97,
         },
       },
       outlined: {
@@ -42,15 +45,13 @@ export const Button = styled(TamaguiButton, {
         pressStyle: {
           bg: '$color2',
           borderColor: '$color6',
-          opacity: 0.9,
+          scale: 0.97,
         },
       },
       transparent: {
         bg: 'transparent',
-        letterSpacing: 0,
-        textTransform: 'none',
         hoverStyle: { bg: '$color2' },
-        pressStyle: { bg: '$color1', opacity: 0.8 },
+        pressStyle: { bg: '$color1', opacity: 0.8, scale: 0.97 },
       },
       floating: {
         bg: '$color12',
@@ -66,7 +67,7 @@ export const Button = styled(TamaguiButton, {
         pressStyle: {
           bg: '$accentBackground',
           color: '$accentForeground',
-          opacity: 0.95,
+          scale: 0.97,
         },
       },
     },

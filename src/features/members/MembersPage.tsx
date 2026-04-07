@@ -15,6 +15,7 @@ import { Input } from '~/interface/forms/Input'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { H1, H3 } from '~/interface/text/Headings'
 import { Avatar } from '~/interface/avatars/Avatar'
+import { memberAccentColors } from '~/tamagui/themes/playfulHousehold'
 
 import { useMemberBoard } from './useMemberBoard'
 import type { Member, MemberRole } from './types'
@@ -38,21 +39,27 @@ function SectionLabel({ children }: { children: string }) {
 
 function MemberCard({
   member,
+  index,
   onRemove,
 }: {
   member: Member
+  index: number
   onRemove: (id: string) => void
 }) {
+  const accentColor = memberAccentColors[index % memberAccentColors.length]
+
   return (
     <XStack
-      borderTopWidth={1}
-      borderTopColor="$borderColor"
-      py="$4"
+      borderRadius="$4"
+      bg="$color2"
+      p="$4"
       gap="$4"
       items="center"
-      hoverStyle={{ bg: '$color2' }}
+      hoverStyle={{ bg: '$color3' }}
+      pressStyle={{ scale: 0.98, opacity: 0.9 }}
+      transition="playfulQuick"
     >
-      <Avatar image={null} name={member.name} size="md" />
+      <Avatar image={null} name={member.name} size="lg" accentColor={accentColor} />
 
       <YStack flex={1} gap="$1">
         <H3 size="$5">{member.name}</H3>
@@ -60,8 +67,6 @@ function MemberCard({
           fontFamily="$body"
           size="$1"
           fontWeight="600"
-          letterSpacing={2}
-          textTransform="uppercase"
           color="$color8"
         >
           {member.role}
@@ -106,8 +111,7 @@ export const MembersPage = memo(() => {
                   fontFamily="$heading"
                   size="$8"
                   fontWeight="700"
-                  fontStyle="italic"
-                  color="$color12"
+                  color="$accentColor"
                 >
                   Members
                 </SizableText>
@@ -174,8 +178,8 @@ export const MembersPage = memo(() => {
           {/* Member List */}
           {members.length === 0 ? (
             <YStack
-              borderTopWidth={2}
-              borderTopColor="$borderColor"
+              borderRadius="$4"
+              bg="$color2"
               pt="$8"
               pb="$6"
               items="center"
@@ -184,7 +188,6 @@ export const MembersPage = memo(() => {
               <SizableText
                 fontFamily="$heading"
                 size="$7"
-                fontStyle="italic"
                 color="$color8"
                 textAlign="center"
               >
@@ -201,11 +204,12 @@ export const MembersPage = memo(() => {
               </SizableText>
             </YStack>
           ) : (
-            <YStack>
-              {members.map((member) => (
+            <YStack gap="$3">
+              {members.map((member, index) => (
                 <MemberCard
                   key={member.id}
                   member={member}
+                  index={index}
                   onRemove={removeMember}
                 />
               ))}

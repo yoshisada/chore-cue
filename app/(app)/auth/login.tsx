@@ -33,7 +33,7 @@ export const LoginPage = () => {
         my="$4"
         items="center"
         justify="center"
-        transition="luxurySlow"
+        transition="playfulBounce"
         enterStyle={{ scale: 0.95, opacity: 0 }}
       >
         <LogoIcon size={42} />
@@ -44,6 +44,7 @@ export const LoginPage = () => {
         width="100%"
         items="center"
         bg="$background"
+        borderRadius="$4"
         p={isWeb ? '$6' : '$4'}
         maxW={isWeb ? 400 : '90%'}
       >

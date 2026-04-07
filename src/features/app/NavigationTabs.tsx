@@ -38,12 +38,12 @@ export function NavigationTabs() {
             <Pressable
               px="$4"
               py="$2"
-              bg="transparent"
-              borderBottomWidth={isActive ? 2 : 0}
-              borderBottomColor={isActive ? '$accentColor' : 'transparent'}
+              bg={isActive ? '$color3' : 'transparent'}
+              borderRadius="$3"
               hoverStyle={{ bg: '$color2' }}
+              pressStyle={{ scale: 0.95, opacity: 0.85 }}
             >
-              <Icon size={iconSize} color={isActive ? '$accentColor' : '$color8'} />
+              <Icon size={iconSize} color={isActive ? '$color12' : '$color8'} />
             </Pressable>
           </Link>
         )

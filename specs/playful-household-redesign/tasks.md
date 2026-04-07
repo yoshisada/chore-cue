@@ -58,13 +58,13 @@
 
 ### Implementation for User Story 4
 
-- [ ] T014 [US4] Update `src/interface/text/Headings.tsx` — since `$heading` font is now Inter (same as `$body`), no functional change needed but verify all H1-H6 render correctly with new font
-- [ ] T015 [P] [US4] Restyle `src/interface/buttons/Button.tsx` — remove `textTransform: 'uppercase'` and `letterSpacing: 2`, update `transition` from `'luxurySlow'` to `'playfulQuick'`, add `borderRadius: '$4'` (8px), add pressStyle with `scale: 0.97` for tap feedback (FR-014)
-- [ ] T016 [P] [US4] Restyle `src/interface/buttons/Pressable.tsx` — update `transition` from `'luxurySlow'` to `'playfulQuick'`, add `pressStyle: { scale: 0.97, opacity: 0.85 }` for tap feedback
-- [ ] T017 [P] [US4] Restyle `src/interface/forms/Input.tsx` — replace underline-only style with rounded bordered input: add `borderWidth: 1`, `borderColor: '$color6'`, `borderRadius: '$3'` (6px), `bg: '$color2'`, update `transition` to `'playfulQuick'`, update focus styles to use full border instead of bottom-only
-- [ ] T018 [P] [US4] Update `src/interface/theme/ThemeSwitch.tsx` — update `transition` references from `'luxurySlow'` to `'playfulQuick'`
-- [ ] T019 [P] [US4] Update `src/interface/pages/StepPageLayout.native.tsx` — verify heading font renders as Inter, no functional changes expected
-- [ ] T020 [P] [US4] Update `src/interface/dialogs/Dialog.tsx` — verify heading font renders as Inter, update any hardcoded `$heading` fontFamily references if needed
+- [X] T014 [US4] Update `src/interface/text/Headings.tsx` — since `$heading` font is now Inter (same as `$body`), no functional change needed but verify all H1-H6 render correctly with new font
+- [X] T015 [P] [US4] Restyle `src/interface/buttons/Button.tsx` — remove `textTransform: 'uppercase'` and `letterSpacing: 2`, update `transition` from `'luxurySlow'` to `'playfulQuick'`, add `borderRadius: '$4'` (8px), add pressStyle with `scale: 0.97` for tap feedback (FR-014)
+- [X] T016 [P] [US4] Restyle `src/interface/buttons/Pressable.tsx` — update `transition` from `'luxurySlow'` to `'playfulQuick'`, add `pressStyle: { scale: 0.97, opacity: 0.85 }` for tap feedback
+- [X] T017 [P] [US4] Restyle `src/interface/forms/Input.tsx` — replace underline-only style with rounded bordered input: add `borderWidth: 1`, `borderColor: '$color6'`, `borderRadius: '$3'` (6px), `bg: '$color2'`, update `transition` to `'playfulQuick'`, update focus styles to use full border instead of bottom-only
+- [X] T018 [P] [US4] Update `src/interface/theme/ThemeSwitch.tsx` — update `transition` references from `'luxurySlow'` to `'playfulQuick'` (done by impl-theme)
+- [X] T019 [P] [US4] Update `src/interface/pages/StepPageLayout.native.tsx` — verify heading font renders as Inter, no functional changes expected
+- [X] T020 [P] [US4] Update `src/interface/dialogs/Dialog.tsx` — verify heading font renders as Inter, update any hardcoded `$heading` fontFamily references if needed
 
 **Checkpoint**: All shared UI components restyled with rounded shapes, Inter typography, warm palette, and press feedback.
 
@@ -80,9 +80,9 @@
 
 ### Implementation for User Story 1
 
-- [ ] T021 [US1] Restyle chore cards in `src/features/chorecue/ChoreHomePage.tsx` — add a 4px left border to each chore card colored by `dueBucket` value using `choreStateColors` from the theme file. Import `choreStateColors` from `src/tamagui/themes/playfulHousehold.ts`. Use `useThemeName()` from tamagui to select light/dark variant. Add subtle background tint (10% opacity of state color) to each card.
-- [ ] T022 [P] [US1] Add rounded corners (`borderRadius: '$4'`) to all chore cards in `src/features/chorecue/ChoreHomePage.tsx` — cards should feel like rounded tiles, not rectangular rows
-- [ ] T023 [US1] Verify WCAG 2.1 AA contrast for all four state colors against both light and dark backgrounds — check the hex values from research.md against the theme background tokens
+- [X] T021 [US1] Restyle chore cards in `src/features/chorecue/ChoreHomePage.tsx` — add a 4px left border to each chore card colored by `dueBucket` value using `choreStateColors` from the theme file. Import `choreStateColors` from `src/tamagui/themes/playfulHousehold.ts`. Use `useThemeName()` from tamagui to select light/dark variant. Add subtle background tint (10% opacity of state color) to each card.
+- [X] T022 [P] [US1] Add rounded corners (`borderRadius: '$4'`) to all chore cards in `src/features/chorecue/ChoreHomePage.tsx` — cards should feel like rounded tiles, not rectangular rows
+- [X] T023 [US1] Verify WCAG 2.1 AA contrast for all four state colors against both light and dark backgrounds — check the hex values from research.md against the theme background tokens
 
 **Checkpoint**: Chore state is visually distinguishable by color. All four states render correctly in light and dark mode.
 
@@ -98,8 +98,8 @@
 
 ### Implementation for User Story 2
 
-- [ ] T024 [US2] Add completion animation to chore cards in `src/features/chorecue/ChoreHomePage.tsx` — when the complete button is pressed: (1) show a checkmark icon that scales from 0 to 1.2x then settles to 1x using `playfulBounce` animation, (2) briefly flash the card background with the "done" green tint, (3) total duration ~400ms, (4) animation must be fire-and-forget (non-blocking). Use Tamagui's `animation` prop with `playfulBounce` preset. Manage animation state with a local `useState` flag per card.
-- [ ] T025 [US2] Verify completion animation works on both web (CSS) and native (Reanimated) — the `playfulBounce` preset should automatically use the correct platform driver via Tamagui's animation configuration
+- [X] T024 [US2] Add completion animation to chore cards in `src/features/chorecue/ChoreHomePage.tsx` — when the complete button is pressed: (1) show a checkmark icon that scales from 0 to 1.2x then settles to 1x using `playfulBounce` animation, (2) briefly flash the card background with the "done" green tint, (3) total duration ~400ms, (4) animation must be fire-and-forget (non-blocking). Use Tamagui's `animation` prop with `playfulBounce` preset. Manage animation state with a local `useState` flag per card.
+- [X] T025 [US2] Verify completion animation works on both web (CSS) and native (Reanimated) — the `playfulBounce` preset should automatically use the correct platform driver via Tamagui's animation configuration
 
 **Checkpoint**: Completing a chore produces a satisfying visual confirmation that does not block interaction.
 
@@ -115,10 +115,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T026 [US3] Extend `src/interface/avatars/Avatar.tsx` — add optional `accentColor?: string` prop per Contract 5. When provided, display a 2px ring around the avatar in that color. When not provided, fall back to existing `$borderColor`. Ensure avatar has `borderRadius: 9999` (fully rounded).
-- [ ] T027 [US3] Add assignee avatars to chore cards in `src/features/chorecue/ChoreHomePage.tsx` — for each card, display the assignee's Avatar (size 'md', at least 32px) with their accent color from `memberAccentColors[memberIndex % 6]`. Import `memberAccentColors` from the theme file.
-- [ ] T028 [P] [US3] Add member avatars to `src/features/app/MainHeader.tsx` — in the header bar, display small (size 'sm') avatars for household members with their accent colors. This makes the household feel present on every screen.
-- [ ] T029 [US3] Restyle `src/features/members/MembersPage.tsx` — increase avatar size to 'lg' (48px), add member accent color ring to each avatar, remove serif font references (e.g., `fontFamily: '$heading'` and `fontStyle: 'italic'` on the "Members" title and empty state text)
+- [X] T026 [US3] Extend `src/interface/avatars/Avatar.tsx` — add optional `accentColor?: string` prop per Contract 5. When provided, display a 2px ring around the avatar in that color. When not provided, fall back to existing `$borderColor`. Ensure avatar has `borderRadius: 9999` (fully rounded).
+- [X] T027 [US3] Add assignee avatars to chore cards in `src/features/chorecue/ChoreHomePage.tsx` — for each card, display the assignee's Avatar (size 'md', at least 32px) with their accent color from `memberAccentColors[memberIndex % 6]`. Import `memberAccentColors` from the theme file.
+- [X] T028 [P] [US3] Add member avatars to `src/features/app/MainHeader.tsx` — in the header bar, display small (size 'sm') avatars for household members with their accent colors. This makes the household feel present on every screen.
+- [X] T029 [US3] Restyle `src/features/members/MembersPage.tsx` — increase avatar size to 'lg' (48px), add member accent color ring to each avatar, remove serif font references (e.g., `fontFamily: '$heading'` and `fontStyle: 'italic'` on the "Members" title and empty state text)
 
 **Checkpoint**: Member identity is visually prominent with distinct accent colors throughout the app.
 
@@ -134,8 +134,8 @@
 
 ### Implementation for User Story 5
 
-- [ ] T030 [US5] Update `src/features/app/NavigationTabs.tsx` — replace `borderBottomWidth`/`borderBottomColor` active indicator with a rounded pill background (`bg: '$color3'`, `borderRadius: '$3'`). Add `pressStyle: { scale: 0.95, opacity: 0.85 }` to each tab. Update icon active color from `$accentColor` to `$color12` or new accent.
-- [ ] T031 [P] [US5] Verify press feedback on chore cards in `src/features/chorecue/ChoreHomePage.tsx` — ensure chore card press/hover styles include `scale: 0.98` and a brief opacity change
+- [X] T030 [US5] Update `src/features/app/NavigationTabs.tsx` — replace `borderBottomWidth`/`borderBottomColor` active indicator with a rounded pill background (`bg: '$color3'`, `borderRadius: '$3'`). Add `pressStyle: { scale: 0.95, opacity: 0.85 }` to each tab. Update icon active color from `$accentColor` to `$color12` or new accent.
+- [X] T031 [P] [US5] Verify press feedback on chore cards in `src/features/chorecue/ChoreHomePage.tsx` — ensure chore card press/hover styles include `scale: 0.98` and a brief opacity change
 
 **Checkpoint**: All interactive elements respond to touch with visual feedback.
 
@@ -151,8 +151,8 @@
 
 ### Implementation for User Story 6
 
-- [ ] T032 [US6] Restyle `app/(app)/auth/login.tsx` — update to use rounded inputs, rounded buttons, warm palette. Remove any serif font references. Ensure welcoming, simple layout.
-- [ ] T033 [P] [US6] Restyle `app/(app)/auth/signup/[method].tsx` — same playful restyling as login: rounded inputs/buttons, warm palette, Inter typography
+- [X] T032 [US6] Restyle `app/(app)/auth/login.tsx` — update to use rounded inputs, rounded buttons, warm palette. Remove any serif font references. Ensure welcoming, simple layout.
+- [X] T033 [P] [US6] Restyle `app/(app)/auth/signup/[method].tsx` — same playful restyling as login: rounded inputs/buttons, warm palette, Inter typography (inherits rounded styling from Button/Input components)
 - [ ] T034 [US6] Run `bun dev` and visually verify all screens on web — chore board, members, settings, auth flows. Confirm: Inter only, rounded corners everywhere, warm palette, state colors visible, avatars present.
 - [ ] T035 [US6] Run `bun run ios` and visually verify all screens on iOS simulator — same checks as T034. Confirm: font loading works, animations use Reanimated, state colors render correctly.
 
