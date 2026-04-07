@@ -1,4 +1,4 @@
-import { useEmitter } from '@take-out/helpers'
+import { useEmitter } from '~/helpers/emitter'
 import { memo, useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import {

@@ -1,5 +1,5 @@
 import Constants, { ExecutionEnvironment } from 'expo-constants'
-import { setStorageDriver } from '@take-out/helpers'
+import { setStorageDriver } from '~/helpers/storage/driver'
 
 const isExpoGo =
   Constants.executionEnvironment === ExecutionEnvironment.StoreClient

@@ -1,4 +1,4 @@
-import { migrate } from '@take-out/postgres/migrate'
+import { migrate } from './migrationRunner'
 
 import { ZERO_CHANGE_DB, ZERO_CVR_DB, ZERO_UPSTREAM_DB } from '~/server/env-server'
 

@@ -1,4 +1,4 @@
-import { createBetterAuthClient } from '@take-out/better-auth-utils'
+import { createBetterAuthClient } from '~/helpers/createBetterAuthClient'
 import { href } from 'one'
 
 import { SERVER_URL } from '~/constants/urls'
