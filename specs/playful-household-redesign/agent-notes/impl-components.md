@@ -16,7 +16,11 @@
 
 4. **Old theme file still exists**: `src/tamagui/themes/luxuryEditorial.ts` is still in the repo. It's no longer imported but wasn't deleted (impl-theme scope). Should be cleaned up.
 
-5. **Visual verification tasks (T034, T035, T040) require human**: These tasks require running the dev server and iOS simulator for visual verification — cannot be completed by the agent alone.
+5. **Visual verification tasks (T034, T035, T040) require human**: These tasks require running the dev server and iOS simulator for visual verification — code-level verification (grep for Playfair, italic, pure black) confirmed clean.
+
+6. **root.css @import broke Vite**: impl-theme added `@import url(...)` for Google Fonts in root.css (commit 346581b) which caused Vite to return HTTP 500 during CSS compilation. Team lead fixed this in commit 75d8ded. The `<link>` tag in `_layout.tsx` already loaded Inter correctly. Lesson: never use CSS `@import` with external URLs in Vite projects — use HTML `<link>` tags instead.
+
+7. **Integration tests need backend**: Playwright tests that test demo login require the Docker backend running (`bun backend`). 4 layout/visual tests passed; 25 auth-dependent tests failed as expected without backend.
 
 ## Decisions made
 
