@@ -65,8 +65,10 @@ export async function up(client: PoolClient) {
   )
 
   // insert demo household (only if household table exists)
+  // use SAVEPOINT so that a failure here doesn't poison the outer transaction
   const DEMO_HOUSEHOLD_ID = `household-${DEMO_ID.slice(0, 8)}`
   try {
+    await client.query('SAVEPOINT household_insert')
     await client.query(
       `
       INSERT INTO "household" (id, name, "createdAt")
@@ -84,8 +86,10 @@ export async function up(client: PoolClient) {
       `,
       [`${DEMO_HOUSEHOLD_ID}-${DEMO_ID}`, DEMO_HOUSEHOLD_ID, DEMO_ID, now]
     )
+    await client.query('RELEASE SAVEPOINT household_insert')
   } catch {
     // household tables may not exist yet if migration 0003 hasn't run
+    await client.query('ROLLBACK TO SAVEPOINT household_insert')
   }
 
   console.info('demo user created:', DEMO_EMAIL)
