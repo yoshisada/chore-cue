@@ -9,7 +9,7 @@
 
 | Agent | Result | Details |
 |-------|--------|---------|
-| e2e-agent | 126/126 passed (78 skipped) | All Playwright specs green; skips are credential-blocked auth/CRUD flows |
+| e2e-agent | 126/126 QA passed (78 skipped), 3/29 integration passed (26 failed) | QA specs green; integration tests blocked by login page freeze |
 | chrome-agent | 3/7 passed (4 skipped) | Login page verified visually; 4 flows skipped (backend not running) |
 | ux-agent | 3 minor findings | All pre-existing on base branch; luxury editorial theme fully preserved |
 
@@ -17,9 +17,10 @@
 
 | # | Severity | Title | GitHub Issue |
 |---|----------|-------|-------------|
-| 1 | minor | Pre-existing minor issues (consolidated) | [#2](https://github.com/yoshisada/chore-cue/issues/2) |
+| 1 | major | Integration tests: login page freezes, demo button not visible (26/29 fail) | [#3](https://github.com/yoshisada/chore-cue/issues/3) |
+| 2 | minor | Pre-existing minor issues (consolidated) | [#2](https://github.com/yoshisada/chore-cue/issues/2) |
 
-No critical or major issues were found. The migration introduced zero regressions.
+1 major issue filed. The login page freeze may be caused by missing backend (Postgres/Zero not running) rather than a code regression.
 
 ---
 
@@ -55,6 +56,22 @@ Duration: ~146 seconds across 6 workers.
 #### Unit tests:
 - 126/131 tests passed, 5 failed (pre-existing on base branch)
 - 0 new failures introduced by migration
+
+### Integration Tests (src/test/integration/)
+
+**3 passed, 26 failed**
+
+#### Passing:
+- `api.test.ts`: health endpoint returns ok status -- PASS
+- `api.test.ts`: health endpoint responds quickly -- PASS
+- `basic.test.ts`: server should be running on port 8081 -- PASS
+
+#### Failures (26 tests, single root cause):
+All 26 failures share the same root cause: `TimeoutError` waiting for `[data-testid="login-as-demo"]` to become visible within 10 seconds. The login page appears to freeze during hydration in headless Chromium, preventing the demo button from rendering.
+
+**Note**: The demo button IS visible in live browser testing (chrome-agent confirmed). The freeze likely relates to Zero sync connection failure (backend not running) blocking page hydration in the Playwright headless environment.
+
+Filed as: [#3](https://github.com/yoshisada/chore-cue/issues/3)
 
 ### Skipped flows (78 Playwright specs)
 All skipped tests require `QA_TEST_USER_EMAIL` + `QA_TEST_USER_PASSWORD` in `.kiln/qa/config/.env.test`. These cover:
