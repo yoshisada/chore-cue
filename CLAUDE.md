@@ -107,9 +107,29 @@ Copy `.env.development.example` → `.env.development` and set:
 
 ### Testing
 
-- Coverage is scoped to specific files in `src/test/vitest.config.ts` (currently `boardState.ts` and `householdContext.ts`)
+- Coverage is scoped to specific files in `src/test/vitest.config.ts` (currently `boardState.ts`, `householdContext.ts`, and `memberState.ts`)
 - Unit tests go in `src/test/unit/`, integration tests in `src/test/integration/`
 - 80% coverage threshold on lines, functions, statements, branches
+- If you add new pure-logic files during implementation, add them to the `coverage.include` array in `src/test/vitest.config.ts`
+
+### Post-Implementation Testing (MANDATORY)
+
+**A feature is NOT complete until it passes all test phases.** Testing MUST begin immediately after implementation — do not wait for the user to ask. The `/speckit.test` skill is registered as a mandatory `after_implement` hook and defines the full workflow.
+
+**Test execution order** (strict — do not skip or reorder):
+
+1. **Unit Tests** — `bun run test:unit` then `bun run test:unit:coverage`
+   - Fast feedback on pure logic regressions
+   - Coverage must meet 80% threshold; write new tests if it drops
+2. **Playwright Web Integration Tests** — `bun run test:integration`
+   - Runs against Chromium Desktop on `http://localhost:8081`
+   - Dev server must be running (`bun dev`); do NOT start it yourself
+   - If the feature added new user-facing flows, write new `*.spec.ts` files
+3. **Mobile Verification** — `bun run ios` (then `bun run android` if needed)
+   - Required if any `.native.ts` / `.native.tsx` files were modified
+   - Ask the user to visually verify the feature on the simulator
+
+**Failure protocol**: Fix the failing code (not the test, unless the test is wrong), re-run that phase until green, then proceed. If stuck after 3 attempts on the same issue, stop and report to the user.
 
 ### Tooling
 

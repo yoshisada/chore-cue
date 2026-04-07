@@ -3,6 +3,7 @@ import { eq } from 'drizzle-orm'
 import { getDb } from '~/database'
 import { user as userTable } from '~/database/schema-private'
 import { todo, userPublic, userState } from '~/database/schema-public'
+import { householdActions } from './householdActions'
 
 import type { AuthData } from '~/features/auth/types'
 
@@ -68,6 +69,9 @@ async function onboardUser(authData: AuthData, userId: string) {
   }
 
   await db.insert(userPublic).values(userRow)
+
+  // Ensure the user has a household
+  await householdActions.ensureHouseholdForUser(authData, userId)
 
   return userPrivate
 }

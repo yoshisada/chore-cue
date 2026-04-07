@@ -34,7 +34,7 @@ const heading = createFont({
     16: 144,
   },
   weight: {
-    3: '300', // Light
+    3: '400', // Regular (Playfair Display has no 300 weight)
     4: '400', // Regular
     5: '500', // Medium
     6: '600', // SemiBold
@@ -42,7 +42,7 @@ const heading = createFont({
   },
   letterSpacing: baseFonts.heading.letterSpacing,
   face: {
-    300: { normal: 'PlayfairDisplay_300Light', italic: 'PlayfairDisplay_300Light_Italic' },
+    300: { normal: 'PlayfairDisplay_400Regular', italic: 'PlayfairDisplay_400Regular_Italic' },
     400: { normal: 'PlayfairDisplay_400Regular', italic: 'PlayfairDisplay_400Regular_Italic' },
     500: { normal: 'PlayfairDisplay_500Medium', italic: 'PlayfairDisplay_500Medium_Italic' },
     600: { normal: 'PlayfairDisplay_600SemiBold', italic: 'PlayfairDisplay_600SemiBold_Italic' },

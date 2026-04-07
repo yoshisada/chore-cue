@@ -6,8 +6,6 @@ import {
   Inter_700Bold,
 } from '@expo-google-fonts/inter'
 import {
-  PlayfairDisplay_300Light,
-  PlayfairDisplay_300Light_Italic,
   PlayfairDisplay_400Regular,
   PlayfairDisplay_400Regular_Italic,
   PlayfairDisplay_500Medium,
@@ -31,8 +29,6 @@ export function useLuxuryFonts() {
     Inter_500Medium,
     Inter_600SemiBold,
     Inter_700Bold,
-    PlayfairDisplay_300Light,
-    PlayfairDisplay_300Light_Italic,
     PlayfairDisplay_400Regular,
     PlayfairDisplay_400Regular_Italic,
     PlayfairDisplay_500Medium,

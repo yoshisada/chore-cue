@@ -36,7 +36,23 @@ const user = {
   ),
 }
 
+const household = {
+  householdsByUserId: defineQuery(
+    v.object({
+      userId: v.string(),
+    }),
+    ({ args }) => Queries.household.householdsByUserId(args)
+  ),
+  householdById: defineQuery(
+    v.object({
+      householdId: v.string(),
+    }),
+    ({ args }) => Queries.household.householdById(args)
+  ),
+}
+
 export const queries = defineQueries({
+  household,
   todo,
   user,
 })

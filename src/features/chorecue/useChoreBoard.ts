@@ -9,6 +9,7 @@ import {
   createSections,
   emptyComposer,
   emptyEditorState,
+  filterBySearch,
   filterByTags,
   initialChores,
   saveEditedChore,
@@ -24,10 +25,12 @@ export function useChoreBoard() {
   const [editor, setEditor] = useState<ChoreEditorState>(emptyEditorState)
   const [bumpCount, setBumpCount] = useState(2)
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set())
+  const [searchQuery, setSearchQuery] = useState('')
 
   const sorted = useMemo(() => sortVisibleChores(chores), [chores])
-  const allTags = useMemo(() => collectAllTags(sorted), [sorted])
-  const filtered = useMemo(() => filterByTags(sorted, selectedTags), [sorted, selectedTags])
+  const afterSearch = useMemo(() => filterBySearch(sorted, searchQuery), [sorted, searchQuery])
+  const allTags = useMemo(() => collectAllTags(afterSearch), [afterSearch])
+  const filtered = useMemo(() => filterByTags(afterSearch, selectedTags), [afterSearch, selectedTags])
   const sections = useMemo(() => createSections(filtered), [filtered])
 
   function updateComposer<Key extends keyof ChoreComposerState>(
@@ -130,6 +133,8 @@ export function useChoreBoard() {
     sections,
     allTags,
     selectedTags,
+    searchQuery,
+    setSearchQuery,
     composer,
     editor,
     bumpCount,

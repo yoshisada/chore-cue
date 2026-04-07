@@ -13,7 +13,7 @@ export const Button = styled(TamaguiButton, {
   focusVisibleStyle: {
     outlineWidth: 2,
     outlineStyle: 'solid',
-    outlineColor: '$color10',
+    outlineColor: '$accentColor',
   },
 
   variants: {
@@ -22,12 +22,12 @@ export const Button = styled(TamaguiButton, {
         bg: '$color12',
         color: '$color1',
         hoverStyle: {
-          bg: '$color10',
-          color: '$color1',
+          bg: '$accentBackground',
+          color: '$accentForeground',
         },
         pressStyle: {
-          bg: '$color11',
-          color: '$color1',
+          bg: '$accentBackground',
+          color: '$accentForeground',
           opacity: 0.95,
         },
       },
@@ -59,13 +59,13 @@ export const Button = styled(TamaguiButton, {
         shadowRadius: 8,
         shadowOffset: { height: 3, width: 0 },
         hoverStyle: {
-          bg: '$color10',
-          color: '$color1',
+          bg: '$accentBackground',
+          color: '$accentForeground',
           shadowRadius: 12,
         },
         pressStyle: {
-          bg: '$color11',
-          color: '$color1',
+          bg: '$accentBackground',
+          color: '$accentForeground',
           opacity: 0.95,
         },
       },

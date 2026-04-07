@@ -63,7 +63,6 @@ export const MainHeaderMenu = memo(() => {
     <>
       <Button
         variant="transparent"
-        circular
         minHeight={0}
         icon={<ListIcon size="$1" color="$color" />}
         aria-label="Menu"

@@ -106,7 +106,7 @@ const SelectableSquare = styled(View, {
   variants: {
     active: {
       true: {
-        outlineColor: '$color12',
+        outlineColor: '$accentColor',
         outlineWidth: 2,
         outlineStyle: 'solid',
 
@@ -125,7 +125,7 @@ const SelectableSquare = styled(View, {
         },
 
         pressStyle: {
-          outlineColor: '$color12',
+          outlineColor: '$accentColor',
           outlineWidth: 2,
           outlineStyle: 'solid',
         },

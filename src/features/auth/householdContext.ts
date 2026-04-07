@@ -1,6 +1,7 @@
 export interface HouseholdContext {
   userId: string
   householdId: string
+  householdName: string
   displayName: string
   isAuthenticated: boolean
 }
@@ -24,6 +25,7 @@ export function deriveHouseholdContext(auth: HouseholdAuthSnapshot): HouseholdCo
   return {
     userId,
     householdId: deriveServerHouseholdId(userId),
+    householdName: 'My Household',
     displayName: auth.user?.name || auth.user?.username || 'Demo Member',
     isAuthenticated: auth.state === 'logged-in',
   }

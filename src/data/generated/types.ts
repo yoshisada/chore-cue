@@ -9,3 +9,9 @@ export type UserUpdate = TableUpdateRow<typeof schema.userPublic>
 
 export type UserState = TableInsertRow<typeof schema.userState>
 export type UserStateUpdate = TableUpdateRow<typeof schema.userState>
+
+export type Household = TableInsertRow<typeof schema.household>
+export type HouseholdUpdate = TableUpdateRow<typeof schema.household>
+
+export type HouseholdMember = TableInsertRow<typeof schema.householdMember>
+export type HouseholdMemberUpdate = TableUpdateRow<typeof schema.householdMember>

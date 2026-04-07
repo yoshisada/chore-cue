@@ -20,12 +20,12 @@ export const Input = styled(TamaguiInput, {
   focusVisibleStyle: {
     outlineWidth: 0,
     borderBottomWidth: 2,
-    borderBottomColor: '$color12',
+    borderBottomColor: '$accentColor',
   },
 
   focusStyle: {
     borderBottomWidth: 2,
-    borderBottomColor: '$color12',
+    borderBottomColor: '$accentColor',
   },
 })
 

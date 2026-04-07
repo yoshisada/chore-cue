@@ -197,6 +197,17 @@ export function collectAllTags(chores: ChoreCard[]): string[] {
   return [...tags].sort((a, b) => a.localeCompare(b))
 }
 
+export function filterBySearch(chores: ChoreCard[], query: string): ChoreCard[] {
+  const trimmed = query.trim().toLowerCase()
+  if (!trimmed) return chores
+  return chores.filter(
+    (chore) =>
+      chore.title.toLowerCase().includes(trimmed) ||
+      chore.assigneeName.toLowerCase().includes(trimmed) ||
+      chore.tags.some((tag) => tag.toLowerCase().includes(trimmed))
+  )
+}
+
 export function filterByTags(chores: ChoreCard[], selectedTags: Set<string>): ChoreCard[] {
   if (selectedTags.size === 0) return chores
   return chores.filter((chore) => chore.tags.some((tag) => selectedTags.has(tag)))

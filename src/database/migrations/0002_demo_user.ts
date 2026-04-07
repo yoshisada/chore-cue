@@ -64,5 +64,29 @@ export async function up(client: PoolClient) {
     [DEMO_ID]
   )
 
+  // insert demo household (only if household table exists)
+  const DEMO_HOUSEHOLD_ID = `household-${DEMO_ID.slice(0, 8)}`
+  try {
+    await client.query(
+      `
+      INSERT INTO "household" (id, name, "createdAt")
+      VALUES ($1, $2, $3)
+      ON CONFLICT (id) DO NOTHING
+      `,
+      [DEMO_HOUSEHOLD_ID, 'My Household', now]
+    )
+
+    await client.query(
+      `
+      INSERT INTO "householdMember" (id, "householdId", "userId", role, "joinedAt")
+      VALUES ($1, $2, $3, 'admin', $4)
+      ON CONFLICT (id) DO NOTHING
+      `,
+      [`${DEMO_HOUSEHOLD_ID}-${DEMO_ID}`, DEMO_HOUSEHOLD_ID, DEMO_ID, now]
+    )
+  } catch {
+    // household tables may not exist yet if migration 0003 hasn't run
+  }
+
   console.info('demo user created:', DEMO_EMAIL)
 }

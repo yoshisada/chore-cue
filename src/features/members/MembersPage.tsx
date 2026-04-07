@@ -94,7 +94,7 @@ export const MembersPage = memo(() => {
   }
 
   return (
-    <Container flex={1} bg="$background" {...(!isWeb && { contentContainerStyle: { paddingBottom: insets.bottom + 40 } })}>
+    <Container flex={1} bg="$background" {...(!isWeb && { contentContainerStyle: { paddingTop: insets.top, paddingBottom: insets.bottom + 40 } })}>
       <PageContainer>
         <YStack gap="$6" py="$5">
           {/* Hero */}

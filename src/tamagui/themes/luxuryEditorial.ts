@@ -12,6 +12,10 @@ const TAUPE = '#EBE5DE'
 const WARM_GREY = '#6C6863'
 const CHARCOAL = '#1A1A1A'
 
+// Gold accent — darker hue for light mode (AA on alabaster), brighter for dark mode (AA on charcoal)
+const GOLD_LIGHT = '#8A6C1F'
+const GOLD_DARK = '#D4AF37'
+
 // 12-step warm monochromatic scale (light to dark)
 const lightScale = {
   color1: ALABASTER,
@@ -64,6 +68,9 @@ export const luxuryLightTheme = {
   shadowColor: 'rgba(26, 26, 26, 0.08)',
   shadowColorHover: 'rgba(26, 26, 26, 0.12)',
   placeholderColor: WARM_GREY,
+  accentColor: GOLD_LIGHT,
+  accentBackground: GOLD_LIGHT,
+  accentForeground: ALABASTER,
 } as const
 
 export const luxuryDarkTheme = {
@@ -86,6 +93,9 @@ export const luxuryDarkTheme = {
   shadowColor: 'rgba(0, 0, 0, 0.2)',
   shadowColorHover: 'rgba(0, 0, 0, 0.3)',
   placeholderColor: '#A89080',
+  accentColor: GOLD_DARK,
+  accentBackground: GOLD_DARK,
+  accentForeground: CHARCOAL,
 } as const
 
 export const luxuryEditorialThemes = {
@@ -99,4 +109,6 @@ export const palette = {
   taupe: TAUPE,
   warmGrey: WARM_GREY,
   charcoal: CHARCOAL,
+  goldLight: GOLD_LIGHT,
+  goldDark: GOLD_DARK,
 } as const

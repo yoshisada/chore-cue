@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { ScrollView, Separator, SizableText, XStack, YStack, isWeb } from 'tamagui'
+import { ScrollView, Separator, Sheet, SizableText, XStack, YStack, isWeb } from 'tamagui'
 
 import { APP_NAME_LOWERCASE } from '~/constants/app'
 import { useAuth } from '~/features/auth/client/authClient'
@@ -7,9 +8,11 @@ import { useHouseholdContext } from '~/features/auth/client/useHouseholdContext'
 import { useLogout } from '~/features/auth/useLogout'
 import { Avatar } from '~/interface/avatars/Avatar'
 import { Button } from '~/interface/buttons/Button'
+import { Input } from '~/interface/forms/Input'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { H1 } from '~/interface/text/Headings'
 import { ThemeSwitch, useToggleTheme } from '~/interface/theme/ThemeSwitch'
+import { zero } from '~/zero/client'
 
 function SectionLabel({ children }: { children: string }) {
   return (
@@ -32,12 +35,22 @@ export function ProfileSettingsPage() {
   const household = useHouseholdContext()
   const { logout } = useLogout()
   const { setting } = useToggleTheme()
+  const [renameOpen, setRenameOpen] = useState(false)
+  const [newHouseholdName, setNewHouseholdName] = useState('')
 
   const displayName = user?.name || user?.username || 'User'
   const email = user?.email || ''
   const themeLabel = setting === 'system' ? 'System' : setting === 'dark' ? 'Dark' : 'Light'
 
   const Container = isWeb ? YStack : ScrollView
+
+  const handleRename = () => {
+    const trimmed = newHouseholdName.trim()
+    if (trimmed) {
+      zero.mutate.household.update({ id: household.householdId, name: trimmed })
+      setRenameOpen(false)
+    }
+  }
 
   return (
     <Container flex={1} bg="$background" {...(!isWeb && { contentContainerStyle: { paddingBottom: insets.bottom + 40 } })}>
@@ -52,7 +65,7 @@ export function ProfileSettingsPage() {
                 size="$8"
                 fontWeight="700"
                 fontStyle="italic"
-                color="$color12"
+                color="$accentColor"
               >
                 Profile
               </SizableText>
@@ -61,7 +74,7 @@ export function ProfileSettingsPage() {
 
           <XStack
             borderTopWidth={2}
-            borderTopColor="$color12"
+            borderTopColor="$accentColor"
             pt="$5"
             gap="$4"
             items="center"
@@ -76,11 +89,72 @@ export function ProfileSettingsPage() {
                   {email}
                 </SizableText>
               ) : null}
-              <SizableText fontFamily="$body" size="$2" color="$color8">
-                {household.householdId}
-              </SizableText>
             </YStack>
           </XStack>
+
+          {/* Household */}
+          <YStack gap="$3">
+            <SectionLabel>Household</SectionLabel>
+            <Separator />
+            <XStack
+              justify="space-between"
+              items="center"
+              py="$2"
+            >
+              <YStack gap="$1" flex={1}>
+                <SizableText fontFamily="$body" size="$5">
+                  {household.householdName}
+                </SizableText>
+                <SizableText fontFamily="$body" size="$2" color="$color8">
+                  {household.householdId}
+                </SizableText>
+              </YStack>
+              <Button
+                size="$3"
+                variant="outlined"
+                onPress={() => {
+                  setNewHouseholdName(household.householdName)
+                  setRenameOpen(true)
+                }}
+              >
+                Rename
+              </Button>
+            </XStack>
+          </YStack>
+
+          {/* Rename Household Sheet */}
+          <Sheet
+            open={renameOpen}
+            onOpenChange={setRenameOpen}
+            transition="medium"
+            modal
+            dismissOnSnapToBottom
+            snapPoints={[40]}
+          >
+            <Sheet.Overlay
+              bg="$shadow6"
+              transition="quick"
+              enterStyle={{ opacity: 0 }}
+              exitStyle={{ opacity: 0 }}
+            />
+            <Sheet.Frame bg="$color2" boxShadow="0 0 10px $shadow4">
+              <ScrollView flex={1} contentContainerStyle={{ padding: 24 }}>
+                <YStack gap="$4">
+                  <SectionLabel>Rename Household</SectionLabel>
+                  <Separator />
+                  <Input
+                    placeholder="Household name"
+                    value={newHouseholdName}
+                    onChangeText={setNewHouseholdName}
+                    onSubmitEditing={handleRename}
+                  />
+                  <Button onPress={handleRename}>
+                    Save name
+                  </Button>
+                </YStack>
+              </ScrollView>
+            </Sheet.Frame>
+          </Sheet>
 
           {/* Appearance */}
           <YStack gap="$3">

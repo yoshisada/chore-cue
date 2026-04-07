@@ -40,10 +40,10 @@ export function NavigationTabs() {
               py="$2"
               bg="transparent"
               borderBottomWidth={isActive ? 2 : 0}
-              borderBottomColor={isActive ? '$color12' : 'transparent'}
+              borderBottomColor={isActive ? '$accentColor' : 'transparent'}
               hoverStyle={{ bg: '$color2' }}
             >
-              <Icon size={iconSize} color={isActive ? '$color12' : '$color8'} />
+              <Icon size={iconSize} color={isActive ? '$accentColor' : '$color8'} />
             </Pressable>
           </Link>
         )
