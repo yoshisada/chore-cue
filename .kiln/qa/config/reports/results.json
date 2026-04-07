@@ -1,0 +1,2379 @@
+{
+  "config": {
+    "configFile": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/config/playwright.config.ts",
+    "rootDir": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 6
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "./reports"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "./reports/results.json"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "desktop-chrome",
+        "name": "desktop-chrome",
+        "testDir": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "tablet",
+        "name": "tablet",
+        "testDir": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "mobile-chrome",
+        "name": "mobile-chrome",
+        "testDir": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.57.0",
+    "workers": 6,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "flow-01-luxury-theme-visual-identity.spec.ts",
+      "file": "flow-01-luxury-theme-visual-identity.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "FR-001: App loads with warm off-white background and charcoal text — no pure black or white",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5670,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:03.404Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-01-luxury-theme-visua-038ea-xt-—-no-pure-black-or-white-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a4a34cb394ab3a1eb1eb-56e9d4e7ef3ee17b0034",
+          "file": "flow-01-luxury-theme-visual-identity.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "FR-002: All headings render in serif typeface",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 5877,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:03.413Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-01-luxury-theme-visua-7bd54-gs-render-in-serif-typeface-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a4a34cb394ab3a1eb1eb-5573b0806bbc93f09774",
+          "file": "flow-01-luxury-theme-visual-identity.spec.ts",
+          "line": 18,
+          "column": 1
+        },
+        {
+          "title": "FR-002: Body text, labels, and buttons use sans-serif typeface",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 5880,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:03.428Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-01-luxury-theme-visua-9dec6-ons-use-sans-serif-typeface-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a4a34cb394ab3a1eb1eb-b3aa1d82847fff6b4f75",
+          "file": "flow-01-luxury-theme-visual-identity.spec.ts",
+          "line": 25,
+          "column": 1
+        },
+        {
+          "title": "FR-003: Zero border radius on all interactive elements",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 5919,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:03.436Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-01-luxury-theme-visua-338c3-on-all-interactive-elements-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a4a34cb394ab3a1eb1eb-16486e870153794e40d8",
+          "file": "flow-01-luxury-theme-visual-identity.spec.ts",
+          "line": 32,
+          "column": 1
+        },
+        {
+          "title": "FR-003: User avatar is rectangular, not circular",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 5447,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:03.421Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-01-luxury-theme-visua-c2945-is-rectangular-not-circular-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a4a34cb394ab3a1eb1eb-652aa1d254c16581acab",
+          "file": "flow-01-luxury-theme-visual-identity.spec.ts",
+          "line": 39,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "flow-04-auth.spec.ts",
+      "file": "flow-04-auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "auth: Login flow — credentials + redirect to chore board — requires credentials",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-04-auth.spec.ts",
+                    "line": 9,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:02.899Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-04-auth.spec.ts",
+                        "line": 9,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "174a0e1043b5c4900c26-f50a01673fffbe634980",
+          "file": "flow-04-auth.spec.ts",
+          "line": 9,
+          "column": 6
+        },
+        {
+          "title": "auth: Signup flow — new account creation — requires credentials",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-04-auth.spec.ts",
+                    "line": 18,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:02.900Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-04-auth.spec.ts",
+                        "line": 18,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "174a0e1043b5c4900c26-5f18abaaf27f8a847880",
+          "file": "flow-04-auth.spec.ts",
+          "line": 18,
+          "column": 6
+        },
+        {
+          "title": "auth: Session persistence on reload — requires credentials",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-04-auth.spec.ts",
+                    "line": 26,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:02.900Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-04-auth.spec.ts",
+                        "line": 26,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "174a0e1043b5c4900c26-86d2a65048f72e7b26f3",
+          "file": "flow-04-auth.spec.ts",
+          "line": 26,
+          "column": 6
+        },
+        {
+          "title": "auth: Logout — session cleared — requires credentials",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-04-auth.spec.ts",
+                    "line": 34,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:02.900Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-04-auth.spec.ts",
+                        "line": 34,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "174a0e1043b5c4900c26-83fdf237f8ebdbd5713d",
+          "file": "flow-04-auth.spec.ts",
+          "line": 34,
+          "column": 6
+        },
+        {
+          "title": "auth: Login page renders with luxury editorial styling (no credentials needed)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 6183,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:03.398Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-04-auth-auth-Login-pa-bdf95-ling-no-credentials-needed--desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "174a0e1043b5c4900c26-894aed1589b632b8b12e",
+          "file": "flow-04-auth.spec.ts",
+          "line": 42,
+          "column": 1
+        },
+        {
+          "title": "auth: Signup page renders with luxury editorial styling (no credentials needed)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 3190,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:09.299Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-04-auth-auth-Signup-p-27c09-ling-no-credentials-needed--desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "174a0e1043b5c4900c26-1c4043dadb505a1d0e53",
+          "file": "flow-04-auth.spec.ts",
+          "line": 51,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "flow-06-interactive-states-animations.spec.ts",
+      "file": "flow-06-interactive-states-animations.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "FR-005: Primary button gold reveal animation fires on hover",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4095,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:09.567Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-06-interactive-states-e7af1-al-animation-fires-on-hover-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "584b67f12e6821c54ede-52400dbaddc00107fe44",
+          "file": "flow-06-interactive-states-animations.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "FR-006: Text input shows only bottom border when unfocused",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 5922,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:09.708Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-06-interactive-states-2d32c-ottom-border-when-unfocused-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "584b67f12e6821c54ede-151169870686ba8fefac",
+          "file": "flow-06-interactive-states-animations.spec.ts",
+          "line": 18,
+          "column": 1
+        },
+        {
+          "title": "FR-006: Text input bottom border transitions to gold on focus",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 5529,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:09.719Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-06-interactive-states-f24b4-ransitions-to-gold-on-focus-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "584b67f12e6821c54ede-adedec69efba2bd9ec50",
+          "file": "flow-06-interactive-states-animations.spec.ts",
+          "line": 26,
+          "column": 1
+        },
+        {
+          "title": "FR-009: CSS animation durations are at least 500ms on web",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 5050,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:09.743Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-06-interactive-states-a0643-s-are-at-least-500ms-on-web-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "584b67f12e6821c54ede-52af4d1ab96d63a271e6",
+          "file": "flow-06-interactive-states-animations.spec.ts",
+          "line": 35,
+          "column": 1
+        },
+        {
+          "title": "FR-017: Chore card hover adds subtle shadow, not harsh drop shadow",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 4797,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:10.018Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-06-interactive-states-5dd4b-hadow-not-harsh-drop-shadow-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "584b67f12e6821c54ede-2bcd556e596375036830",
+          "file": "flow-06-interactive-states-animations.spec.ts",
+          "line": 42,
+          "column": 1
+        },
+        {
+          "title": "FR-010: Reduced motion — transitions complete instantly when prefers-reduced-motion is set",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 6270,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:12.513Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-06-interactive-states-1129f-efers-reduced-motion-is-set-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "584b67f12e6821c54ede-0c37eff7fb72808f99f4",
+          "file": "flow-06-interactive-states-animations.spec.ts",
+          "line": 51,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "flow-07-typography-hierarchy.spec.ts",
+      "file": "flow-07-typography-hierarchy.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "FR-002/US-004: Main screen heading uses italic serif with gold accent for editorial personality",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5902,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:13.696Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-07-typography-hierarc-b29a8-t-for-editorial-personality-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "df03a9ddc1b6b960eb72-c529cb7738bbf4318860",
+          "file": "flow-07-typography-hierarchy.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "FR-007/US-004: Section labels (Overdue/Due/Upcoming) are uppercase with wide letter spacing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 5834,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:14.812Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-07-typography-hierarc-732dc-se-with-wide-letter-spacing-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "df03a9ddc1b6b960eb72-b775a3f8e6eabec0fcdd",
+          "file": "flow-07-typography-hierarchy.spec.ts",
+          "line": 17,
+          "column": 1
+        },
+        {
+          "title": "US-004: Metadata text (timestamps, counts) is small, sans-serif, warm grey",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 5308,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:14.834Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-07-typography-hierarc-5f2fc--small-sans-serif-warm-grey-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "df03a9ddc1b6b960eb72-53aaf3e7a79989a3ac82",
+          "file": "flow-07-typography-hierarchy.spec.ts",
+          "line": 25,
+          "column": 1
+        },
+        {
+          "title": "FR-002: Font loading — Playfair Display or system serif fallback visible on web",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 5779,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:15.262Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-07-typography-hierarc-971cf-rif-fallback-visible-on-web-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "df03a9ddc1b6b960eb72-ef64d07652a3d8252256",
+          "file": "flow-07-typography-hierarchy.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "FR-014: Font fallback preserves serif/sans distinction when CDN blocked",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 5776,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:15.641Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-07-typography-hierarc-fa96d-istinction-when-CDN-blocked-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "df03a9ddc1b6b960eb72-27356d191dc9b06413a9",
+          "file": "flow-07-typography-hierarchy.spec.ts",
+          "line": 41,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "flow-08-dark-mode-theme.spec.ts",
+      "file": "flow-08-dark-mode-theme.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "FR-011: Dark mode uses inverted palette — dark charcoal background, warm off-white text",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 5420,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:18.811Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-08-dark-mode-theme-FR-c1daf-kground-warm-off-white-text-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9184be74b45f5d501786-cf8f85b67b003a0832ba",
+          "file": "flow-08-dark-mode-theme.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "FR-011: Dark mode preserves zero border radius",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5119,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:19.611Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-08-dark-mode-theme-FR-ba229-reserves-zero-border-radius-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9184be74b45f5d501786-d64a3fd30bf25a987253",
+          "file": "flow-08-dark-mode-theme.spec.ts",
+          "line": 19,
+          "column": 1
+        },
+        {
+          "title": "FR-011: Dark mode preserves serif/sans-serif typographic hierarchy",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 5087,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:20.154Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-08-dark-mode-theme-FR-c0e6f-serif-typographic-hierarchy-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9184be74b45f5d501786-d2872ef8df529d328966",
+          "file": "flow-08-dark-mode-theme.spec.ts",
+          "line": 28,
+          "column": 1
+        },
+        {
+          "title": "spec: Theme toggle in settings switches between light and dark luxury themes — requires credentials",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-08-dark-mode-theme.spec.ts",
+                    "line": 37,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:20.654Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-08-dark-mode-theme.spec.ts",
+                        "line": 37,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "9184be74b45f5d501786-68644dc9d58a73c0dc92",
+          "file": "flow-08-dark-mode-theme.spec.ts",
+          "line": 37,
+          "column": 6
+        }
+      ]
+    },
+    {
+      "title": "flow-09-accessibility.spec.ts",
+      "file": "flow-09-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "FR-012/SC-003: Primary text achieves WCAG AA contrast (4.5:1) against background",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 5065,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:20.658Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-09-accessibility-FR-0-f2d06-st-4-5-1-against-background-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "703e4e16b4215f80e9b6-095ede8626b2ad7b74bf",
+          "file": "flow-09-accessibility.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "FR-012/SC-003: Secondary/metadata text achieves at least 4.5:1 contrast",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 4965,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:21.052Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-09-accessibility-FR-0-2d0fa-ves-at-least-4-5-1-contrast-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "703e4e16b4215f80e9b6-c68aa893d460e76f9aa8",
+          "file": "flow-09-accessibility.spec.ts",
+          "line": 17,
+          "column": 1
+        },
+        {
+          "title": "FR-012/SC-003: Dark mode primary text achieves WCAG AA contrast",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 5962,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:21.431Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-09-accessibility-FR-0-e5907-t-achieves-WCAG-AA-contrast-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "703e4e16b4215f80e9b6-14b8173d87689ea24123",
+          "file": "flow-09-accessibility.spec.ts",
+          "line": 25,
+          "column": 1
+        },
+        {
+          "title": "FR-013/SC-004: Interactive touch targets are at least 48pt (64px) in height",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 3963,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:24.247Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-09-accessibility-FR-0-824ce-t-least-48pt-64px-in-height-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "703e4e16b4215f80e9b6-a8c1a2b35f59df1ef3f8",
+          "file": "flow-09-accessibility.spec.ts",
+          "line": 34,
+          "column": 1
+        },
+        {
+          "title": "FR-012/SC-003: Navigation header text achieves WCAG AA contrast",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6156,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:24.740Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-09-accessibility-FR-0-d96b6-t-achieves-WCAG-AA-contrast-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "703e4e16b4215f80e9b6-3c7ed6e8d705b6db7814",
+          "file": "flow-09-accessibility.spec.ts",
+          "line": 42,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "flow-10-navigation-components.spec.ts",
+      "file": "flow-10-navigation-components.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "US-005/FR-002: Navigation header uses monochromatic palette and sans-serif type",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 5993,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:25.254Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-10-navigation-compone-adfb4-palette-and-sans-serif-type-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "32375c3fc42cb4ec3e6a-68d449b35a8a2f09bea0",
+          "file": "flow-10-navigation-components.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "US-005: Navigation header gold accent only on active/hovered item",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 6619,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:25.733Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-10-navigation-compone-10732-only-on-active-hovered-item-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "32375c3fc42cb4ec3e6a-ed13bb31d46c13ef3d00",
+          "file": "flow-10-navigation-components.spec.ts",
+          "line": 18,
+          "column": 1
+        },
+        {
+          "title": "US-005: Dialog renders with luxury editorial styling — requires credentials",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-10-navigation-components.spec.ts",
+                    "line": 26,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:26.023Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-10-navigation-components.spec.ts",
+                        "line": 26,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "32375c3fc42cb4ec3e6a-0b3fc499fae5e6f3363a",
+          "file": "flow-10-navigation-components.spec.ts",
+          "line": 26,
+          "column": 6
+        },
+        {
+          "title": "spec: Settings page renders with luxury editorial styling — requires credentials",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-10-navigation-components.spec.ts",
+                    "line": 35,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:26.023Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-10-navigation-components.spec.ts",
+                        "line": 35,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "32375c3fc42cb4ec3e6a-5b31b56cbf9ee4cd09a6",
+          "file": "flow-10-navigation-components.spec.ts",
+          "line": 35,
+          "column": 6
+        },
+        {
+          "title": "spec: Members page renders with luxury editorial styling — requires credentials",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-10-navigation-components.spec.ts",
+                    "line": 43,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:26.023Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-10-navigation-components.spec.ts",
+                        "line": 43,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "32375c3fc42cb4ec3e6a-e98e18b44272d179b290",
+          "file": "flow-10-navigation-components.spec.ts",
+          "line": 43,
+          "column": 6
+        }
+      ]
+    },
+    {
+      "title": "flow-11-responsive-viewports.spec.ts",
+      "file": "flow-11-responsive-viewports.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "SC-010: App renders correctly at tablet viewport (768x1024)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 6947,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:26.028Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-11-responsive-viewpor-2a72c-t-tablet-viewport-768x1024--desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e6a8a3959182c2135a2f-caf9b0d91674bb30977b",
+          "file": "flow-11-responsive-viewports.spec.ts",
+          "line": 12,
+          "column": 1
+        },
+        {
+          "title": "SC-010: App renders correctly at mobile viewport (375x667)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 6216,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:27.406Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-11-responsive-viewpor-886f6-at-mobile-viewport-375x667--desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e6a8a3959182c2135a2f-3189d3c80458b97f699f",
+          "file": "flow-11-responsive-viewports.spec.ts",
+          "line": 22,
+          "column": 1
+        },
+        {
+          "title": "US-001: Typography scales proportionally on mobile viewport",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 5926,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:28.225Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-11-responsive-viewpor-f134e-tionally-on-mobile-viewport-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e6a8a3959182c2135a2f-7461e556a45eaa72a78e",
+          "file": "flow-11-responsive-viewports.spec.ts",
+          "line": 31,
+          "column": 1
+        },
+        {
+          "title": "SC-010: Auth forms display correctly on mobile viewport — requires credentials",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-11-responsive-viewports.spec.ts",
+                    "line": 39,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:30.903Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-11-responsive-viewports.spec.ts",
+                        "line": 39,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "e6a8a3959182c2135a2f-c902ce676853352fc1dc",
+          "file": "flow-11-responsive-viewports.spec.ts",
+          "line": 39,
+          "column": 6
+        }
+      ]
+    },
+    {
+      "title": "flow-12-infra-dev-server.spec.ts",
+      "file": "flow-12-infra-dev-server.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "infra: Dev server responds on port 8081 without errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5354,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:30.908Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-12-infra-dev-server-i-aa447-on-port-8081-without-errors-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "61a412ae0ecfaa3a2f0d-fbae2ecca8b7522b1304",
+          "file": "flow-12-infra-dev-server.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "infra: No app-level JS console errors on initial page load (backend not required)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 10926,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:31.265Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-12-infra-dev-server-i-57a8d--load-backend-not-required--desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "61a412ae0ecfaa3a2f0d-37f60638577fca4d1948",
+          "file": "flow-12-infra-dev-server.spec.ts",
+          "line": 18,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "flow-13-kit-migration-import-cleanup.spec.ts",
+      "file": "flow-13-kit-migration-import-cleanup.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "kit/SC-005/FR-014: Zero @take-out/ imports remain in source files",
+          "ok": true,
+          "tags": [
+            "take-out/"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 95,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:38.806Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "17c6a00a561af8cb4ec9-25343041da4578fdf1d1",
+          "file": "flow-13-kit-migration-import-cleanup.spec.ts",
+          "line": 7,
+          "column": 1
+        },
+        {
+          "title": "kit/SC-006/FR-004: Zero tko references remain in package.json scripts",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 8,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:38.913Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "17c6a00a561af8cb4ec9-edd3a08daa6f0f5c27d5",
+          "file": "flow-13-kit-migration-import-cleanup.spec.ts",
+          "line": 22,
+          "column": 1
+        },
+        {
+          "title": "kit/US-002: bun.lock contains no @take-out/ as DIRECT project dependency",
+          "ok": true,
+          "tags": [
+            "take-out/"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 12,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:38.930Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "17c6a00a561af8cb4ec9-26762ad30aa38c2af8ba",
+          "file": "flow-13-kit-migration-import-cleanup.spec.ts",
+          "line": 36,
+          "column": 1
+        },
+        {
+          "title": "kit/FR-007: postinstall.ts contains no @take-out references",
+          "ok": true,
+          "tags": [
+            "take-out"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 8,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:38.951Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "17c6a00a561af8cb4ec9-66895ac65e330c93de21",
+          "file": "flow-13-kit-migration-import-cleanup.spec.ts",
+          "line": 54,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "flow-14-kit-migration-app-runtime.spec.ts",
+      "file": "flow-14-kit-migration-app-runtime.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "kit/SC-003: App loads on port 8081 after migration with no server errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 5953,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:32.366Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-14-kit-migration-app--67458-ation-with-no-server-errors-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5ab4f7fe63511843450d-2fd93f9b16ba067d3a07",
+          "file": "flow-14-kit-migration-app-runtime.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "kit/SC-003: No app-level JS console errors on initial load after migration (backend not required)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 12806,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:32.994Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-14-kit-migration-app--407c5-ation-backend-not-required--desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5ab4f7fe63511843450d-4f85201e923ee679f2b2",
+          "file": "flow-14-kit-migration-app-runtime.spec.ts",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "title": "kit/SC-008: Luxury editorial theme preserved — warm background, no pure white/black",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 5825,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:33.632Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-14-kit-migration-app--639cc-kground-no-pure-white-black-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5ab4f7fe63511843450d-f1c01c184750fa12ba83",
+          "file": "flow-14-kit-migration-app-runtime.spec.ts",
+          "line": 40,
+          "column": 1
+        },
+        {
+          "title": "kit/SC-008: Luxury editorial theme preserved — zero border radius on interactive elements",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 6446,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:34.185Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-14-kit-migration-app--cb357-ius-on-interactive-elements-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5ab4f7fe63511843450d-e54ab1944306a1392574",
+          "file": "flow-14-kit-migration-app-runtime.spec.ts",
+          "line": 53,
+          "column": 1
+        },
+        {
+          "title": "kit/SC-008: Luxury editorial theme preserved — serif font used for headings",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5718,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:36.274Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/test-results/flow-14-kit-migration-app--5dda6-erif-font-used-for-headings-desktop-chrome/test-finished-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5ab4f7fe63511843450d-396dbe7334f5264ba98f",
+          "file": "flow-14-kit-migration-app-runtime.spec.ts",
+          "line": 66,
+          "column": 1
+        },
+        {
+          "title": "kit/US-001: Zero sync connects and data flows after migration — requires credentials",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-14-kit-migration-app-runtime.spec.ts",
+                    "line": 84,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop-chrome",
+              "projectName": "desktop-chrome",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-07T22:13:38.329Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/ryansuematsu/Documents/github/personal/chore-cue/.kiln/qa/tests/flow-14-kit-migration-app-runtime.spec.ts",
+                        "line": 84,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "5ab4f7fe63511843450d-2f836e2ac974a7fb78b6",
+          "file": "flow-14-kit-migration-app-runtime.spec.ts",
+          "line": 84,
+          "column": 6
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-04-07T22:13:02.839Z",
+    "duration": 43030.763,
+    "expected": 42,
+    "skipped": 10,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
