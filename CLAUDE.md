@@ -133,7 +133,7 @@ Copy `.env.development.example` → `.env.development` and set:
 
 ### Tooling
 
-- `tko` CLI (from `@take-out/cli`) provides project scripts — run `bun tko` to see available commands
+- Project scripts are defined in `package.json` — run `bun run` to see available commands
 - Spec Kit integration via `npx openskills read <skill-name>` for task-specific guidance
 
 ## Active Technologies

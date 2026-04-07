@@ -145,7 +145,7 @@ async function main() {
 
     // build migrations
     console.info('\nbuilding migrations...')
-    await $('bun run tko migrate build', { timeout: BUILD_TIMEOUT })
+    await $('bun run migrate:build', { timeout: BUILD_TIMEOUT })
 
     // start docker
     console.info('\nstarting docker...')
