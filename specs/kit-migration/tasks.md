@@ -19,9 +19,9 @@
 
 **Purpose**: Read existing implementations from node_modules before removing dependencies
 
-- [ ] T001 Read and document `@take-out/helpers` source from `node_modules/@take-out/helpers/` to understand exact implementations before inlining
-- [ ] T002 [P] Read and document `@take-out/better-auth-utils` source from `node_modules/@take-out/better-auth-utils/` to understand createBetterAuthClient implementation
-- [ ] T003 [P] Read and document `@take-out/postgres` source from `node_modules/@take-out/postgres/` to understand migrate() and createServerHelpers() implementations
+- [X] T001 Read and document `@take-out/helpers` source from `node_modules/@take-out/helpers/` to understand exact implementations before inlining
+- [X] T002 [P] Read and document `@take-out/better-auth-utils` source from `node_modules/@take-out/better-auth-utils/` to understand createBetterAuthClient implementation
+- [X] T003 [P] Read and document `@take-out/postgres` source from `node_modules/@take-out/postgres/` to understand migrate() and createServerHelpers() implementations
 
 ---
 
@@ -31,12 +31,12 @@
 
 **CRITICAL**: No import updates (Phases 3-8) can begin until these files exist.
 
-- [ ] T004 Create `src/helpers/ensureEnv.ts` — inline ensureEnv(key, defaultValue?) from @take-out/helpers
-- [ ] T005 [P] Create `src/helpers/assertions.ts` — inline assertString, ensure, ensureExists from @take-out/helpers
-- [ ] T006 [P] Create `src/helpers/emitter.ts` — inline createEmitter, useEmitter, useEmitterValue, isEqualNever from @take-out/helpers (uses useSyncExternalStore pattern)
-- [ ] T007 [P] Create `src/helpers/storage.ts` — inline createStorage, setStorageDriver from @take-out/helpers
-- [ ] T008 [P] Create `src/helpers/time.ts` — inline time duration helper object from @take-out/helpers
-- [ ] T009 [P] Create `src/helpers/prettyPrintResponse.ts` — inline prettyPrintResponse from @take-out/helpers
+- [X] T004 Create `src/helpers/ensureEnv.ts` — inline ensureEnv(key, defaultValue?) from @take-out/helpers
+- [X] T005 [P] Create `src/helpers/assertions.ts` — inline assertString, ensure, ensureExists from @take-out/helpers
+- [X] T006 [P] Create `src/helpers/emitter.ts` — inline createEmitter, useEmitter, useEmitterValue, isEqualNever from @take-out/helpers (uses useSyncExternalStore pattern)
+- [X] T007 [P] Create `src/helpers/storage.ts` — inline createStorage, setStorageDriver from @take-out/helpers
+- [X] T008 [P] Create `src/helpers/time.ts` — inline time duration helper object from @take-out/helpers
+- [X] T009 [P] Create `src/helpers/prettyPrintResponse.ts` — inline prettyPrintResponse from @take-out/helpers
 
 **Checkpoint**: All helper modules exist — import updates can now proceed in parallel
 
@@ -50,21 +50,21 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Inline `createBetterAuthClient()` into `src/features/auth/client/authClient.ts` — replace @take-out/better-auth-utils import with local implementation (wraps better-auth/client, adds useAuth hook, token management, authState emitter)
-- [ ] T011 [P] [US1] Inline `migrate()` function into `src/database/migrate.ts` — replace `@take-out/postgres/migrate` import with local Drizzle migration runner including Zero CVR/CDB database creation
-- [ ] T012 [P] [US1] Inline `createServerHelpers()` into `src/database/helpers.ts` — replace `@take-out/postgres` import with local wrapper returning `{ sql, getDBClient }`
-- [ ] T013 [P] [US1] Update `src/server/env-server.ts` — replace `@take-out/helpers` import with `~/helpers/ensureEnv`
-- [ ] T014 [P] [US1] Update `src/server/getIsAdmin.ts` — replace `@take-out/helpers` import with `~/helpers/assertions`
-- [ ] T015 [P] [US1] Update `src/zero/server.ts` — replace `@take-out/helpers` import with `~/helpers/assertions`
-- [ ] T016 [P] [US1] Update `src/features/auth/server/ensureAuthUser.ts` — replace `@take-out/helpers` import with `~/helpers/assertions`
-- [ ] T017 [P] [US1] Update `src/features/auth/server/apiHandler.ts` — replace `@take-out/helpers` import with `~/helpers/prettyPrintResponse`
-- [ ] T018 [P] [US1] Update `src/features/auth/server/authServer.ts` — replace `@take-out/helpers` import with `~/helpers/time`
-- [ ] T019 [P] [US1] Update `src/features/auth/client/platformClient.native.ts` — replace `@take-out/helpers` import with `~/helpers/storage`
-- [ ] T020 [P] [US1] Update `src/features/storage/setupStorage.native.ts` — replace `@take-out/helpers` import with `~/helpers/storage`
-- [ ] T021 [P] [US1] Update `src/interface/toast/emitter.ts` — replace `@take-out/helpers` import with `~/helpers/emitter`
-- [ ] T022 [P] [US1] Update `src/interface/toast/Toast.tsx` — replace `@take-out/helpers` imports with `~/helpers/emitter` and `import { isWeb } from 'tamagui'`
-- [ ] T023 [P] [US1] Update `src/interface/toast/Toast.native.tsx` — replace `@take-out/helpers` import with `~/helpers/emitter`
-- [ ] T024 [P] [US1] Update `src/features/app/scrollToTopEmitter.ts` — replace `@take-out/helpers` import with `~/helpers/emitter`
+- [X] T010 [US1] Inline `createBetterAuthClient()` into `src/features/auth/client/authClient.ts` — replace @take-out/better-auth-utils import with local implementation (wraps better-auth/client, adds useAuth hook, token management, authState emitter)
+- [X] T011 [P] [US1] Inline `migrate()` function into `src/database/migrate.ts` — replace `@take-out/postgres/migrate` import with local Drizzle migration runner including Zero CVR/CDB database creation
+- [X] T012 [P] [US1] Inline `createServerHelpers()` into `src/database/helpers.ts` — replace `@take-out/postgres` import with local wrapper returning `{ sql, getDBClient }`
+- [X] T013 [P] [US1] Update `src/server/env-server.ts` — replace `@take-out/helpers` import with `~/helpers/ensureEnv`
+- [X] T014 [P] [US1] Update `src/server/getIsAdmin.ts` — replace `@take-out/helpers` import with `~/helpers/assertions`
+- [X] T015 [P] [US1] Update `src/zero/server.ts` — replace `@take-out/helpers` import with `~/helpers/assertions`
+- [X] T016 [P] [US1] Update `src/features/auth/server/ensureAuthUser.ts` — replace `@take-out/helpers` import with `~/helpers/assertions`
+- [X] T017 [P] [US1] Update `src/features/auth/server/apiHandler.ts` — replace `@take-out/helpers` import with `~/helpers/prettyPrintResponse`
+- [X] T018 [P] [US1] Update `src/features/auth/server/authServer.ts` — replace `@take-out/helpers` import with `~/helpers/time`
+- [X] T019 [P] [US1] Update `src/features/auth/client/platformClient.native.ts` — replace `@take-out/helpers` import with `~/helpers/storage`
+- [X] T020 [P] [US1] Update `src/features/storage/setupStorage.native.ts` — replace `@take-out/helpers` import with `~/helpers/storage`
+- [X] T021 [P] [US1] Update `src/interface/toast/emitter.ts` — replace `@take-out/helpers` import with `~/helpers/emitter`
+- [X] T022 [P] [US1] Update `src/interface/toast/Toast.tsx` — replace `@take-out/helpers` imports with `~/helpers/emitter` and `import { isWeb } from 'tamagui'`
+- [X] T023 [P] [US1] Update `src/interface/toast/Toast.native.tsx` — replace `@take-out/helpers` import with `~/helpers/emitter`
+- [X] T024 [P] [US1] Update `src/features/app/scrollToTopEmitter.ts` — replace `@take-out/helpers` import with `~/helpers/emitter`
 
 **Checkpoint**: All @take-out/* imports replaced in source files — app should compile
 
@@ -78,9 +78,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T025 [US2] Remove all 6 `@take-out/*` packages from `package.json` dependencies: @take-out/better-auth-utils, @take-out/cli, @take-out/helpers, @take-out/hooks, @take-out/postgres, @take-out/scripts
-- [ ] T026 [US2] Run `bun install` to regenerate `bun.lock` without @take-out packages
-- [ ] T027 [US2] Run `grep -r "@take-out/" src/ scripts/ app/ package.json` to verify zero remaining references — fix any missed imports
+- [X] T025 [US2] Remove all 6 `@take-out/*` packages from `package.json` dependencies: @take-out/better-auth-utils, @take-out/cli, @take-out/helpers, @take-out/hooks, @take-out/postgres, @take-out/scripts
+- [X] T026 [US2] Run `bun install` to regenerate `bun.lock` without @take-out packages
+- [X] T027 [US2] Run `grep -r "@take-out/" src/ scripts/ app/ package.json` to verify zero remaining references — fix any missed imports
 
 **Checkpoint**: No @take-out packages in dependencies or source code
 
@@ -94,11 +94,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T028 [US3] Replace `tko check` and `tko check --all` in `package.json` scripts with direct validation commands or remove if not needed
-- [ ] T029 [P] [US3] Replace `tko migrate build` in `package.json` scripts with direct Drizzle migration build command
-- [ ] T030 [P] [US3] Replace `tko run env-update` in `package.json` scripts with inline env generation script
-- [ ] T031 [US3] Update `scripts/postinstall.ts` — remove @take-out patches (patches 1 and 2), keep react-native deepFreeze patch (patch 3), replace `bun tko run update-local-env` with inline equivalent, keep `bun run one patch`
-- [ ] T032 [P] [US3] Update `scripts/up.ts` — remove `takeout` upgrade target if present
+- [X] T028 [US3] Replace `tko check` and `tko check --all` in `package.json` scripts with direct validation commands or remove if not needed
+- [X] T029 [P] [US3] Replace `tko migrate build` in `package.json` scripts with direct Drizzle migration build command
+- [X] T030 [P] [US3] Replace `tko run env-update` in `package.json` scripts with inline env generation script
+- [X] T031 [US3] Update `scripts/postinstall.ts` — remove @take-out patches (patches 1 and 2), keep react-native deepFreeze patch (patch 3), replace `bun tko run update-local-env` with inline equivalent, keep `bun run one patch`
+- [X] T032 [P] [US3] Update `scripts/up.ts` — remove `takeout` upgrade target if present
 
 **Checkpoint**: No tko references in package.json — all scripts use direct commands
 
@@ -112,10 +112,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T033 [US4] Update `src/test/unit/auth-initialization.test.ts` — replace `@take-out/helpers` imports (setStorageDriver, createStorage) with `~/helpers/storage`
-- [ ] T034 [US4] Run `bun run test:unit` and fix any failing tests caused by import path changes
-- [ ] T035 [US4] Run `bun run test:unit:coverage` and verify 80%+ coverage threshold — add helpers to coverage.include in `src/test/vitest.config.ts` if needed
-- [ ] T036 [US4] Run `bun run test:integration` and fix any failing Playwright tests
+- [X] T033 [US4] Update `src/test/unit/auth-initialization.test.ts` — replace `@take-out/helpers` imports (setStorageDriver, createStorage) with `~/helpers/storage`
+- [X] T034 [US4] Run `bun run test:unit` and fix any failing tests caused by import path changes
+- [X] T035 [US4] Run `bun run test:unit:coverage` and verify 80%+ coverage threshold — add helpers to coverage.include in `src/test/vitest.config.ts` if needed
+- [X] T036 [US4] Run `bun run test:integration` and fix any failing Playwright tests
 
 **Checkpoint**: All tests green with coverage threshold met
 
