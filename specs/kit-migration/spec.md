@@ -1,6 +1,6 @@
 # Feature Specification: Kit Scaffold Migration
 
-**Feature Branch**: `build/kit-migration-20260407`  
+**Feature Branch**: `build/kit-migration-20260408`  
 **Created**: 2026-04-04  
 **Status**: Draft  
 **Input**: Migrate ChoreCue from tamagui/takeout-free scaffold to yoshisada/kit — a pure scaffold swap with full feature parity.
@@ -17,7 +17,7 @@ A developer clones the migrated branch, runs the standard dev commands (`bun dev
 
 **Acceptance Scenarios**:
 
-1. **Given** the migrated codebase on `build/kit-migration-20260407`, **When** a developer runs `bun dev`, **Then** the web app starts and all screens render identically to `002-luxury-editorial-redesign`.
+1. **Given** the migrated codebase on `build/kit-migration-20260408`, **When** a developer runs `bun dev`, **Then** the web app starts and all screens render identically to `002-luxury-editorial-redesign`.
 2. **Given** the migrated codebase, **When** a developer runs `bun run ios`, **Then** the iOS simulator builds and launches with all flows working.
 3. **Given** the migrated codebase, **When** a developer runs `bun backend && bun dev`, **Then** Zero sync connects, data flows between client and server, and offline-first behavior works.
 

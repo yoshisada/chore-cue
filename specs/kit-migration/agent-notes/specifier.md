@@ -2,7 +2,7 @@
 
 **Date**: 2026-04-04
 **Agent**: specifier
-**Branch**: build/kit-migration-20260407
+**Branch**: build/kit-migration-20260408
 
 ## What was confusing or unclear
 
