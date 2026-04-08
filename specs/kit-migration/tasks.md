@@ -158,10 +158,10 @@
 
 **Purpose**: Final verification, documentation, and cleanup
 
-- [ ] T044 Run `grep -r "@take-out/" .` across entire repo to catch any remaining references in config files, docs, or comments
-- [ ] T045 [P] Update `CLAUDE.md` — remove references to `@take-out/*` packages and `tko` CLI, update tech stack and commands sections
-- [ ] T046 [P] Verify `vite.config.ts` has no takeout-free-specific configuration that needs updating
-- [ ] T047 [P] Verify `tsconfig.json` path aliases include `~/helpers/*` mapping if not already covered by `~/*` → `./src/*`
+- [X] T044 Run `grep -r "@take-out/" .` across entire repo to catch any remaining references in config files, docs, or comments
+- [X] T045 [P] Update `CLAUDE.md` — remove references to `@take-out/*` packages and `tko` CLI, update tech stack and commands sections
+- [X] T046 [P] Verify `vite.config.ts` has no takeout-free-specific configuration that needs updating
+- [X] T047 [P] Verify `tsconfig.json` path aliases include `~/helpers/*` mapping if not already covered by `~/*` → `./src/*`
 - [ ] T048 Run final verification: `bun dev` starts, `bun run test:unit:coverage` passes, `bun run test:integration` passes
 - [ ] T049 Run `bun run ios` for final iOS verification
 
