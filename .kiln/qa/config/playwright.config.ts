@@ -7,8 +7,8 @@ export default defineConfig({
   timeout: 30000,
   retries: 1,
   reporter: [
-    ['html', { outputFolder: './reports' }],
-    ['json', { outputFile: './reports/results.json' }],
+    ['html', { outputFolder: '../reports' }],
+    ['json', { outputFile: '../reports/results.json' }],
     ['list']
   ],
   use: {

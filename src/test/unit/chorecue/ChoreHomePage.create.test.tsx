@@ -19,6 +19,7 @@ vi.mock('~/features/auth/client/useHouseholdContext', () => ({
   useHouseholdContext: () => ({
     userId: 'test-user',
     householdId: 'household-test1234',
+    householdName: 'My Household',
     displayName: 'Test Member',
     isAuthenticated: true,
   }),
@@ -86,7 +87,7 @@ describe('ChoreHomePage – create form and initial board rendering', () => {
 
   it('displays household context info', () => {
     renderWithProviders(<ChoreHomePage />)
-    expect(screen.getByText(/household-test1234/)).toBeTruthy()
+    expect(screen.getByText(/My Household/)).toBeTruthy()
     expect(screen.getByText(/Test Member/)).toBeTruthy()
   })
 })

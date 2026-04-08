@@ -21,6 +21,7 @@ vi.mock('~/features/auth/client/useHouseholdContext', () => ({
   useHouseholdContext: () => ({
     userId: 'test-user',
     householdId: 'household-test1234',
+    householdName: 'My Household',
     displayName: 'Test Member',
     isAuthenticated: true,
   }),
