@@ -1,8 +1,8 @@
-# Auditor Friction Notes — Kit Migration
+# Auditor Friction Notes — Kit Migration (Final Audit)
 
-**Agent**: auditor (Task #5)
-**Date**: 2026-04-04
-**Branch**: `build/kit-migration-20260407`
+**Agent**: auditor (Task #7)
+**Date**: 2026-04-08
+**Branch**: `build/kit-migration-20260408`
 
 ---
 
@@ -10,35 +10,45 @@
 
 - Zero @take-out/ references in source code, scripts, app, or package.json — grep confirmed clean.
 - Zero tko references in package.json — confirmed clean.
-- All helper modules exist in src/helpers/ with correct structure (14 files across 3 subdirectories).
-- QA report was comprehensive — 42/42 E2E tests pass, visual verification of luxury editorial theme confirmed.
-- The 5 unit test failures are pre-existing from the base branch (002-luxury-editorial-redesign), not migration regressions.
-- Implementation was well-scoped — 70 files changed, 31 source files modified, all import paths correctly updated.
+- All helper modules exist in src/helpers/ with correct exports.
+- 131 unit tests pass, 92.2% statement coverage (above 80% threshold).
+- QA report was comprehensive — 16/16 P0 flows pass on desktop-chrome.
+- Luxury editorial theme preservation confirmed by QA (SC-008: PASS).
+- Implementation tasks T001-T036 and T044-T047 all marked [X] in tasks.md.
+- postinstall.ts cleanly updated — only react-native deepFreeze patch and `bun run one patch` remain.
 
 ## Friction Points
 
-### 1. No blockers.md to reconcile
+### 1. FR-013 (file kit issues) not completed
 
-The instructions required reconciling blockers.md against code state, but no blockers.md was ever created. No blockers were encountered during the pipeline. This is a good outcome but the reconciliation step was a no-op.
+Tasks T037-T041 remain unchecked. Kit issue filing was P2 and no implementer was assigned to it. This is the only FR with a BLOCKED status. Can be done as a follow-up.
 
-### 2. FR-013 (file kit issues) scored as partial
+### 2. Helper file naming differs from task plan
 
-The spec requires filing GitHub issues on yoshisada/kit for every bug or API mismatch. The implementer correctly noted that kit is a scaffolding CLI with no runtime packages — the gap is architectural, not a bug. No actionable issues to file. This FR should have been revised after the research phase found that kit doesn't publish runtime packages.
+Tasks specified `assertions.ts`, `emitter.ts`, `storage.ts` but implementation created `ensure.ts`, `emitter.ts` (under helpers/), and `storage/driver.ts` + `storage/createStorage.ts`. All imports resolve and tests pass — the naming difference is cosmetic.
 
-### 3. Unit test exit code 1 despite pre-existing failures
+### 3. No FR comments in source code
 
-`bun run test:unit` and `bun run test:unit:coverage` both exit with code 1 due to 5 pre-existing failures. This makes it impossible to get a clean "smoke test: PASS" for unit tests. The QA report confirmed these are identical to the base branch, so this is accepted as a known condition.
+The audit template checks for `// FR-NNN` comments in source. None exist. For a migration (removing imports, not adding features), FR verification is done by grep absence checks and test results, not code annotations. This is acceptable.
 
-### 4. bun.lock still references @take-out/helpers transitively
+### 4. T042-T043 (visual verification), T048-T049 (final verification) unchecked
 
-`on-zero` (Zero sync) depends on `@take-out/helpers` as a transitive dependency. This is outside the project's control and expected. The spec's FR-014 grep target correctly scopes to `src/ scripts/ app/ package.json`, excluding lockfile transitive deps.
+These verification tasks were effectively covered by QA (web) but iOS native verification was not independently run. QA confirmed web parity; iOS requires `bun run ios`.
 
-### 5. tasks.md checkboxes never updated
+### 5. Dev server instability under parallel Playwright load
 
-All 49 tasks in tasks.md remain unchecked ([ ]) even though implementation is complete. The implementer committed code but didn't update the task checkboxes. This is cosmetic but makes post-hoc verification harder.
+QA reported the One/Vite dev server becoming unresponsive after ~25 concurrent browser connections. This is a test infrastructure issue documented in the QA report, not an app regression.
+
+## Audit Results
+
+- PRD Coverage: 100% (15/15 PRD requirements have covering FRs)
+- FR Compliance: 93% (14/15 FRs implemented and verified; FR-013 BLOCKED)
+- Test Coverage: 92.2% statements, 86.4% branches (above 80% threshold)
+- Unit Tests: 131/131 PASS
+- QA: 16/16 PASS, 1 SKIPPED (credentials), 0 FAIL
 
 ## Recommendations
 
-- Future migration PRDs should include a research gate before writing requirements — FR-013 assumed kit publishes packages, which research disproved.
-- The 5 pre-existing test failures on the base branch should be fixed before the next feature branch to avoid confusion in future audits.
-- Consider adding a pipeline step to update tasks.md checkboxes as implementation progresses.
+- File kit issues (T037-T041) as a follow-up task after merge.
+- Run `bun run ios` for native verification before shipping to production.
+- Consider adding FR-013 items to a backlog issue rather than blocking the PR.
