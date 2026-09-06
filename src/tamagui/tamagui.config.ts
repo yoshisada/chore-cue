@@ -34,9 +34,10 @@ export const config = createTamagui({
   fonts,
   // tamagui optimization - reduce bundle size by avoiding themes js on client
   // tamagui will hydrate it from CSS which improves lighthouse scores
-  themes: process.env.VITE_ENVIRONMENT === 'client'
-    ? ({} as typeof playfulHouseholdThemes)
-    : playfulHouseholdThemes,
+  themes:
+    process.env.VITE_ENVIRONMENT === 'client'
+      ? ({} as typeof playfulHouseholdThemes)
+      : playfulHouseholdThemes,
 })
 
 export type Conf = typeof config

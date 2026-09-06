@@ -1,4 +1,3 @@
-import { useEmitter } from '~/helpers/emitter'
 import { memo, useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import {
@@ -25,6 +24,8 @@ import {
   YStack,
   type ThemeName,
 } from 'tamagui'
+
+import { useEmitter } from '~/helpers/emitter'
 
 import { toastEmitter } from './emitter'
 

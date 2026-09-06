@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { createBoardDriver } from './renderHelpers'
 import { buildChore } from './fixtures'
+import { createBoardDriver } from './renderHelpers'
 
 describe('PhotoInput – attach and clear behavior via board state', () => {
   it('new chore gets photo label from composer', () => {
@@ -34,7 +34,9 @@ describe('PhotoInput – attach and clear behavior via board state', () => {
   })
 
   it('editing clears the photo from an existing chore', () => {
-    const board = createBoardDriver([buildChore({ id: 'c1', photoLabel: 'old-photo.jpg' })])
+    const board = createBoardDriver([
+      buildChore({ id: 'c1', photoLabel: 'old-photo.jpg' }),
+    ])
     board.beginEdit('c1')
     board.updateEditor('photoLabel', '')
     board.saveEdit()

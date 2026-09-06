@@ -1,6 +1,6 @@
-import type { Page } from '@playwright/test'
-
 import { loginAsDemo } from '../helpers'
+
+import type { Page } from '@playwright/test'
 
 const BASE_URL = 'http://localhost:8081'
 
@@ -38,5 +38,7 @@ export async function getChoreCards(page: Page) {
 }
 
 export async function waitForBoardVisible(page: Page) {
-  await page.getByText('ChoreCue Phase 1 on Takeout').waitFor({ state: 'visible', timeout: 10000 })
+  await page
+    .getByText('ChoreCue Phase 1 on Takeout')
+    .waitFor({ state: 'visible', timeout: 10000 })
 }

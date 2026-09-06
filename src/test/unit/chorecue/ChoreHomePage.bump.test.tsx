@@ -1,10 +1,11 @@
+import { screen, fireEvent } from '@testing-library/react'
 // @vitest-environment jsdom
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { screen, fireEvent } from '@testing-library/react'
+
+import { createSections, sortVisibleChores } from '~/features/chorecue/boardState'
 
 import { buildMockBoardState, renderWithProviders } from './componentHelpers'
 import { buildDueChore } from './fixtures'
-import { createSections, sortVisibleChores } from '~/features/chorecue/boardState'
 
 // ---------- Mocks ----------
 vi.mock('react-native-safe-area-context', () => ({
@@ -43,9 +44,12 @@ describe('ChoreHomePage – bump buttons, disabled states, and reminder labels',
   it('renders "Bump" for bump-eligible chores', () => {
     const chores = [buildDueChore({ canBump: true })]
     const sorted = sortVisibleChores(chores)
-    Object.assign(mockBoardState, buildMockBoardState({
-      sections: createSections(sorted),
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        sections: createSections(sorted),
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     expect(screen.getByText('Bump')).toBeTruthy()
@@ -54,9 +58,12 @@ describe('ChoreHomePage – bump buttons, disabled states, and reminder labels',
   it('renders "No bump" for non-eligible chores', () => {
     const chores = [buildDueChore({ canBump: false })]
     const sorted = sortVisibleChores(chores)
-    Object.assign(mockBoardState, buildMockBoardState({
-      sections: createSections(sorted),
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        sections: createSections(sorted),
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     expect(screen.getByText('No bump')).toBeTruthy()
@@ -65,9 +72,12 @@ describe('ChoreHomePage – bump buttons, disabled states, and reminder labels',
   it('calls sendBump with chore id when Bump is clicked', () => {
     const chores = [buildDueChore({ id: 'bump-me', canBump: true })]
     const sorted = sortVisibleChores(chores)
-    Object.assign(mockBoardState, buildMockBoardState({
-      sections: createSections(sorted),
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        sections: createSections(sorted),
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     fireEvent.click(screen.getByText('Bump'))

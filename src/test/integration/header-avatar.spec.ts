@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+
 import { loginAsDemo } from './helpers'
 
 test.describe('Header avatar button – no background', () => {
@@ -37,7 +38,9 @@ test.describe('Header avatar button – no background', () => {
     expect(avatarBtn, 'Avatar button should exist in the header').not.toBeNull()
 
     // Check the button's background
-    const btnBg = await avatarBtn!.evaluate((el) => window.getComputedStyle(el).backgroundColor)
+    const btnBg = await avatarBtn!.evaluate(
+      (el) => window.getComputedStyle(el).backgroundColor
+    )
     console.log(`Button background-color: ${btnBg}`)
 
     // Check ALL descendants for non-transparent backgrounds
@@ -58,7 +61,10 @@ test.describe('Header avatar button – no background', () => {
       return results
     })
 
-    console.log('Elements with non-transparent backgrounds:', JSON.stringify(descendantBgs, null, 2))
+    console.log(
+      'Elements with non-transparent backgrounds:',
+      JSON.stringify(descendantBgs, null, 2)
+    )
 
     // Take a cropped screenshot of the header
     await page.screenshot({

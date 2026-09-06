@@ -1,10 +1,11 @@
+import { screen, fireEvent } from '@testing-library/react'
 // @vitest-environment jsdom
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { screen, fireEvent } from '@testing-library/react'
+
+import { createSections, sortVisibleChores } from '~/features/chorecue/boardState'
 
 import { buildMockBoardState, renderWithProviders } from './componentHelpers'
 import { buildOverdueChore, buildDueChore } from './fixtures'
-import { createSections, sortVisibleChores } from '~/features/chorecue/boardState'
 
 // ---------- Mocks ----------
 vi.mock('react-native-safe-area-context', () => ({
@@ -43,9 +44,12 @@ describe('ChoreHomePage – completion controls and refreshed labels', () => {
       buildDueChore({ id: 'd1', lastCompletedLabel: null }),
     ]
     const sorted = sortVisibleChores(chores)
-    Object.assign(mockBoardState, buildMockBoardState({
-      sections: createSections(sorted),
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        sections: createSections(sorted),
+      })
+    )
   })
 
   it('renders Complete buttons for each visible chore', () => {

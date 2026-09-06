@@ -1,5 +1,6 @@
 import { useState, useEffect, type ReactNode } from 'react'
 import { AlertDialog, XStack, YStack } from 'tamagui'
+
 import { Button } from '~/interface/buttons/Button'
 
 type DialogState = {
@@ -77,7 +78,9 @@ export function DialogProvider({ children }: { children: ReactNode }) {
             p="$5"
           >
             <YStack gap="$4">
-              <AlertDialog.Title size="$6" fontFamily="$heading">{state.title}</AlertDialog.Title>
+              <AlertDialog.Title size="$6" fontFamily="$heading">
+                {state.title}
+              </AlertDialog.Title>
               <AlertDialog.Description size="$3" color="$color8" fontFamily="$body">
                 {state.description}
               </AlertDialog.Description>
@@ -85,15 +88,13 @@ export function DialogProvider({ children }: { children: ReactNode }) {
               <XStack gap="$3" justify="flex-end">
                 {state.type === 'confirm' ? (
                   <>
-                    <Button variant="outlined" onPress={() => handleClose(false)}>Cancel</Button>
-                    <Button onPress={() => handleClose(true)}>
-                      Confirm
+                    <Button variant="outlined" onPress={() => handleClose(false)}>
+                      Cancel
                     </Button>
+                    <Button onPress={() => handleClose(true)}>Confirm</Button>
                   </>
                 ) : (
-                  <Button onPress={() => handleClose(false)}>
-                    OK
-                  </Button>
+                  <Button onPress={() => handleClose(false)}>OK</Button>
                 )}
               </XStack>
             </YStack>

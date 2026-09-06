@@ -7,6 +7,7 @@ import {
   initialMembers,
   removeMember,
 } from './memberState'
+
 import type { Member, MemberComposerState } from './types'
 
 export function useMemberBoard() {

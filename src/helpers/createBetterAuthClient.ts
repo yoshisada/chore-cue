@@ -1,5 +1,5 @@
-import { dequal } from 'dequal/lite'
 import { type BetterAuthClientOptions, createAuthClient } from 'better-auth/client'
+import { dequal } from 'dequal/lite'
 
 import { createEmitter, type Emitter, useEmitterValue } from './emitter'
 import { createStorageValue } from './storage/createStorage'

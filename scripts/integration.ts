@@ -7,6 +7,7 @@
  */
 
 import { Socket } from 'node:net'
+
 import { getTestEnv } from './helpers/get-test-env'
 
 // --- config ---

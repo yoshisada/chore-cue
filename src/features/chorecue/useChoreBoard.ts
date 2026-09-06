@@ -16,8 +16,8 @@ import {
   sendBumpForBoard,
   sortVisibleChores,
 } from './boardState'
-import type { ChoreCard, ChoreComposerState, ChoreEditorState } from './types'
 
+import type { ChoreCard, ChoreComposerState, ChoreEditorState } from './types'
 
 export function useChoreBoard() {
   const [chores, setChores] = useState<ChoreCard[]>(initialChores)
@@ -28,9 +28,15 @@ export function useChoreBoard() {
   const [searchQuery, setSearchQuery] = useState('')
 
   const sorted = useMemo(() => sortVisibleChores(chores), [chores])
-  const afterSearch = useMemo(() => filterBySearch(sorted, searchQuery), [sorted, searchQuery])
+  const afterSearch = useMemo(
+    () => filterBySearch(sorted, searchQuery),
+    [sorted, searchQuery]
+  )
   const allTags = useMemo(() => collectAllTags(afterSearch), [afterSearch])
-  const filtered = useMemo(() => filterByTags(afterSearch, selectedTags), [afterSearch, selectedTags])
+  const filtered = useMemo(
+    () => filterByTags(afterSearch, selectedTags),
+    [afterSearch, selectedTags]
+  )
   const sections = useMemo(() => createSections(filtered), [filtered])
 
   function updateComposer<Key extends keyof ChoreComposerState>(

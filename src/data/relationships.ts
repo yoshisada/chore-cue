@@ -39,18 +39,21 @@ export const householdRelationships = relationships(tables.household, ({ many })
   }),
 }))
 
-export const householdMemberRelationships = relationships(tables.householdMember, ({ one }) => ({
-  household: one({
-    sourceField: ['householdId'],
-    destSchema: tables.household,
-    destField: ['id'],
-  }),
-  user: one({
-    sourceField: ['userId'],
-    destSchema: tables.userPublic,
-    destField: ['id'],
-  }),
-}))
+export const householdMemberRelationships = relationships(
+  tables.householdMember,
+  ({ one }) => ({
+    household: one({
+      sourceField: ['householdId'],
+      destSchema: tables.household,
+      destField: ['id'],
+    }),
+    user: one({
+      sourceField: ['userId'],
+      destSchema: tables.userPublic,
+      destField: ['id'],
+    }),
+  })
+)
 
 export const allRelationships = [
   userRelationships,

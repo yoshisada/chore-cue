@@ -1,10 +1,11 @@
+import { screen, fireEvent } from '@testing-library/react'
 // @vitest-environment jsdom
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { screen, fireEvent } from '@testing-library/react'
+
+import { createSections, sortVisibleChores } from '~/features/chorecue/boardState'
 
 import { buildMockBoardState, renderWithProviders } from './componentHelpers'
 import { buildDueChore, buildEditor } from './fixtures'
-import { createSections, sortVisibleChores } from '~/features/chorecue/boardState'
 
 // ---------- Mocks ----------
 vi.mock('react-native-safe-area-context', () => ({
@@ -40,9 +41,12 @@ describe('ChoreHomePage – edit-mode UI and archive actions', () => {
     vi.clearAllMocks()
     const chores = [buildDueChore({ id: 'd1' })]
     const sorted = sortVisibleChores(chores)
-    Object.assign(mockBoardState, buildMockBoardState({
-      sections: createSections(sorted),
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        sections: createSections(sorted),
+      })
+    )
   })
 
   it('renders Edit button on each chore card', () => {
@@ -62,20 +66,26 @@ describe('ChoreHomePage – edit-mode UI and archive actions', () => {
   })
 
   it('shows the edit panel when editor has a choreId', () => {
-    Object.assign(mockBoardState, buildMockBoardState({
-      editor: buildEditor({ choreId: 'd1', title: 'Due chore', tags: ['Test'] }),
-      sections: mockBoardState.sections,
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        editor: buildEditor({ choreId: 'd1', title: 'Due chore', tags: ['Test'] }),
+        sections: mockBoardState.sections,
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     expect(screen.getByText('Edit chore')).toBeTruthy()
   })
 
   it('renders Save changes and Archive chore buttons in editor', () => {
-    Object.assign(mockBoardState, buildMockBoardState({
-      editor: buildEditor({ choreId: 'd1' }),
-      sections: mockBoardState.sections,
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        editor: buildEditor({ choreId: 'd1' }),
+        sections: mockBoardState.sections,
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     expect(screen.getByText('Save changes')).toBeTruthy()
@@ -83,10 +93,13 @@ describe('ChoreHomePage – edit-mode UI and archive actions', () => {
   })
 
   it('calls saveEdit when Save changes is clicked', () => {
-    Object.assign(mockBoardState, buildMockBoardState({
-      editor: buildEditor({ choreId: 'd1' }),
-      sections: mockBoardState.sections,
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        editor: buildEditor({ choreId: 'd1' }),
+        sections: mockBoardState.sections,
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     fireEvent.click(screen.getByText('Save changes'))
@@ -94,10 +107,13 @@ describe('ChoreHomePage – edit-mode UI and archive actions', () => {
   })
 
   it('calls archiveChore when Archive chore is clicked in editor', () => {
-    Object.assign(mockBoardState, buildMockBoardState({
-      editor: buildEditor({ choreId: 'd1' }),
-      sections: mockBoardState.sections,
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        editor: buildEditor({ choreId: 'd1' }),
+        sections: mockBoardState.sections,
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     fireEvent.click(screen.getByText('Archive chore'))

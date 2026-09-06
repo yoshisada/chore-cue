@@ -30,7 +30,12 @@ describe('boardState', () => {
       archived: true,
     }
 
-    const sorted = sortVisibleChores([initialChores[2], archived, initialChores[1], initialChores[0]])
+    const sorted = sortVisibleChores([
+      initialChores[2],
+      archived,
+      initialChores[1],
+      initialChores[0],
+    ])
 
     expect(sorted.map((item) => item.id)).toEqual(['chore-1', 'chore-2', 'chore-3'])
   })

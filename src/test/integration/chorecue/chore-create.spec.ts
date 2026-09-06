@@ -1,6 +1,11 @@
 import { test, expect } from '@playwright/test'
 
-import { clickAddChore, fillChoreForm, navigateToChoreBoard, waitForBoardVisible } from './helpers'
+import {
+  clickAddChore,
+  fillChoreForm,
+  navigateToChoreBoard,
+  waitForBoardVisible,
+} from './helpers'
 
 test.describe('Chore creation through the board UI', () => {
   test.beforeEach(async ({ page }) => {

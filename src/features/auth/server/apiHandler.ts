@@ -1,5 +1,4 @@
 import { prettyPrintResponse } from '~/helpers/prettyPrintResponse'
-
 import { ADMIN_WHITELIST } from '~/server/constants-server'
 
 import { authServer } from './authServer'

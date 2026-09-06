@@ -25,7 +25,9 @@ export const householdMember = pgTable(
     id: text('id').primaryKey(),
     householdId: text('householdId').notNull(),
     userId: text('userId').notNull(),
-    role: text('role', { enum: ['admin', 'member'] }).notNull().default('member'),
+    role: text('role', { enum: ['admin', 'member'] })
+      .notNull()
+      .default('member'),
     displayName: text('displayName'),
     joinedAt: timestamp('joinedAt', { mode: 'string' }).defaultNow().notNull(),
   },

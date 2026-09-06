@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { createBoardDriver } from './renderHelpers'
 import { buildChore, buildMixedBoard } from './fixtures'
+import { createBoardDriver } from './renderHelpers'
 
 describe('useChoreBoard – default state and section ordering', () => {
   it('groups initial chores into overdue, due, and upcoming sections', () => {

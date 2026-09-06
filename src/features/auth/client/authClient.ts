@@ -1,7 +1,7 @@
-import { createBetterAuthClient } from '~/helpers/createBetterAuthClient'
 import { href } from 'one'
 
 import { SERVER_URL } from '~/constants/urls'
+import { createBetterAuthClient } from '~/helpers/createBetterAuthClient'
 import { showToast } from '~/interface/toast/Toast'
 
 import { plugins } from './plugins'

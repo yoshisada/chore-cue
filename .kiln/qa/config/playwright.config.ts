@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
   testDir: '../tests',
@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: [
     ['html', { outputFolder: '../reports' }],
     ['json', { outputFile: '../reports/results.json' }],
-    ['list']
+    ['list'],
   ],
   use: {
     baseURL: process.env.DEV_URL || 'http://localhost:8081',
@@ -40,4 +40,4 @@ export default defineConfig({
       },
     },
   ],
-});
+})

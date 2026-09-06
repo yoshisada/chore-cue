@@ -30,4 +30,3 @@ export function deriveHouseholdContext(auth: HouseholdAuthSnapshot): HouseholdCo
     isAuthenticated: auth.state === 'logged-in',
   }
 }
-

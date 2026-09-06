@@ -81,7 +81,10 @@ export function createSections(chores: ChoreCard[]) {
   }
 }
 
-export function addChoreToBoard(chores: ChoreCard[], composer: ChoreComposerState): ChoreCard[] {
+export function addChoreToBoard(
+  chores: ChoreCard[],
+  composer: ChoreComposerState
+): ChoreCard[] {
   if (!composer.title.trim() || composer.tags.length === 0) {
     return chores
   }
@@ -145,7 +148,10 @@ export function sendBumpForBoard(
   }
 }
 
-export function beginEditForBoard(chores: ChoreCard[], choreId: string): ChoreEditorState {
+export function beginEditForBoard(
+  chores: ChoreCard[],
+  choreId: string
+): ChoreEditorState {
   const chore = chores.find((item) => item.id === choreId)
   if (!chore) {
     return emptyEditorState
@@ -208,7 +214,10 @@ export function filterBySearch(chores: ChoreCard[], query: string): ChoreCard[] 
   )
 }
 
-export function filterByTags(chores: ChoreCard[], selectedTags: Set<string>): ChoreCard[] {
+export function filterByTags(
+  chores: ChoreCard[],
+  selectedTags: Set<string>
+): ChoreCard[] {
   if (selectedTags.size === 0) return chores
   return chores.filter((chore) => chore.tags.some((tag) => selectedTags.has(tag)))
 }

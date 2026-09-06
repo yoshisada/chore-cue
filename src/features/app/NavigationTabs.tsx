@@ -3,8 +3,8 @@ import { useMedia, XStack, View } from 'tamagui'
 
 import { Pressable } from '~/interface/buttons/Pressable'
 import { HouseIcon } from '~/interface/icons/phosphor/HouseIcon'
-import { UsersThreeIcon } from '~/interface/icons/phosphor/UsersThreeIcon'
 import { UserCircleIcon } from '~/interface/icons/phosphor/UserCircleIcon'
+import { UsersThreeIcon } from '~/interface/icons/phosphor/UsersThreeIcon'
 
 import type { Href } from 'one'
 

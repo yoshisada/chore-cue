@@ -37,7 +37,9 @@ test.describe('Edit, archive, and photo flows on the board UI', () => {
   })
 
   test('attach sample photo button is visible', async ({ page }) => {
-    await expect(page.getByRole('button', { name: 'Attach sample photo' }).first()).toBeVisible()
+    await expect(
+      page.getByRole('button', { name: 'Attach sample photo' }).first()
+    ).toBeVisible()
   })
 
   test('clear photo button is visible', async ({ page }) => {

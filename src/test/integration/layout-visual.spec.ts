@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+
 import { loginAsDemo } from './helpers'
 
 test.describe('Layout visual verification', () => {

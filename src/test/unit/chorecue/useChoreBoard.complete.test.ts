@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { createBoardDriver } from './renderHelpers'
 import { buildChore, buildMixedBoard, buildOverdueChore } from './fixtures'
+import { createBoardDriver } from './renderHelpers'
 
 describe('useChoreBoard – complete-chore state transitions', () => {
   it('moves a completed chore to upcoming bucket', () => {

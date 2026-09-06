@@ -1,5 +1,5 @@
-import { createFont } from 'tamagui'
 import { createSystemFont, fonts as baseFonts } from '@tamagui/config/v5'
+import { createFont } from 'tamagui'
 
 const mono = createSystemFont({
   sizeLineHeight: (size) => (size >= 16 ? size * 1.2 + 8 : size * 1.15 + 5),

@@ -1,4 +1,9 @@
-import type { ChoreCard, ChoreComposerState, ChoreEditorState, RecurrenceSummary } from '~/features/chorecue/types'
+import type {
+  ChoreCard,
+  ChoreComposerState,
+  ChoreEditorState,
+  RecurrenceSummary,
+} from '~/features/chorecue/types'
 
 const defaults: ChoreCard = {
   id: 'test-chore-1',
@@ -48,7 +53,9 @@ export function buildUpcomingChore(overrides: Partial<ChoreCard> = {}): ChoreCar
   })
 }
 
-export function buildComposer(overrides: Partial<ChoreComposerState> = {}): ChoreComposerState {
+export function buildComposer(
+  overrides: Partial<ChoreComposerState> = {}
+): ChoreComposerState {
   return {
     title: 'New chore',
     tags: ['Kitchen'],
@@ -72,18 +79,23 @@ export function buildEditor(overrides: Partial<ChoreEditorState> = {}): ChoreEdi
 }
 
 export function buildMixedBoard(): ChoreCard[] {
-  return [
-    buildOverdueChore(),
-    buildDueChore(),
-    buildUpcomingChore(),
-  ]
+  return [buildOverdueChore(), buildDueChore(), buildUpcomingChore()]
 }
 
 export function buildBoardWithArchived(): ChoreCard[] {
   return [
     ...buildMixedBoard(),
-    buildChore({ id: 'archived-1', title: 'Archived chore', archived: true, canBump: false }),
+    buildChore({
+      id: 'archived-1',
+      title: 'Archived chore',
+      archived: true,
+      canBump: false,
+    }),
   ]
 }
 
-export const allRecurrenceTypes: RecurrenceSummary[] = ['Every N days', 'Weekly', 'Daily time']
+export const allRecurrenceTypes: RecurrenceSummary[] = [
+  'Every N days',
+  'Weekly',
+  'Daily time',
+]

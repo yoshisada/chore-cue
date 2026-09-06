@@ -1,6 +1,6 @@
-import { migrate } from './migrationRunner'
-
 import { ZERO_CHANGE_DB, ZERO_CVR_DB, ZERO_UPSTREAM_DB } from '~/server/env-server'
+
+import { migrate } from './migrationRunner'
 
 const migrationsTS = import.meta.glob(`./migrations/*.ts`)
 

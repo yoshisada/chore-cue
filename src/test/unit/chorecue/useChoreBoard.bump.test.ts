@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { createBoardDriver } from './renderHelpers'
 import { buildChore, buildMixedBoard } from './fixtures'
+import { createBoardDriver } from './renderHelpers'
 
 describe('useChoreBoard – bump-count and bump-label state transitions', () => {
   it('accepts the first bump and increments count', () => {

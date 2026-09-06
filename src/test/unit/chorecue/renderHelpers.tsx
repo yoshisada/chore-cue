@@ -10,7 +10,12 @@ import {
   sendBumpForBoard,
   sortVisibleChores,
 } from '~/features/chorecue/boardState'
-import type { ChoreCard, ChoreComposerState, ChoreEditorState } from '~/features/chorecue/types'
+
+import type {
+  ChoreCard,
+  ChoreComposerState,
+  ChoreEditorState,
+} from '~/features/chorecue/types'
 
 /**
  * Simulates the useChoreBoard hook as a plain object for testing
@@ -43,7 +48,10 @@ export function createBoardDriver(initialChores: ChoreCard[]) {
     get sections() {
       return getSections()
     },
-    updateComposer<K extends keyof ChoreComposerState>(key: K, value: ChoreComposerState[K]) {
+    updateComposer<K extends keyof ChoreComposerState>(
+      key: K,
+      value: ChoreComposerState[K]
+    ) {
       composer = { ...composer, [key]: value }
     },
     addChore() {

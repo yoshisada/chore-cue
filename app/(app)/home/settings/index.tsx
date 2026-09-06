@@ -40,7 +40,8 @@ export function ProfileSettingsPage() {
 
   const displayName = user?.name || user?.username || 'User'
   const email = user?.email || ''
-  const themeLabel = setting === 'system' ? 'System' : setting === 'dark' ? 'Dark' : 'Light'
+  const themeLabel =
+    setting === 'system' ? 'System' : setting === 'dark' ? 'Dark' : 'Light'
 
   const Container = isWeb ? YStack : ScrollView
 
@@ -53,7 +54,11 @@ export function ProfileSettingsPage() {
   }
 
   return (
-    <Container flex={1} bg="$background" {...(!isWeb && { contentContainerStyle: { paddingBottom: insets.bottom + 40 } })}>
+    <Container
+      flex={1}
+      bg="$background"
+      {...(!isWeb && { contentContainerStyle: { paddingBottom: insets.bottom + 40 } })}
+    >
       <PageContainer>
         <YStack gap="$6" py="$5">
           {/* Hero — profile card */}
@@ -96,11 +101,7 @@ export function ProfileSettingsPage() {
           <YStack gap="$3">
             <SectionLabel>Household</SectionLabel>
             <Separator />
-            <XStack
-              justify="space-between"
-              items="center"
-              py="$2"
-            >
+            <XStack justify="space-between" items="center" py="$2">
               <YStack gap="$1" flex={1}>
                 <SizableText fontFamily="$body" size="$5">
                   {household.householdName}
@@ -148,9 +149,7 @@ export function ProfileSettingsPage() {
                     onChangeText={setNewHouseholdName}
                     onSubmitEditing={handleRename}
                   />
-                  <Button onPress={handleRename}>
-                    Save name
-                  </Button>
+                  <Button onPress={handleRename}>Save name</Button>
                 </YStack>
               </ScrollView>
             </Sheet.Frame>
@@ -160,11 +159,7 @@ export function ProfileSettingsPage() {
           <YStack gap="$3">
             <SectionLabel>Appearance</SectionLabel>
             <Separator />
-            <XStack
-              justify="space-between"
-              items="center"
-              py="$2"
-            >
+            <XStack justify="space-between" items="center" py="$2">
               <YStack gap="$1">
                 <SizableText fontFamily="$body" size="$5">
                   Theme

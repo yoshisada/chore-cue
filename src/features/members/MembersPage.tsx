@@ -1,23 +1,16 @@
 import { memo, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import {
-  ScrollView,
-  Separator,
-  Sheet,
-  SizableText,
-  XStack,
-  YStack,
-  isWeb,
-} from 'tamagui'
+import { ScrollView, Separator, Sheet, SizableText, XStack, YStack, isWeb } from 'tamagui'
 
+import { Avatar } from '~/interface/avatars/Avatar'
 import { Button } from '~/interface/buttons/Button'
 import { Input } from '~/interface/forms/Input'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { H1, H3 } from '~/interface/text/Headings'
-import { Avatar } from '~/interface/avatars/Avatar'
 import { memberAccentColors } from '~/tamagui/themes/playfulHousehold'
 
 import { useMemberBoard } from './useMemberBoard'
+
 import type { Member, MemberRole } from './types'
 
 const roleOptions: MemberRole[] = ['admin', 'member']
@@ -63,12 +56,7 @@ function MemberCard({
 
       <YStack flex={1} gap="$1">
         <H3 size="$5">{member.name}</H3>
-        <SizableText
-          fontFamily="$body"
-          size="$1"
-          fontWeight="600"
-          color="$color8"
-        >
+        <SizableText fontFamily="$body" size="$1" fontWeight="600" color="$color8">
           {member.role}
         </SizableText>
       </YStack>
@@ -83,13 +71,7 @@ function MemberCard({
 export const MembersPage = memo(() => {
   const insets = useSafeAreaInsets()
   const [addOpen, setAddOpen] = useState(false)
-  const {
-    members,
-    composer,
-    updateComposer,
-    addMember,
-    removeMember,
-  } = useMemberBoard()
+  const { members, composer, updateComposer, addMember, removeMember } = useMemberBoard()
 
   const Container = isWeb ? YStack : ScrollView
 
@@ -99,7 +81,16 @@ export const MembersPage = memo(() => {
   }
 
   return (
-    <Container flex={1} bg="$background" {...(!isWeb && { contentContainerStyle: { paddingTop: insets.top, paddingBottom: insets.bottom + 40 } })}>
+    <Container
+      flex={1}
+      bg="$background"
+      {...(!isWeb && {
+        contentContainerStyle: {
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom + 40,
+        },
+      })}
+    >
       <PageContainer>
         <YStack gap="$6" py="$5">
           {/* Hero */}

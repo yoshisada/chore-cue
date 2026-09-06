@@ -15,18 +15,14 @@ import { $ } from 'bun'
 try {
   const rnFreezePath = join(
     require.resolve('react-native/package.json'),
-    '../Libraries/Utilities/deepFreezeAndThrowOnMutationInDev.js',
+    '../Libraries/Utilities/deepFreezeAndThrowOnMutationInDev.js'
   )
   const freezeSource = readFileSync(rnFreezePath, 'utf-8')
   if (freezeSource.includes('throw Error(')) {
-    writeFileSync(
-      rnFreezePath,
-      freezeSource.replace(
-        'throw Error(',
-        'console.warn(',
-      ),
+    writeFileSync(rnFreezePath, freezeSource.replace('throw Error(', 'console.warn('))
+    console.info(
+      'Patched react-native deepFreezeAndThrowOnMutationInDev (warn instead of throw)'
     )
-    console.info('Patched react-native deepFreezeAndThrowOnMutationInDev (warn instead of throw)')
   }
 } catch {
   // ignore if file not found

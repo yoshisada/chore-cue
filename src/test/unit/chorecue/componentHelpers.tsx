@@ -1,12 +1,26 @@
 import './jsdom-setup'
-import { type ReactNode } from 'react'
+
 import { render } from '@testing-library/react'
+import { type ReactNode } from 'react'
 import { TamaguiProvider } from 'tamagui'
+
+import {
+  collectAllTags,
+  emptyComposer,
+  emptyEditorState,
+  initialChores,
+  createSections,
+  sortVisibleChores,
+} from '~/features/chorecue/boardState'
 import { config } from '~/tamagui/tamagui.config'
 
-import type { ChoreCard, ChoreComposerState, ChoreEditorState } from '~/features/chorecue/types'
-import { collectAllTags, emptyComposer, emptyEditorState, initialChores, createSections, sortVisibleChores } from '~/features/chorecue/boardState'
 import { buildMixedBoard } from './fixtures'
+
+import type {
+  ChoreCard,
+  ChoreComposerState,
+  ChoreEditorState,
+} from '~/features/chorecue/types'
 
 // ---------- Mocked hook return type ----------
 export interface MockBoardState {
@@ -32,7 +46,9 @@ export interface MockBoardState {
   clearTagFilter: ReturnType<typeof vi.fn>
 }
 
-export function buildMockBoardState(overrides: Partial<MockBoardState> = {}): MockBoardState {
+export function buildMockBoardState(
+  overrides: Partial<MockBoardState> = {}
+): MockBoardState {
   const chores = buildMixedBoard()
   const sorted = sortVisibleChores(chores)
   return {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { createBoardDriver } from './renderHelpers'
 import { buildMixedBoard } from './fixtures'
+import { createBoardDriver } from './renderHelpers'
 
 describe('useChoreBoard – create-chore state transitions', () => {
   it('adds a chore from the composer to the board', () => {

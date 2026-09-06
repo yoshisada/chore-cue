@@ -1,5 +1,3 @@
-import { isWeb } from 'tamagui'
-import { useEmitter, useEmitterValue } from '~/helpers/emitter'
 import {
   ToastProvider as TamaguiToastProvider,
   Toast,
@@ -8,7 +6,10 @@ import {
   useToastState,
 } from '@tamagui/toast'
 import { useState, type ReactNode } from 'react'
+import { isWeb } from 'tamagui'
 import { YStack } from 'tamagui'
+
+import { useEmitter, useEmitterValue } from '~/helpers/emitter'
 
 import { Z_INDICES } from '../constants'
 import { toastEmitter } from './emitter'

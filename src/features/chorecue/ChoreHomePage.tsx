@@ -13,21 +13,27 @@ import {
   useThemeName,
 } from 'tamagui'
 
+import { useHouseholdContext } from '~/features/auth/client/useHouseholdContext'
+import { useMemberBoard } from '~/features/members/useMemberBoard'
+import { Avatar } from '~/interface/avatars/Avatar'
 import { Button } from '~/interface/buttons/Button'
 import { Input } from '~/interface/forms/Input'
-import { Avatar } from '~/interface/avatars/Avatar'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { H1, H3 } from '~/interface/text/Headings'
-import { useHouseholdContext } from '~/features/auth/client/useHouseholdContext'
 import { choreStateColors, memberAccentColors } from '~/tamagui/themes/playfulHousehold'
-
-import { useMemberBoard } from '~/features/members/useMemberBoard'
 
 import { CheckIcon } from './components/CheckIcon'
 import { PhotoInput } from './components/PhotoInput'
 import { PhotoThumbnail } from './components/PhotoThumbnail'
 import { useChoreBoard } from './useChoreBoard'
-import type { ChoreCard, ChoreComposerState, ChoreEditorState, DueBucket, RecurrenceSummary } from './types'
+
+import type {
+  ChoreCard,
+  ChoreComposerState,
+  ChoreEditorState,
+  DueBucket,
+  RecurrenceSummary,
+} from './types'
 
 function useStateColor(bucket: DueBucket): string {
   const themeName = useThemeName()
@@ -79,12 +85,7 @@ function TagInput({
       {tags.length > 0 ? (
         <XStack gap="$2" flexWrap="wrap">
           {tags.map((tag) => (
-            <Button
-              key={tag}
-              size="$3"
-              variant="outlined"
-              onPress={() => onRemove(tag)}
-            >
+            <Button key={tag} size="$3" variant="outlined" onPress={() => onRemove(tag)}>
               {tag} ×
             </Button>
           ))}
@@ -94,13 +95,7 @@ function TagInput({
   )
 }
 
-function SectionLabel({
-  children,
-  accent,
-}: {
-  children: string
-  accent?: boolean
-}) {
+function SectionLabel({ children, accent }: { children: string; accent?: boolean }) {
   return (
     <SizableText
       fontFamily="$body"
@@ -125,31 +120,14 @@ function SectionHeader({
   stateColor?: string
 }) {
   return (
-    <XStack
-      justify="space-between"
-      items="center"
-      pt="$4"
-      pb="$2"
-    >
+    <XStack justify="space-between" items="center" pt="$4" pb="$2">
       <XStack items="center" gap="$2">
-        {stateColor && (
-          <View width={8} height={8} borderRadius={4} bg={stateColor} />
-        )}
-        <SizableText
-          fontFamily="$heading"
-          size="$5"
-          fontWeight="600"
-          color="$color"
-        >
+        {stateColor && <View width={8} height={8} borderRadius={4} bg={stateColor} />}
+        <SizableText fontFamily="$heading" size="$5" fontWeight="600" color="$color">
           {title}
         </SizableText>
       </XStack>
-      <View
-        bg="$color3"
-        px="$2"
-        py="$1"
-        borderRadius="$2"
-      >
+      <View bg="$color3" px="$2" py="$1" borderRadius="$2">
         <SizableText fontFamily="$body" size="$1" color="$color8">
           {count}
         </SizableText>
@@ -196,12 +174,7 @@ function ChoreCardItem({
       hoverStyle={{ bg: '$color2', scale: 1.01 }}
       pressStyle={{ scale: 0.98, opacity: 0.9 }}
     >
-      <Avatar
-        image={null}
-        name={item.assigneeName}
-        size="md"
-        accentColor={accentColor}
-      />
+      <Avatar image={null} name={item.assigneeName} size="md" accentColor={accentColor} />
 
       <YStack flex={1} gap="$1">
         <XStack items="baseline" gap="$2" flexWrap="wrap">
@@ -248,9 +221,7 @@ function ChoreCardItem({
         </XStack>
       </YStack>
 
-      {item.photoLabel ? (
-        <PhotoThumbnail label={item.photoLabel} />
-      ) : null}
+      {item.photoLabel ? <PhotoThumbnail label={item.photoLabel} /> : null}
     </XStack>
   )
 }
@@ -411,7 +382,10 @@ export const ChoreHomePage = memo(() => {
   }
 
   const removeComposerTag = (tag: string) => {
-    updateComposer('tags', composer.tags.filter((t) => t !== tag))
+    updateComposer(
+      'tags',
+      composer.tags.filter((t) => t !== tag)
+    )
   }
 
   const addEditorTag = (tag: string) => {
@@ -419,11 +393,23 @@ export const ChoreHomePage = memo(() => {
   }
 
   const removeEditorTag = (tag: string) => {
-    updateEditor('tags', editor.tags.filter((t) => t !== tag))
+    updateEditor(
+      'tags',
+      editor.tags.filter((t) => t !== tag)
+    )
   }
 
   return (
-    <Container flex={1} bg="$background" {...(!isWeb && { contentContainerStyle: { paddingTop: insets.top, paddingBottom: insets.bottom + 40 } })}>
+    <Container
+      flex={1}
+      bg="$background"
+      {...(!isWeb && {
+        contentContainerStyle: {
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom + 40,
+        },
+      })}
+    >
       <PageContainer>
         <YStack gap="$6" py="$5">
           {/* Hero — compact */}
@@ -522,7 +508,9 @@ export const ChoreHomePage = memo(() => {
                         <Button
                           key={name}
                           size="$4"
-                          variant={composer.assigneeName === name ? undefined : 'outlined'}
+                          variant={
+                            composer.assigneeName === name ? undefined : 'outlined'
+                          }
                           onPress={() => updateComposer('assigneeName', name)}
                         >
                           {name}
@@ -538,7 +526,9 @@ export const ChoreHomePage = memo(() => {
                         <Button
                           key={option}
                           size="$4"
-                          variant={composer.recurrenceSummary === option ? undefined : 'outlined'}
+                          variant={
+                            composer.recurrenceSummary === option ? undefined : 'outlined'
+                          }
                           onPress={() => updateComposer('recurrenceSummary', option)}
                         >
                           {option}
@@ -608,7 +598,9 @@ export const ChoreHomePage = memo(() => {
                           <Button
                             key={name}
                             size="$4"
-                            variant={editor.assigneeName === name ? undefined : 'outlined'}
+                            variant={
+                              editor.assigneeName === name ? undefined : 'outlined'
+                            }
                             onPress={() => updateEditor('assigneeName', name)}
                           >
                             {name}
@@ -624,7 +616,9 @@ export const ChoreHomePage = memo(() => {
                           <Button
                             key={option}
                             size="$4"
-                            variant={editor.recurrenceSummary === option ? undefined : 'outlined'}
+                            variant={
+                              editor.recurrenceSummary === option ? undefined : 'outlined'
+                            }
                             onPress={() => updateEditor('recurrenceSummary', option)}
                           >
                             {option}

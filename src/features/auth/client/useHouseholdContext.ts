@@ -10,11 +10,7 @@ export function useHouseholdContext() {
   const auth = useAuth()
   const userId = auth.user?.id ?? ''
 
-  const [memberships] = useQuery(
-    householdsByUserId,
-    { userId },
-    { enabled: !!userId }
-  )
+  const [memberships] = useQuery(householdsByUserId, { userId }, { enabled: !!userId })
 
   const derived = useMemo(
     () => deriveHouseholdContext(auth),

@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest'
 
+import {
+  buildBoardWithArchived,
+  buildChore,
+  buildDueChore,
+  buildMixedBoard,
+  buildOverdueChore,
+  buildUpcomingChore,
+} from './fixtures'
 import { createBoardDriver } from './renderHelpers'
-import { buildBoardWithArchived, buildChore, buildDueChore, buildMixedBoard, buildOverdueChore, buildUpcomingChore } from './fixtures'
 
 describe('useChoreBoard – due-bucket grouping and archive filtering', () => {
   it('excludes archived chores from all sections', () => {

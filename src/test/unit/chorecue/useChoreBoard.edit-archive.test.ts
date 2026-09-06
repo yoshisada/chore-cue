@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 
 import { emptyEditorState } from '~/features/chorecue/boardState'
 
-import { createBoardDriver } from './renderHelpers'
 import { buildMixedBoard } from './fixtures'
+import { createBoardDriver } from './renderHelpers'
 
 describe('useChoreBoard – edit and archive flows', () => {
   describe('editing', () => {

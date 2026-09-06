@@ -46,6 +46,7 @@
     "**/.vscode/**",
     "**/.claude/**",
     "**/migrations/meta/**",
+    ".kiln/qa/reports/**",
     "**/migrate-dist.js",
     "**/themes-out.ts",
     "**/*.d.ts",

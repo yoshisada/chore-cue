@@ -1,6 +1,12 @@
 import Svg, { Path } from 'react-native-svg'
 
-export const LogoIcon = ({ size = 24, color = 'currentColor' }: { size?: number; color?: string }) => {
+export const LogoIcon = ({
+  size = 24,
+  color = 'currentColor',
+}: {
+  size?: number
+  color?: string
+}) => {
   return (
     <Svg width={size} height={size} viewBox="0 0 256 256" fill="none">
       <Path

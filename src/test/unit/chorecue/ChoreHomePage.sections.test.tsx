@@ -1,10 +1,11 @@
+import { screen } from '@testing-library/react'
 // @vitest-environment jsdom
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { screen } from '@testing-library/react'
+
+import { createSections, sortVisibleChores } from '~/features/chorecue/boardState'
 
 import { buildMockBoardState, renderWithProviders } from './componentHelpers'
 import { buildOverdueChore, buildDueChore, buildUpcomingChore } from './fixtures'
-import { createSections, sortVisibleChores } from '~/features/chorecue/boardState'
 
 // ---------- Mocks ----------
 vi.mock('react-native-safe-area-context', () => ({
@@ -43,9 +44,12 @@ describe('ChoreHomePage – section ordering, metadata rendering, and empty-stat
   it('renders Overdue, Due Soon, and Upcoming section headings', () => {
     const chores = [buildOverdueChore(), buildDueChore(), buildUpcomingChore()]
     const sorted = sortVisibleChores(chores)
-    Object.assign(mockBoardState, buildMockBoardState({
-      sections: createSections(sorted),
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        sections: createSections(sorted),
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     expect(screen.getByText('Overdue')).toBeTruthy()
@@ -60,9 +64,12 @@ describe('ChoreHomePage – section ordering, metadata rendering, and empty-stat
       buildDueChore({ id: 'd1' }),
     ]
     const sorted = sortVisibleChores(chores)
-    Object.assign(mockBoardState, buildMockBoardState({
-      sections: createSections(sorted),
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        sections: createSections(sorted),
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     // Count badges show the number
@@ -73,9 +80,12 @@ describe('ChoreHomePage – section ordering, metadata rendering, and empty-stat
   it('renders chore metadata (tags and assignee)', () => {
     const chores = [buildDueChore({ assigneeName: 'Sam', tags: ['Kitchen', 'Quick'] })]
     const sorted = sortVisibleChores(chores)
-    Object.assign(mockBoardState, buildMockBoardState({
-      sections: createSections(sorted),
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        sections: createSections(sorted),
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     expect(screen.getByText(/Kitchen, Quick.*Sam/)).toBeTruthy()
@@ -84,9 +94,12 @@ describe('ChoreHomePage – section ordering, metadata rendering, and empty-stat
   it('renders recurrence summary on each card', () => {
     const chores = [buildDueChore({ recurrenceSummary: 'Weekly' })]
     const sorted = sortVisibleChores(chores)
-    Object.assign(mockBoardState, buildMockBoardState({
-      sections: createSections(sorted),
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        sections: createSections(sorted),
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     // "Weekly" appears as both a recurrence button and on the card
@@ -96,9 +109,12 @@ describe('ChoreHomePage – section ordering, metadata rendering, and empty-stat
   it('hides a section when it has no chores', () => {
     const chores = [buildDueChore()]
     const sorted = sortVisibleChores(chores)
-    Object.assign(mockBoardState, buildMockBoardState({
-      sections: createSections(sorted),
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        sections: createSections(sorted),
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     expect(screen.getByText('Due Soon')).toBeTruthy()
@@ -109,9 +125,12 @@ describe('ChoreHomePage – section ordering, metadata rendering, and empty-stat
   it('renders photo label when present', () => {
     const chores = [buildDueChore({ photoLabel: 'kitchen.jpg' })]
     const sorted = sortVisibleChores(chores)
-    Object.assign(mockBoardState, buildMockBoardState({
-      sections: createSections(sorted),
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        sections: createSections(sorted),
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     expect(screen.getByText('kitchen.jpg')).toBeTruthy()
@@ -120,9 +139,12 @@ describe('ChoreHomePage – section ordering, metadata rendering, and empty-stat
   it('shows "No photo attached" when photo is null', () => {
     const chores = [buildDueChore({ photoLabel: null })]
     const sorted = sortVisibleChores(chores)
-    Object.assign(mockBoardState, buildMockBoardState({
-      sections: createSections(sorted),
-    }))
+    Object.assign(
+      mockBoardState,
+      buildMockBoardState({
+        sections: createSections(sorted),
+      })
+    )
 
     renderWithProviders(<ChoreHomePage />)
     // "No photo attached" appears in both the form's PhotoInput and the card

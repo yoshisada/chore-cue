@@ -1,8 +1,8 @@
 import Constants, { ExecutionEnvironment } from 'expo-constants'
+
 import { setStorageDriver } from '~/helpers/storage/driver'
 
-const isExpoGo =
-  Constants.executionEnvironment === ExecutionEnvironment.StoreClient
+const isExpoGo = Constants.executionEnvironment === ExecutionEnvironment.StoreClient
 
 if (isExpoGo) {
   // NitroModules (e.g. react-native-mmkv) are not supported in Expo Go.
@@ -17,7 +17,8 @@ if (isExpoGo) {
     getAllKeys: () => Array.from(memory.keys()),
   })
 } else {
-  const { createMMKV } = require('react-native-mmkv') as typeof import('react-native-mmkv')
+  const { createMMKV } =
+    require('react-native-mmkv') as typeof import('react-native-mmkv')
   const mmkv = createMMKV({ id: 'app-storage-2' })
   setStorageDriver({
     getItem: (key) => mmkv.getString(key) ?? null,

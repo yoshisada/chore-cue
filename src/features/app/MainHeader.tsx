@@ -5,7 +5,6 @@ import { H3, Separator, Sheet, Spacer, View, XStack, YStack } from 'tamagui'
 import { useAuth } from '~/features/auth/client/authClient'
 import { useLogout } from '~/features/auth/useLogout'
 import { useMemberBoard } from '~/features/members/useMemberBoard'
-import { memberAccentColors } from '~/tamagui/themes/playfulHousehold'
 import { Logo } from '~/interface/app/Logo'
 import { Avatar } from '~/interface/avatars/Avatar'
 import { Button } from '~/interface/buttons/Button'
@@ -15,6 +14,7 @@ import { GearIcon } from '~/interface/icons/phosphor/GearIcon'
 import { ListIcon } from '~/interface/icons/phosphor/ListIcon'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { ThemeSwitch } from '~/interface/theme/ThemeSwitch'
+import { memberAccentColors } from '~/tamagui/themes/playfulHousehold'
 
 import { NavigationTabs } from './NavigationTabs'
 
@@ -125,7 +125,9 @@ export const MainHeaderMenu = memo(() => {
                 }}
               >
                 <GearIcon />
-                <H3 size="$3" fontFamily="$body">Settings</H3>
+                <H3 size="$3" fontFamily="$body">
+                  Settings
+                </H3>
               </XStack>
 
               <XStack
@@ -140,7 +142,9 @@ export const MainHeaderMenu = memo(() => {
                 onPress={handleLogout}
               >
                 <DoorIcon />
-                <H3 size="$3" fontFamily="$body">Logout</H3>
+                <H3 size="$3" fontFamily="$body">
+                  Logout
+                </H3>
               </XStack>
             </YStack>
 

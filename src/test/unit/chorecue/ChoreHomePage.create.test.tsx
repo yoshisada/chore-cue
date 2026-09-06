@@ -1,6 +1,6 @@
+import { screen, fireEvent } from '@testing-library/react'
 // @vitest-environment jsdom
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { screen, fireEvent } from '@testing-library/react'
 
 import { buildMockBoardState, renderWithProviders } from './componentHelpers'
 
