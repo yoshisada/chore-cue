@@ -1,6 +1,6 @@
 import type { ExpoConfig } from 'expo/config'
 
-const appName = 'Takeout'
+const appName = 'ChoreCue'
 const appId = appName.toLowerCase()
 
 const { APP_VARIANT = 'development' } = process.env
@@ -16,13 +16,13 @@ if (
 const IS_DEV = APP_VARIANT === 'development'
 
 const getBundleId = () => {
-  // use tamagui bundle ids for production/preview, takeout for dev
+  // separate bundle ids per variant so they can be installed side by side
   if (APP_VARIANT === 'development') {
-    return 'com.takeout.app.dev'
+    return 'com.chorecue.app.dev'
   } else if (APP_VARIANT === 'preview') {
-    return 'dev.tamagui.takeout.preview'
+    return 'com.chorecue.app.preview'
   }
-  return 'dev.tamagui.takeout'
+  return 'com.chorecue.app'
 }
 
 const getAppIcon = () => {
@@ -43,8 +43,8 @@ export default {
           return ''
       }
     })()}`,
-    slug: 'takeout',
-    owner: 'takeout',
+    slug: 'chorecue',
+    owner: 'yoshisada',
     scheme: appId,
     version,
     runtimeVersion: version, // must be set to use hot-updater "appVersion" update strategy

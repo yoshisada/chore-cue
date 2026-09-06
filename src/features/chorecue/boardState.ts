@@ -55,6 +55,10 @@ export const emptyEditorState: ChoreEditorState = {
   choreId: null,
 }
 
+export const initialBumpCount = 0
+
+export const dailyBumpLimit = 5
+
 export function dueSortValue(bucket: DueBucket): number {
   switch (bucket) {
     case 'overdue':
@@ -126,7 +130,7 @@ export function sendBumpForBoard(
   choreId: string,
   bumpCount: number
 ): { chores: ChoreCard[]; bumpCount: number; accepted: boolean } {
-  if (bumpCount >= 5) {
+  if (bumpCount >= dailyBumpLimit) {
     return {
       chores,
       bumpCount,

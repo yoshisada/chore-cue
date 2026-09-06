@@ -11,6 +11,7 @@ import {
   emptyEditorState,
   filterBySearch,
   filterByTags,
+  initialBumpCount,
   initialChores,
   saveEditedChore,
   sendBumpForBoard,
@@ -23,7 +24,7 @@ export function useChoreBoard() {
   const [chores, setChores] = useState<ChoreCard[]>(initialChores)
   const [composer, setComposer] = useState<ChoreComposerState>(emptyComposer)
   const [editor, setEditor] = useState<ChoreEditorState>(emptyEditorState)
-  const [bumpCount, setBumpCount] = useState(2)
+  const [bumpCount, setBumpCount] = useState(initialBumpCount)
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set())
   const [searchQuery, setSearchQuery] = useState('')
 

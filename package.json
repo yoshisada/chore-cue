@@ -30,7 +30,7 @@
     "lint:fix": "oxfmt && oxlint --type-aware --fix --fix-suggestions",
     "lint": "oxlint --type-aware",
     "migrate": "bun run env:dev bun ./src/database/migrate.ts",
-    "migrate:build": "bun build ./src/database/migrate.ts --outdir ./dist --target node",
+    "migrate:build": "bun run ./scripts/migrate/build.ts",
     "prebuild:native": "one prebuild",
     "run:dev": "bun env:dev bun",
     "run:prod": "NODE_ENV=production dotenvx run -f .env .env.production -- bun",

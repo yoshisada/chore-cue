@@ -20,4 +20,24 @@ const permissions = serverWhere('householdMember', (_, auth) => {
   return _.cmp('userId', auth?.id || '')
 })
 
-export const mutate = mutations(schema, permissions)
+// memberships are created/removed server-side only (see householdActions), and
+// householdId/userId/role are server-owned — clients may only edit their own displayName
+export const mutate = mutations(schema, permissions, {
+  insert: async () => {
+    throw new Error('Household memberships can only be created on the server')
+  },
+  upsert: async () => {
+    throw new Error('Household memberships can only be created on the server')
+  },
+  delete: async () => {
+    throw new Error('Household memberships can only be removed on the server')
+  },
+  update: async ({ authData, tx }, member: Partial<HouseholdMember> & { id: string }) => {
+    if (!authData) throw new Error('Unauthorized')
+    await tx.mutate.householdMember.update(
+      member.displayName === undefined
+        ? { id: member.id }
+        : { id: member.id, displayName: member.displayName }
+    )
+  },
+})

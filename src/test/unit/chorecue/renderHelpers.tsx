@@ -6,6 +6,7 @@ import {
   createSections,
   emptyComposer,
   emptyEditorState,
+  initialBumpCount,
   saveEditedChore,
   sendBumpForBoard,
   sortVisibleChores,
@@ -25,7 +26,7 @@ export function createBoardDriver(initialChores: ChoreCard[]) {
   let chores = initialChores
   let composer: ChoreComposerState = { ...emptyComposer }
   let editor: ChoreEditorState = { ...emptyEditorState }
-  let bumpCount = 0
+  let bumpCount = initialBumpCount
 
   function getSections() {
     const sorted = sortVisibleChores(chores)

@@ -10,6 +10,15 @@ export const emptyComposer: MemberComposerState = {
   role: 'member',
 }
 
+function nextMemberId(members: Member[]): string {
+  const highest = members.reduce((max, m) => {
+    const suffix = Number.parseInt(m.id.replace(/^member-/, ''), 10)
+    return Number.isFinite(suffix) ? Math.max(max, suffix) : max
+  }, 0)
+
+  return `member-${highest + 1}`
+}
+
 export function addMember(members: Member[], composer: MemberComposerState): Member[] {
   const trimmed = composer.name.trim()
   if (!trimmed) return members
@@ -18,7 +27,7 @@ export function addMember(members: Member[], composer: MemberComposerState): Mem
   return [
     ...members,
     {
-      id: `member-${members.length + 1}`,
+      id: nextMemberId(members),
       name: trimmed,
       role: composer.role,
     },

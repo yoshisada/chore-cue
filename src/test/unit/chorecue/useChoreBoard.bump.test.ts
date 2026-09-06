@@ -4,6 +4,12 @@ import { buildChore, buildMixedBoard } from './fixtures'
 import { createBoardDriver } from './renderHelpers'
 
 describe('useChoreBoard – bump-count and bump-label state transitions', () => {
+  it('starts a fresh board with no bumps spent', () => {
+    const board = createBoardDriver(buildMixedBoard())
+
+    expect(board.bumpCount).toBe(0)
+  })
+
   it('accepts the first bump and increments count', () => {
     const board = createBoardDriver(buildMixedBoard())
     const accepted = board.sendBump('overdue-1')
