@@ -53,6 +53,7 @@ All of these are gitignored. Use the `.example` files as templates.
 | `FORCE_ISSUER` | Override auth token issuer (server-only). |
 | `DEBUG` | Set to log auth API debug output. |
 | `VITE_DEMO_MODE` | Set to `1` to enable demo mode. |
+| `SEED_DEMO_USER` | Set to `1` to seed the demo account (`demo@takeout.tamagui.dev`) when migrations run. **Off by default** — that account has a well-known password and is a household admin, so never set it in CI, staging or production. Local dev: put `SEED_DEMO_USER=1` in `.env.development` (used by `bun migrate`) and/or run `SEED_DEMO_USER=1 bun backend` (Docker passes it through to the `migrate` service). Migration `0002` is recorded as applied even when it skips, so enabling it later needs `bun backend:clean`; the login screen's demo button self-signs-up regardless. |
 
 ### Production-only (see `.env.production.example`)
 

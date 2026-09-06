@@ -8,6 +8,20 @@ const DEMO_EMAIL = 'demo@takeout.tamagui.dev'
 const DEMO_NAME = 'Demo User'
 const DEMO_PASSWORD = 'demopassword123'
 
+// this migration seeds a well-known, email-verified account with a public
+// password that is also a household admin. it must never run unless a human
+// explicitly opts in, so it is gated behind SEED_DEMO_USER=1 (opt-in, never
+// opt-out: an unset variable in CI/staging/production seeds nothing).
+const SEED_ENV_VAR = 'SEED_DEMO_USER'
+
+// vite tries to eval process.env at build time, so read it through globalThis
+// (same trick as src/database/migrate.ts)
+const PROCESS_ENV = globalThis['process']['env']
+
+function isDemoSeedEnabled(): boolean {
+  return PROCESS_ENV[SEED_ENV_VAR] === '1'
+}
+
 // same params as better-auth
 const scryptConfig = { N: 16384, r: 16, p: 1, dkLen: 64 }
 
@@ -21,6 +35,11 @@ async function hashPassword(password: string): Promise<string> {
 }
 
 export async function up(client: PoolClient) {
+  if (!isDemoSeedEnabled()) {
+    console.info(`⏭️  skipping demo user seed (set ${SEED_ENV_VAR}=1 to enable)`)
+    return
+  }
+
   const passwordHash = await hashPassword(DEMO_PASSWORD)
   const now = new Date().toISOString()
 
