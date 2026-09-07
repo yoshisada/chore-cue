@@ -1,4 +1,5 @@
 import { Redirect, Slot, Stack, usePathname } from 'one'
+import { isWeb } from 'tamagui'
 import { Configuration } from 'tamagui'
 
 import { useAuth } from '~/features/auth/client/authClient'
@@ -33,7 +34,7 @@ export function AppLayout() {
         <ToastProvider>
           <DialogProvider>
             <PlatformSpecificRootProvider>
-              {process.env.VITE_PLATFORM === 'web' ? (
+              {isWeb ? (
                 <Slot />
               ) : (
                 // We need Stack here for transition animation to work on native

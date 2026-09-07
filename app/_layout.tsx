@@ -2,6 +2,7 @@ import './root.css'
 
 import { Slot, Stack } from 'one'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { isWeb } from 'tamagui'
 import { YStack } from 'tamagui'
 
 import { usePlayfulFonts } from '~/features/fonts/useFonts'
@@ -41,7 +42,7 @@ export function Layout() {
           <PlatformSpecificRootProvider>
             <TamaguiRootProvider>
               <SafeAreaProvider>
-                {process.env.VITE_PLATFORM === 'web' ? (
+                {isWeb ? (
                   <YStack flex={1}>
                     <Slot />
                   </YStack>

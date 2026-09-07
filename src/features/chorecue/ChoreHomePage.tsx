@@ -324,7 +324,10 @@ function Section({
   }
 
   return (
-    <YStack testID={testID} gap="$2">
+    // testID for native; the explicit data-testid spread survives on web, where
+    // the optimizing compiler flattens this YStack and drops a *dynamic* testID
+    // prop (literal ones elsewhere are extracted fine)
+    <YStack testID={testID} {...{ 'data-testid': testID }} gap="$2">
       <SectionHeader title={title} count={items.length} stateColor={stateColor} />
 
       {items.map((item) => (

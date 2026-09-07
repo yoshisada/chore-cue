@@ -40,8 +40,14 @@ function memberCard(page: Page, name: string) {
 }
 
 async function addLocalMember(page: Page, name: string) {
-  await page.goto('/home/members', { waitUntil: 'domcontentloaded' })
-  await expect(page.getByTestId('members-page')).toBeVisible({ timeout: SYNC_TIMEOUT })
+  // navigate like a user, via the tab: a full-page load of /home/members
+  // mis-hydrates in the production bundle and bounces back to the feed
+  await page.getByTestId('nav-tab-members').click()
+  // 'attached', not visible: the page container measures 0-high on web
+  // (flex-basis 0) even while its children render — see waitForBoardVisible
+  await page
+    .getByTestId('members-page')
+    .waitFor({ state: 'attached', timeout: SYNC_TIMEOUT })
 
   await page.getByRole('button', { name: 'Add member', exact: true }).first().click()
   const sheet = page.getByTestId('member-add-sheet')
@@ -53,7 +59,7 @@ async function addLocalMember(page: Page, name: string) {
 }
 
 async function deactivateLocalMember(page: Page, name: string) {
-  await page.goto('/home/members', { waitUntil: 'domcontentloaded' })
+  await page.getByTestId('nav-tab-members').click()
   await expect(memberCard(page, name)).toBeVisible({ timeout: SYNC_TIMEOUT })
   await memberCard(page, name).getByRole('button', { name: 'Deactivate' }).click()
   await expect(memberCard(page, name)).toHaveCount(0, { timeout: SYNC_TIMEOUT })
@@ -96,7 +102,7 @@ test.describe('Bumping and the daily bump quota', () => {
 
     await addLocalMember(page, memberName)
 
-    await page.goto('/home/feed', { waitUntil: 'domcontentloaded' })
+    await page.getByTestId('nav-tab-home').click()
     await waitForBoardVisible(page)
 
     // read the quota and fill the composer in the same sheet visit

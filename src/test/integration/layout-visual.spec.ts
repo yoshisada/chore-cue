@@ -14,11 +14,9 @@ test.describe('Layout visual verification', () => {
       fullPage: true,
     })
 
-    // Verify key layout elements exist
-    await expect(page.getByRole('heading', { name: 'Your Household' })).toBeVisible()
+    // Verify key layout elements exist (current playful-household DOM)
+    await expect(page.getByRole('heading', { name: /Welcome to/ })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Create a chore' })).toBeVisible()
-
-    // Verify tag filter bar renders "All" and tag chips
-    await expect(page.getByRole('button', { name: 'All' })).toBeVisible()
+    await expect(page.getByPlaceholder('Search chores...')).toBeVisible()
   })
 })

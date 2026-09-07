@@ -65,7 +65,11 @@ test.describe('Editing, archiving and photo labels', () => {
     await expect(choreCard(page, title)).toHaveCount(0, { timeout: SYNC_TIMEOUT })
 
     await page.reload({ waitUntil: 'domcontentloaded' })
-    await expect(page.getByTestId('chore-board')).toBeVisible({ timeout: SYNC_TIMEOUT })
+    // 'attached', not visible: the board container measures 0-high on web
+    // (flex-basis 0) even while its children render — see waitForBoardVisible
+    await page
+      .getByTestId('chore-board')
+      .waitFor({ state: 'attached', timeout: SYNC_TIMEOUT })
     await expect(choreCard(page, title)).toHaveCount(0)
   })
 

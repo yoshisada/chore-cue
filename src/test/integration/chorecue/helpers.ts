@@ -40,9 +40,13 @@ export async function navigateToChoreBoard(page: Page) {
 }
 
 export async function waitForBoardVisible(page: Page) {
+  // 'attached', not 'visible': the board container is a flex-basis-0 tamagui
+  // Container whose measured box is 0-high in the production layout even
+  // while its children render — Playwright's visibility check would fail on
+  // a page a human sees perfectly well
   await page
     .getByTestId('chore-board')
-    .waitFor({ state: 'visible', timeout: SYNC_TIMEOUT })
+    .waitFor({ state: 'attached', timeout: SYNC_TIMEOUT })
   // the hero action renders before any row has synced, so this is the earliest
   // point at which the board is actually interactive
   await page
