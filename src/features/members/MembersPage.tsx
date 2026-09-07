@@ -1,13 +1,23 @@
 import { memo, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { ScrollView, Separator, Sheet, SizableText, XStack, YStack, isWeb } from 'tamagui'
+import {
+  ScrollView,
+  Separator,
+  Sheet,
+  SizableText,
+  XStack,
+  YStack,
+  isWeb,
+  useThemeName,
+} from 'tamagui'
 
 import { Avatar } from '~/interface/avatars/Avatar'
 import { Button } from '~/interface/buttons/Button'
 import { Input } from '~/interface/forms/Input'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { H1, H3 } from '~/interface/text/Headings'
-import { memberAccentColors } from '~/tamagui/themes/playfulHousehold'
+import { showToast } from '~/interface/toast/helpers'
+import { choreStateColors, memberAccentColors } from '~/tamagui/themes/playfulHousehold'
 
 import { useMemberBoard } from './useMemberBoard'
 
@@ -26,6 +36,27 @@ function SectionLabel({ children }: { children: string }) {
       color="$color8"
     >
       {children}
+    </SizableText>
+  )
+}
+
+/** inline, in-place feedback for a roster write the server refused */
+function FormError({ message }: { message: string | null }) {
+  const themeName = useThemeName()
+  const mode = themeName.startsWith('dark') ? 'dark' : 'light'
+
+  if (!message) {
+    return null
+  }
+
+  return (
+    <SizableText
+      testID="member-add-error"
+      fontFamily="$body"
+      size="$2"
+      color={choreStateColors[mode].overdue}
+    >
+      {message}
     </SizableText>
   )
 }
@@ -79,19 +110,37 @@ function MemberCard({
 export const MembersPage = memo(() => {
   const insets = useSafeAreaInsets()
   const [addOpen, setAddOpen] = useState(false)
+  const [addError, setAddError] = useState<string | null>(null)
   const { members, composer, updateComposer, addMember, removeMember } = useMemberBoard()
 
   const Container = isWeb ? YStack : ScrollView
 
-  // members are deactivated, never deleted: chore assignee FKs are
-  // ON DELETE RESTRICT, so removing a row would orphan history
-  const handleAdd = () => {
-    void addMember()
+  // a rejected add keeps the sheet open with the composer intact, so the reason
+  // is visible next to the field the user has to change
+  const handleAdd = async () => {
+    const result = await addMember()
+    if (!result.ok) {
+      const reason = result.error ?? 'Could not add that member'
+      setAddError(reason)
+      showToast(reason, { type: 'error' })
+      return
+    }
+    setAddError(null)
     setAddOpen(false)
   }
 
-  const handleRemove = (memberId: string) => {
-    void removeMember(memberId)
+  const handleAddOpenChange = (open: boolean) => {
+    if (!open) setAddError(null)
+    setAddOpen(open)
+  }
+
+  // members are deactivated, never deleted: chore assignee FKs are
+  // ON DELETE RESTRICT, so removing a row would orphan history
+  const handleRemove = async (memberId: string) => {
+    const result = await removeMember(memberId)
+    if (!result.ok) {
+      showToast(result.error ?? 'Could not deactivate that member', { type: 'error' })
+    }
   }
 
   return (
@@ -134,7 +183,7 @@ export const MembersPage = memo(() => {
           {/* Add Member Sheet */}
           <Sheet
             open={addOpen}
-            onOpenChange={setAddOpen}
+            onOpenChange={handleAddOpenChange}
             transition="medium"
             modal
             dismissOnSnapToBottom
@@ -179,7 +228,9 @@ export const MembersPage = memo(() => {
                     </XStack>
                   </YStack>
 
-                  <Button onPress={handleAdd}>Add member</Button>
+                  <FormError message={addError} />
+
+                  <Button onPress={() => void handleAdd()}>Add member</Button>
                 </YStack>
               </ScrollView>
             </Sheet.Frame>

@@ -65,6 +65,7 @@ export interface BoardDriver {
   completeChore(choreId: string): Promise<{ ok: boolean; reason?: string }>
   sendBump(choreId: string): Promise<boolean>
   beginEdit(choreId: string): void
+  cancelEdit(): void
   saveEdit(): Promise<{ ok: boolean; reason?: string }>
   archiveChore(choreId: string): Promise<{ ok: boolean; reason?: string }>
 }
@@ -218,6 +219,10 @@ export function createBoardDriver(
 
     beginEdit(choreId: string) {
       editor = beginEditForBoard(cards(), choreId)
+    },
+
+    cancelEdit() {
+      editor = { ...emptyEditorState }
     },
 
     async saveEdit() {

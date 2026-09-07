@@ -6,6 +6,7 @@ import {
   Separator,
   Sheet,
   SizableText,
+  Spinner,
   View,
   XStack,
   YStack,
@@ -19,6 +20,7 @@ import { Button } from '~/interface/buttons/Button'
 import { Input } from '~/interface/forms/Input'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { H1, H3 } from '~/interface/text/Headings'
+import { showToast } from '~/interface/toast/helpers'
 import {
   choreStateColors,
   memberAccentColors,
@@ -58,6 +60,23 @@ function getMemberAccentColor(name: string, memberNames: string[]): HexColor {
 }
 
 const recurrenceOptions: RecurrenceSummary[] = ['Every N days', 'Weekly', 'Daily time']
+
+/** names the filters that are hiding everything, so they can be undone knowingly */
+export function describeActiveFilters(
+  searchQuery: string,
+  selectedTags: ReadonlySet<string>
+): string {
+  const parts: string[] = []
+  const trimmed = searchQuery.trim()
+  if (trimmed) parts.push(`search “${trimmed}”`)
+  if (selectedTags.size > 0) {
+    parts.push(
+      `${selectedTags.size === 1 ? 'tag' : 'tags'} ${[...selectedTags].join(', ')}`
+    )
+  }
+  if (parts.length === 0) return 'Nothing matches the current view.'
+  return `Nothing matches ${parts.join(' and ')}.`
+}
 
 function TagInput({
   tags,
@@ -117,6 +136,21 @@ function SectionLabel({ children, accent }: { children: string; accent?: boolean
       color={accent ? '$accentColor' : '$color8'}
     >
       {children}
+    </SizableText>
+  )
+}
+
+/** inline, in-place feedback for a write the board refused to make */
+function FormError({ testID, message }: { testID: string; message: string | null }) {
+  const color = useStateColor('overdue')
+
+  if (!message) {
+    return null
+  }
+
+  return (
+    <SizableText testID={testID} fontFamily="$body" size="$2" color={color}>
+      {message}
     </SizableText>
   )
 }
@@ -368,6 +402,8 @@ export const ChoreHomePage = memo(() => {
   const insets = useSafeAreaInsets()
   const household = useHouseholdContext()
   const [createOpen, setCreateOpen] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
+  const [editError, setEditError] = useState<string | null>(null)
   const {
     sections,
     memberNames,
@@ -378,11 +414,14 @@ export const ChoreHomePage = memo(() => {
     composer,
     editor,
     bumpCount,
+    isLoading,
+    hasAnyChores,
     updateComposer,
     addChore,
     completeChore,
     sendBump,
     beginEdit,
+    cancelEdit,
     updateEditor,
     saveEdit,
     archiveChore,
@@ -396,40 +435,97 @@ export const ChoreHomePage = memo(() => {
 
   const Container = isWeb ? YStack : ScrollView
 
-  const hasNoChores =
-    sections.overdue.length === 0 &&
-    sections.dueSoon.length === 0 &&
-    sections.upcoming.length === 0
+  const hasVisibleChores =
+    sections.overdue.length > 0 ||
+    sections.dueSoon.length > 0 ||
+    sections.upcoming.length > 0
+
+  const hasActiveFilters = searchQuery.trim().length > 0 || selectedTags.size > 0
+  // an empty board means one of three different things, and they need three
+  // different answers: still syncing, genuinely empty, or filtered to nothing
+  const showLoading = isLoading && !hasVisibleChores
+  const showFilteredEmpty = !showLoading && !hasVisibleChores && hasAnyChores
+  const showEmpty = !showLoading && !hasVisibleChores && !hasAnyChores
+
+  const clearFilters = () => {
+    setSearchQuery('')
+    clearTagFilter()
+  }
 
   // every write is a Zero mutator now, so these all return promises; the board
-  // re-renders from the synced query rather than from the promise resolving
-  const handleAddChore = () => {
-    void addChore()
+  // re-renders from the synced query rather than from the promise resolving —
+  // but a refusal only ever reaches the user through the awaited result
+  const handleAddChore = async () => {
+    const result = await addChore()
+    if (!result.ok) {
+      const reason = result.reason ?? 'Could not create that chore'
+      setCreateError(reason)
+      showToast(reason, { type: 'error' })
+      return
+    }
+    setCreateError(null)
     setCreateOpen(false)
   }
 
+  const handleCreateOpenChange = (open: boolean) => {
+    if (!open) setCreateError(null)
+    setCreateOpen(open)
+  }
+
   const handleBeginEdit = (choreId: string) => {
+    setEditError(null)
     beginEdit(choreId)
   }
 
-  const handleSaveEdit = () => {
-    void saveEdit()
+  const handleSaveEdit = async () => {
+    const result = await saveEdit()
+    if (!result.ok) {
+      const reason = result.reason ?? 'Could not save those changes'
+      setEditError(reason)
+      showToast(reason, { type: 'error' })
+      return
+    }
+    setEditError(null)
   }
 
-  const handleArchiveFromEdit = () => {
-    void archiveChore(editor.choreId as string)
+  // dismissing the sheet discards the draft; only the Save button writes
+  const handleCancelEdit = () => {
+    setEditError(null)
+    cancelEdit()
   }
 
-  const handleComplete = (choreId: string) => {
-    void completeChore(choreId)
+  const handleArchiveFromEdit = async () => {
+    const result = await archiveChore(editor.choreId as string)
+    if (!result.ok) {
+      const reason = result.reason ?? 'Could not archive that chore'
+      setEditError(reason)
+      showToast(reason, { type: 'error' })
+      return
+    }
+    setEditError(null)
   }
 
-  const handleBump = (choreId: string) => {
-    void sendBump(choreId)
+  const handleComplete = async (choreId: string) => {
+    const result = await completeChore(choreId)
+    if (!result.ok) {
+      showToast(result.reason ?? 'Could not complete that chore', { type: 'error' })
+    }
   }
 
-  const handleArchive = (choreId: string) => {
-    void archiveChore(choreId)
+  const handleBump = async (choreId: string) => {
+    const sent = await sendBump(choreId)
+    if (!sent) {
+      showToast('Bump not sent — check the daily limit and the assignee', {
+        type: 'error',
+      })
+    }
+  }
+
+  const handleArchive = async (choreId: string) => {
+    const result = await archiveChore(choreId)
+    if (!result.ok) {
+      showToast(result.reason ?? 'Could not archive that chore', { type: 'error' })
+    }
   }
 
   const addComposerTag = (tag: string) => {
@@ -526,7 +622,7 @@ export const ChoreHomePage = memo(() => {
           {/* Create Sheet */}
           <Sheet
             open={createOpen}
-            onOpenChange={setCreateOpen}
+            onOpenChange={handleCreateOpenChange}
             transition="medium"
             modal
             dismissOnSnapToBottom
@@ -603,11 +699,13 @@ export const ChoreHomePage = memo(() => {
                     onClear={clearComposerPhoto}
                   />
 
+                  <FormError testID="chore-create-error" message={createError} />
+
                   <XStack justify="space-between" items="center" gap="$3" flexWrap="wrap">
                     <SizableText fontFamily="$body" size="$2" color="$color8">
                       {bumpCount} of 5 daily bumps used
                     </SizableText>
-                    <Button onPress={handleAddChore}>Add chore</Button>
+                    <Button onPress={() => void handleAddChore()}>Add chore</Button>
                   </XStack>
                 </YStack>
               </ScrollView>
@@ -617,9 +715,9 @@ export const ChoreHomePage = memo(() => {
           {/* Edit Sheet */}
           {editor.choreId ? (
             <Sheet
-              open
+              open={!!editor.choreId}
               onOpenChange={(open: boolean) => {
-                if (!open) void saveEdit()
+                if (!open) handleCancelEdit()
               }}
               transition="medium"
               modal
@@ -697,9 +795,17 @@ export const ChoreHomePage = memo(() => {
                       onClear={clearEditorPhoto}
                     />
 
+                    <FormError testID="chore-edit-error" message={editError} />
+
                     <XStack gap="$3" flexWrap="wrap">
-                      <Button onPress={handleSaveEdit}>Save changes</Button>
-                      <Button variant="outlined" onPress={handleArchiveFromEdit}>
+                      <Button onPress={() => void handleSaveEdit()}>Save changes</Button>
+                      <Button variant="outlined" onPress={handleCancelEdit}>
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        onPress={() => void handleArchiveFromEdit()}
+                      >
                         Archive chore
                       </Button>
                     </XStack>
@@ -710,7 +816,48 @@ export const ChoreHomePage = memo(() => {
           ) : null}
 
           {/* Chore sections */}
-          {hasNoChores ? (
+          {showLoading ? (
+            <YStack
+              testID="chore-board-loading"
+              rounded="$4"
+              bg="$color2"
+              pt="$8"
+              pb="$6"
+              items="center"
+              gap="$3"
+            >
+              <Spinner size="large" color="$accentColor" />
+              <SizableText fontFamily="$body" size="$3" color="$color8" text="center">
+                Loading your chores…
+              </SizableText>
+            </YStack>
+          ) : showFilteredEmpty ? (
+            <YStack
+              testID="chore-board-no-matches"
+              rounded="$4"
+              bg="$color2"
+              pt="$8"
+              pb="$6"
+              items="center"
+              gap="$3"
+            >
+              <SizableText fontFamily="$heading" size="$7" color="$color8" text="center">
+                No chores match your filters
+              </SizableText>
+              <Paragraph
+                fontFamily="$body"
+                size="$3"
+                color="$color8"
+                text="center"
+                maxW={400}
+              >
+                {describeActiveFilters(searchQuery, selectedTags)}
+              </Paragraph>
+              <Button testID="chore-clear-filters" size="$3" onPress={clearFilters}>
+                Clear filters
+              </Button>
+            </YStack>
+          ) : showEmpty ? (
             <YStack
               testID="chore-board-empty"
               rounded="$4"

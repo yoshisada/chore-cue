@@ -118,7 +118,10 @@ export function useChoreBoard(options: { now?: number } = {}) {
     () => filterBySearch(sorted, searchQuery),
     [sorted, searchQuery]
   )
-  const allTags = useMemo(() => collectAllTags(afterSearch), [afterSearch])
+  // tags come from every visible chore, not just the ones matching the current
+  // search — otherwise typing in the search box hides the chip list and strands
+  // whatever tag filter is still active
+  const allTags = useMemo(() => collectAllTags(sorted), [sorted])
   const filtered = useMemo(
     () => filterByTags(afterSearch, selectedTags),
     [afterSearch, selectedTags]
@@ -219,6 +222,12 @@ export function useChoreBoard(options: { now?: number } = {}) {
     setEditor(beginEditForBoard(chores, choreId))
   }
 
+  // dismissing the edit sheet throws the draft away; the chore itself is
+  // untouched until an explicit save succeeds
+  function cancelEdit() {
+    setEditor(emptyEditorState)
+  }
+
   const saveEdit = useCallback(async (): Promise<BoardActionResult> => {
     if (!editor.choreId) return { ok: false, reason: 'No chore is being edited' }
 
@@ -295,11 +304,16 @@ export function useChoreBoard(options: { now?: number } = {}) {
     bumpCount,
     memberNames: members.map((member) => member.name),
     isLoading: !!householdId && choreInfo.type === 'unknown',
+    // whether the household has any visible chore at all, regardless of the
+    // search box and tag chips — lets the board tell "nothing here yet" apart
+    // from "nothing matches your filters"
+    hasAnyChores: sorted.length > 0,
     updateComposer,
     addChore,
     completeChore,
     sendBump,
     beginEdit,
+    cancelEdit,
     updateEditor,
     saveEdit,
     archiveChore,

@@ -26,15 +26,20 @@ export interface MockBoardState {
   sections: ReturnType<typeof createSections>
   allTags: string[]
   selectedTags: Set<string>
+  searchQuery: string
+  setSearchQuery: ReturnType<typeof vi.fn>
   memberNames: string[]
   composer: ChoreComposerState
   editor: ChoreEditorState
   bumpCount: number
+  isLoading: boolean
+  hasAnyChores: boolean
   updateComposer: ReturnType<typeof vi.fn>
   addChore: ReturnType<typeof vi.fn>
   completeChore: ReturnType<typeof vi.fn>
   sendBump: ReturnType<typeof vi.fn>
   beginEdit: ReturnType<typeof vi.fn>
+  cancelEdit: ReturnType<typeof vi.fn>
   updateEditor: ReturnType<typeof vi.fn>
   saveEdit: ReturnType<typeof vi.fn>
   archiveChore: ReturnType<typeof vi.fn>
@@ -55,18 +60,23 @@ export function buildMockBoardState(
     sections: createSections(sorted),
     allTags: collectAllTags(sorted),
     selectedTags: new Set<string>(),
+    searchQuery: '',
+    setSearchQuery: vi.fn(),
     memberNames: ['Sam', 'Alex'],
     composer: { ...emptyComposer },
     editor: { ...emptyEditorState },
     bumpCount: 2,
+    isLoading: false,
+    hasAnyChores: chores.length > 0,
     updateComposer: vi.fn(),
-    addChore: vi.fn(),
-    completeChore: vi.fn(),
+    addChore: vi.fn().mockResolvedValue({ ok: true }),
+    completeChore: vi.fn().mockResolvedValue({ ok: true }),
     sendBump: vi.fn().mockResolvedValue(true),
     beginEdit: vi.fn(),
+    cancelEdit: vi.fn(),
     updateEditor: vi.fn(),
-    saveEdit: vi.fn(),
-    archiveChore: vi.fn(),
+    saveEdit: vi.fn().mockResolvedValue({ ok: true }),
+    archiveChore: vi.fn().mockResolvedValue({ ok: true }),
     attachComposerPhoto: vi.fn(),
     clearComposerPhoto: vi.fn(),
     attachEditorPhoto: vi.fn(),

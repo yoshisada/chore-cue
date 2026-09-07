@@ -184,4 +184,19 @@ describe('useChoreBoard – edit and archive flows', () => {
       expect(visible.find((c) => c.id === 'overdue-1')).toBeUndefined()
     })
   })
+
+  describe('cancelEdit', () => {
+    it('clears the editor without writing the draft', () => {
+      const board = createBoardDriver(buildMixedRows())
+      board.beginEdit('overdue-1')
+      board.updateEditor('title', 'Renamed while distracted')
+
+      board.cancelEdit()
+
+      expect(board.editor).toEqual(emptyEditorState)
+      expect(board.rows.find((row) => row.id === 'overdue-1')?.title).not.toBe(
+        'Renamed while distracted'
+      )
+    })
+  })
 })
