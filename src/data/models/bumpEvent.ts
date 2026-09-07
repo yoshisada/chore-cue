@@ -10,6 +10,7 @@ import { localDateKey } from '~/features/chorecue/timezone'
 
 import { inCallerHousehold } from '../where/household'
 import { loadOwnChore, requireActiveMember } from './helpers/requireActiveMember'
+import { trustedNow } from './helpers/trustedNow'
 
 import type { TableInsertRow } from 'on-zero'
 import type { BumpMessageType } from '~/features/chorecue/choreRules'
@@ -63,6 +64,9 @@ export const mutate = mutations(schema, permissions, {
   },
 
   async send(ctx, input: BumpSendInput) {
+    // the quota bucket must come from the server clock — a client lying about
+    // `now` would otherwise mint itself a fresh daily quota at will
+    const now = trustedNow(ctx, input.now)
     if (!isBumpMessageType(input.messageType)) {
       throw new BumpRejected('invalid-template')
     }
@@ -74,7 +78,7 @@ export const mutate = mutations(schema, permissions, {
       ? await ctx.tx.run(zql.householdMember.where('id', chore.assigneeMemberId).one())
       : undefined
 
-    const sentOnDate = localDateKey(input.now, sender.timezone)
+    const sentOnDate = localDateKey(now, sender.timezone)
     const usedToday = await ctx.tx.run(
       zql.bumpEvent.where('senderMemberId', sender.id).where('sentOnDate', sentOnDate)
     )
@@ -97,17 +101,17 @@ export const mutate = mutations(schema, permissions, {
       choreId: chore.id,
       senderMemberId: sender.id,
       recipientMemberId: chore.assigneeMemberId,
-      sentAt: input.now,
+      sentAt: now,
       sentOnDate,
       dailySequence: usedToday.length + 1,
       messageType: input.messageType,
-      createdAt: input.now,
+      createdAt: now,
     })
 
     await ctx.tx.mutate.chore.update({
       id: chore.id,
-      lastBumpedAt: input.now,
-      updatedAt: input.now,
+      lastBumpedAt: now,
+      updatedAt: now,
     })
   },
 })

@@ -16,6 +16,7 @@ import {
   loadOwnChore,
   requireActiveMember,
 } from './helpers/requireActiveMember'
+import { trustedNow } from './helpers/trustedNow'
 
 import type { TableInsertRow } from 'on-zero'
 import type { RecurrenceRule } from '~/features/chorecue/recurrence'
@@ -106,6 +107,7 @@ export const mutate = mutations(schema, permissions, {
   },
 
   async create(ctx, input: ChoreCreateInput) {
+    const now = trustedNow(ctx, input.now)
     const member = await requireActiveMember(ctx)
     const draft = validateChoreDraft(input)
 
@@ -130,17 +132,18 @@ export const mutate = mutations(schema, permissions, {
       assigneeMemberId: draft.assigneeMemberId,
       status: 'active',
       ...ruleToColumns(draft.rule),
-      nextDueAt: firstDueAt(draft.rule, input.now),
+      nextDueAt: firstDueAt(draft.rule, now),
       lastCompletedAt: null,
       lastCompletedByMemberId: null,
       lastBumpedAt: null,
       archivedAt: null,
-      createdAt: input.now,
-      updatedAt: input.now,
+      createdAt: now,
+      updatedAt: now,
     })
   },
 
   async edit(ctx, input: ChoreEditInput) {
+    const now = trustedNow(ctx, input.now)
     const member = await requireActiveMember(ctx)
     const chore = await loadOwnChore(ctx, input.choreId, member.householdId)
     if (chore.status !== 'active') throw new Error('Cannot edit an archived chore')
@@ -156,11 +159,12 @@ export const mutate = mutations(schema, permissions, {
       throw new Error('Assignee is not an active member of this household')
     }
 
-    // a recurrence edit must not leave nextDueAt ambiguous: re-anchor
-    // deterministically off the last completion (or now, if never completed)
+    // a recurrence edit must not leave nextDueAt ambiguous: re-anchor to the
+    // first occurrence after now — anchoring off an old lastCompletedAt would
+    // back-date the chore into deep overdue the moment its rule changes
     const nextDueAt = sameRule(toRule(chore), draft.rule)
       ? chore.nextDueAt
-      : firstDueAt(draft.rule, chore.lastCompletedAt ?? input.now)
+      : firstDueAt(draft.rule, now)
 
     await ctx.tx.mutate.chore.update({
       id: chore.id,
@@ -171,11 +175,12 @@ export const mutate = mutations(schema, permissions, {
       assigneeMemberId: draft.assigneeMemberId,
       ...ruleToColumns(draft.rule),
       nextDueAt,
-      updatedAt: input.now,
+      updatedAt: now,
     })
   },
 
   async complete(ctx, input: ChoreCompleteInput) {
+    const now = trustedNow(ctx, input.now)
     const member = await requireActiveMember(ctx)
     const chore = await loadOwnChore(ctx, input.choreId, member.householdId)
     if (chore.status !== 'active') throw new Error('Cannot complete an archived chore')
@@ -189,17 +194,18 @@ export const mutate = mutations(schema, permissions, {
 
     await ctx.tx.mutate.chore.update({
       id: chore.id,
-      lastCompletedAt: input.now,
+      lastCompletedAt: now,
       lastCompletedByMemberId: member.id,
       nextDueAt: advanceNextDueAt(rule, {
         previousDueAt: chore.nextDueAt,
-        completedAt: input.now,
+        completedAt: now,
       }),
-      updatedAt: input.now,
+      updatedAt: now,
     })
   },
 
   async archive(ctx, input: ChoreArchiveInput) {
+    const now = trustedNow(ctx, input.now)
     const member = await requireActiveMember(ctx)
     const chore = await loadOwnChore(ctx, input.choreId, member.householdId)
     if (chore.status === 'archived') return // idempotent
@@ -207,8 +213,8 @@ export const mutate = mutations(schema, permissions, {
     await ctx.tx.mutate.chore.update({
       id: chore.id,
       status: 'archived',
-      archivedAt: input.now,
-      updatedAt: input.now,
+      archivedAt: now,
+      updatedAt: now,
     })
   },
 })

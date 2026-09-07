@@ -1,7 +1,8 @@
 import { deriveDueBucket, DUE_SOON_WINDOW_MS } from './choreMapping'
 import { ChoreValidationError, DAILY_BUMP_LIMIT, validateChoreDraft } from './choreRules'
-import { ruleFromSummary } from './recurrence'
+import { describeRecurrence, ruleFromSummary } from './recurrence'
 
+import type { RecurrenceRule } from './recurrence'
 import type {
   ChoreCard,
   ChoreComposerState,
@@ -147,6 +148,12 @@ export interface ChoreIntentContext {
   assigneeMemberId: string | null | undefined
   timezone: string
   now: number
+  /**
+   * the chore's current rule when editing. the form only round-trips the coarse
+   * summary, so an unchanged summary must keep the stored rule's parameters
+   * instead of silently resetting them to the summary's defaults
+   */
+  existingRule?: RecurrenceRule | null
 }
 
 function buildIntent(form: ChoreComposerState, ctx: ChoreIntentContext): ChoreIntent {
@@ -156,7 +163,11 @@ function buildIntent(form: ChoreComposerState, ctx: ChoreIntentContext): ChoreIn
       tags: form.tags,
       photoLabel: form.photoLabel,
       assigneeMemberId: ctx.assigneeMemberId ?? '',
-      rule: ruleFromSummary(form.recurrenceSummary, ctx.timezone),
+      rule:
+        ctx.existingRule &&
+        describeRecurrence(ctx.existingRule) === form.recurrenceSummary
+          ? ctx.existingRule
+          : ruleFromSummary(form.recurrenceSummary, ctx.timezone),
     })
 
     return {

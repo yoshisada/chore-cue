@@ -22,6 +22,7 @@ import {
 } from './boardState'
 import { toChoreCard } from './choreMapping'
 import { bumpEligibility } from './choreRules'
+import { toRule } from './recurrence'
 import { localDateKey } from './timezone'
 import { useNowTick } from './useNowTick'
 
@@ -225,6 +226,7 @@ export function useChoreBoard(options: { now?: number } = {}) {
       assigneeMemberId: findMemberIdByName(members, editor.assigneeName),
       timezone,
       now,
+      existingRule: toRule(choreRows?.find((row) => row.id === editor.choreId)),
     })
     if (!intent.ok) return { ok: false, reason: intent.error.message }
 
@@ -235,7 +237,7 @@ export function useChoreBoard(options: { now?: number } = {}) {
     } catch (error) {
       return failure(error)
     }
-  }, [editor, members, timezone, now])
+  }, [editor, members, timezone, now, choreRows])
 
   const archiveChore = useCallback(
     async (choreId: string): Promise<BoardActionResult> => {
