@@ -8,7 +8,12 @@ import { plugins } from './plugins'
 
 import type { User } from 'better-auth'
 
-type AppUser = User & { role?: 'admin' }
+/**
+ * better-auth's `User` only carries the core columns. Our `user` table also has
+ * a nullable `username` (see `src/database/schema-private.ts`), which
+ * `afterCreateUser` populates and the profile/header UI reads.
+ */
+type AppUser = User & { role?: 'admin'; username?: string | null }
 
 const betterAuthClient = createBetterAuthClient({
   baseURL: SERVER_URL,

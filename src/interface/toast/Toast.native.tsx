@@ -15,15 +15,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import {
-  SizableText,
-  Theme,
-  useTheme,
-  View,
-  XStack,
-  YStack,
-  type ThemeName,
-} from 'tamagui'
+import { SizableText, useTheme, View, XStack, YStack } from 'tamagui'
 
 import { useEmitter } from '~/helpers/emitter'
 
@@ -39,18 +31,21 @@ const VELOCITY_THRESHOLD = 500
 const SLIDE_UP_DISTANCE = BANNER_HEIGHT + TOP_OFFSET
 const RESISTANCE_FACTOR = 0.15
 
-function getThemeForType(type?: ToastType): ThemeName | null {
-  switch (type) {
-    case 'error':
-      return 'red'
-    case 'warn':
-      return 'yellow'
-    case 'success':
-      return 'green'
-    case 'info':
-    default:
-      return null
-  }
+/**
+ * The app config only registers `light`/`dark` themes — there are no `red` /
+ * `yellow` / `green` sub-themes to switch into — so the toast signals its type
+ * with an explicit accent border instead of a `<Theme>` wrapper that would
+ * resolve to nothing.
+ */
+const TOAST_ACCENTS: Record<ToastType, `#${string}`> = {
+  error: '#D94F4F',
+  warn: '#D4920B',
+  success: '#2E7D4F',
+  info: '#5B8DEF',
+}
+
+function getAccentForType(type?: ToastType) {
+  return type ? TOAST_ACCENTS[type] : undefined
 }
 
 const createEnteringAnimation = () =>
@@ -99,7 +94,7 @@ const ToastBanner = memo(({ toast, onHide }: ToastBannerProps) => {
 
   const duration = toast.duration ?? DEFAULT_DURATION
   const toastType = toast.type
-  const themeName = getThemeForType(toastType)
+  const accentColor = getAccentForType(toastType)
   const action = toast.action
 
   useEffect(() => {
@@ -188,58 +183,53 @@ const ToastBanner = memo(({ toast, onHide }: ToastBannerProps) => {
   }
 
   return (
-    <Theme name={themeName}>
-      <GestureHandlerRootView style={StyleSheet.absoluteFill} pointerEvents="box-none">
-        <Animated.View
-          entering={createEnteringAnimation()}
-          style={[
-            {
-              top: top + TOP_OFFSET,
-              position: 'absolute',
-              left: 16,
-              right: 16,
-              zIndex: 9999,
-            },
-            animatedStyle,
-          ]}
-        >
-          <GestureDetector gesture={panGesture}>
-            <Pressable onPress={handlePress} style={{ flex: 1 }}>
-              <YStack
-                flex={1}
-                bg="$background"
-                borderWidth={1}
-                borderColor="$borderColor"
-                justify="center"
-                px="$5"
-                py="$3"
-                gap="$1"
-              >
-                <SizableText
-                  size="$4"
-                  fontWeight="600"
-                  color="$color12"
-                  numberOfLines={1}
-                >
-                  {toast.title}
+    <GestureHandlerRootView style={StyleSheet.absoluteFill} pointerEvents="box-none">
+      <Animated.View
+        entering={createEnteringAnimation()}
+        style={[
+          {
+            top: top + TOP_OFFSET,
+            position: 'absolute',
+            left: 16,
+            right: 16,
+            zIndex: 9999,
+          },
+          animatedStyle,
+        ]}
+      >
+        <GestureDetector gesture={panGesture}>
+          <Pressable onPress={handlePress} style={{ flex: 1 }}>
+            <YStack
+              flex={1}
+              bg="$background"
+              borderWidth={1}
+              borderColor="$borderColor"
+              borderLeftWidth={4}
+              borderLeftColor={accentColor ?? '$borderColor'}
+              justify="center"
+              px="$5"
+              py="$3"
+              gap="$1"
+            >
+              <SizableText size="$4" fontWeight="600" color="$color12" numberOfLines={1}>
+                {toast.title}
+              </SizableText>
+              {toast.message && (
+                <SizableText size="$3" color="$color11" numberOfLines={2}>
+                  {toast.message}
                 </SizableText>
-                {toast.message && (
-                  <SizableText size="$3" color="$color11" numberOfLines={2}>
-                    {toast.message}
+              )}
+              {action && (
+                <XStack pr="$3" items="center">
+                  <SizableText size="$3" color="$color10" fontWeight="500">
+                    {action.label}
                   </SizableText>
-                )}
-                {action && (
-                  <XStack pr="$3" items="center">
-                    <SizableText size="$3" color="$color10" fontWeight="500">
-                      {action.label}
-                    </SizableText>
-                  </XStack>
-                )}
-              </YStack>
-            </Pressable>
-          </GestureDetector>
-        </Animated.View>
-      </GestureHandlerRootView>
-    </Theme>
+                </XStack>
+              )}
+            </YStack>
+          </Pressable>
+        </GestureDetector>
+      </Animated.View>
+    </GestureHandlerRootView>
   )
 })

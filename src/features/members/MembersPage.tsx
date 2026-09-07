@@ -39,12 +39,13 @@ function MemberCard({
   index: number
   onRemove: (id: string) => void
 }) {
-  const accentColor = memberAccentColors[index % memberAccentColors.length]
+  const accentColor =
+    memberAccentColors[index % memberAccentColors.length] ?? memberAccentColors[0]
 
   return (
     <XStack
       testID="member-card"
-      borderRadius="$4"
+      rounded="$4"
       bg="$color2"
       p="$4"
       gap="$4"
@@ -100,8 +101,8 @@ export const MembersPage = memo(() => {
       bg="$background"
       {...(!isWeb && {
         contentContainerStyle: {
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom + 40,
+          pt: insets.top,
+          pb: insets.bottom + 40,
         },
       })}
     >
@@ -140,7 +141,7 @@ export const MembersPage = memo(() => {
             snapPoints={[55]}
           >
             <Sheet.Overlay
-              bg="$shadow6"
+              bg="rgba(0, 0, 0, 0.5)"
               transition="quick"
               enterStyle={{ opacity: 0 }}
               exitStyle={{ opacity: 0 }}
@@ -150,7 +151,7 @@ export const MembersPage = memo(() => {
               bg="$color2"
               boxShadow="0 0 10px $shadow4"
             >
-              <ScrollView flex={1} contentContainerStyle={{ padding: 24 }}>
+              <ScrollView flex={1} contentContainerStyle={{ p: 24 }}>
                 <YStack gap="$4">
                   <SectionLabel>Add a member</SectionLabel>
 
@@ -188,27 +189,22 @@ export const MembersPage = memo(() => {
           {members.length === 0 ? (
             <YStack
               testID="members-empty"
-              borderRadius="$4"
+              rounded="$4"
               bg="$color2"
               pt="$8"
               pb="$6"
               items="center"
               gap="$3"
             >
-              <SizableText
-                fontFamily="$heading"
-                size="$7"
-                color="$color8"
-                textAlign="center"
-              >
+              <SizableText fontFamily="$heading" size="$7" color="$color8" text="center">
                 No members yet
               </SizableText>
               <SizableText
                 fontFamily="$body"
                 size="$3"
                 color="$color8"
-                textAlign="center"
-                maxWidth={400}
+                text="center"
+                maxW={400}
               >
                 Add family members to assign chores to them.
               </SizableText>

@@ -7,6 +7,13 @@ import { UserIcon } from '../icons/phosphor/UserIcon'
 
 export type SimpleSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
+/**
+ * The playful-household themes only define `light`/`dark` (no color sub-themes),
+ * so the online dot uses a raw hex rather than a `$green*` token that resolves
+ * to nothing.
+ */
+const ONLINE_INDICATOR_COLOR = '#2E7D4F'
+
 const simpleSizes: Record<SimpleSize, number> = {
   xs: 24,
   sm: 28,
@@ -29,7 +36,8 @@ export type AvatarProps = Omit<ViewProps, 'size'> & {
   disableBorder?: boolean
   gradient?: boolean
   gradientColors?: string[]
-  accentColor?: string
+  /** a theme color token or a raw hex color, matching what tamagui accepts */
+  accentColor?: ViewProps['outlineColor']
 }
 
 export const Avatar = memo(
@@ -55,7 +63,7 @@ export const Avatar = memo(
         width={size}
         height={size}
         position="relative"
-        borderRadius={9999}
+        rounded={9999}
         {...(!disableBorder && {
           outlineColor: accentColor ?? '$borderColor',
           outlineOffset: 1,
@@ -69,7 +77,7 @@ export const Avatar = memo(
           width={size}
           height={size}
           overflow="hidden"
-          borderRadius={9999}
+          rounded={9999}
           {...rest}
         >
           {image ? (
@@ -93,7 +101,7 @@ export const Avatar = memo(
             width={7 * scale}
             height={7 * scale}
             opacity={1}
-            bg={isOnline ? '$green10' : '$color4'}
+            bg={isOnline ? ONLINE_INDICATOR_COLOR : '$color4'}
           />
         ) : null}
       </YStack>

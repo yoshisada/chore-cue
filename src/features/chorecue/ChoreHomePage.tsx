@@ -19,7 +19,11 @@ import { Button } from '~/interface/buttons/Button'
 import { Input } from '~/interface/forms/Input'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { H1, H3 } from '~/interface/text/Headings'
-import { choreStateColors, memberAccentColors } from '~/tamagui/themes/playfulHousehold'
+import {
+  choreStateColors,
+  memberAccentColors,
+  type HexColor,
+} from '~/tamagui/themes/playfulHousehold'
 
 import { CheckIcon } from './components/CheckIcon'
 import { PhotoInput } from './components/PhotoInput'
@@ -29,7 +33,7 @@ import { useChoreBoard } from './useChoreBoard'
 import type { BumpBlockedReason } from './choreRules'
 import type { ChoreCard, DueBucket, RecurrenceSummary } from './types'
 
-function useStateColor(bucket: DueBucket): string {
+function useStateColor(bucket: DueBucket): HexColor {
   const themeName = useThemeName()
   const mode = themeName.startsWith('dark') ? 'dark' : 'light'
   const key = bucket === 'dueSoon' ? 'due' : bucket
@@ -45,9 +49,12 @@ const BUMP_BLOCKED_LABELS: Record<BumpBlockedReason, string> = {
   'invalid-template': 'Unavailable',
 }
 
-function getMemberAccentColor(name: string, memberNames: string[]): string {
+function getMemberAccentColor(name: string, memberNames: string[]): HexColor {
   const index = memberNames.indexOf(name)
-  return memberAccentColors[(index >= 0 ? index : 0) % memberAccentColors.length]
+  return (
+    memberAccentColors[(index >= 0 ? index : 0) % memberAccentColors.length] ??
+    memberAccentColors[0]
+  )
 }
 
 const recurrenceOptions: RecurrenceSummary[] = ['Every N days', 'Weekly', 'Daily time']
@@ -121,17 +128,17 @@ function SectionHeader({
 }: {
   title: string
   count: number
-  stateColor?: string
+  stateColor?: HexColor
 }) {
   return (
     <XStack justify="space-between" items="center" pt="$4" pb="$2">
       <XStack items="center" gap="$2">
-        {stateColor && <View width={8} height={8} borderRadius={4} bg={stateColor} />}
+        {stateColor && <View width={8} height={8} rounded={4} bg={stateColor} />}
         <SizableText fontFamily="$heading" size="$5" fontWeight="600" color="$color">
           {title}
         </SizableText>
       </XStack>
-      <View bg="$color3" px="$2" py="$1" borderRadius="$2">
+      <View bg="$color3" px="$2" py="$1" rounded="$2">
         <SizableText
           testID="chore-section-count"
           fontFamily="$body"
@@ -173,7 +180,7 @@ function ChoreCardItem({
   return (
     <XStack
       testID="chore-card"
-      borderRadius="$4"
+      rounded="$4"
       borderLeftWidth={4}
       borderLeftColor={stateColor}
       bg={`${stateColor}10`}
@@ -209,7 +216,7 @@ function ChoreCardItem({
           <Button size="$3" onPress={handleComplete}>
             {justCompleted ? (
               <View
-                animation="playfulBounce"
+                transition="playfulBounce"
                 enterStyle={{ scale: 0, opacity: 0 }}
                 scale={1}
                 opacity={1}
@@ -269,7 +276,7 @@ function Section({
   title: string
   testID: string
   items: ChoreCard[]
-  stateColor?: string
+  stateColor?: HexColor
   memberNames: string[]
   onComplete: (choreId: string) => void
   onBump: (choreId: string) => void
@@ -454,8 +461,8 @@ export const ChoreHomePage = memo(() => {
       bg="$background"
       {...(!isWeb && {
         contentContainerStyle: {
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom + 40,
+          pt: insets.top,
+          pb: insets.bottom + 40,
         },
       })}
     >
@@ -526,7 +533,7 @@ export const ChoreHomePage = memo(() => {
             snapPoints={[85]}
           >
             <Sheet.Overlay
-              bg="$shadow6"
+              bg="rgba(0, 0, 0, 0.5)"
               transition="quick"
               enterStyle={{ opacity: 0 }}
               exitStyle={{ opacity: 0 }}
@@ -536,7 +543,7 @@ export const ChoreHomePage = memo(() => {
               bg="$color2"
               boxShadow="0 0 10px $shadow4"
             >
-              <ScrollView flex={1} contentContainerStyle={{ padding: 24 }}>
+              <ScrollView flex={1} contentContainerStyle={{ p: 24 }}>
                 <YStack gap="$4">
                   <SectionLabel>Create a chore</SectionLabel>
 
@@ -620,7 +627,7 @@ export const ChoreHomePage = memo(() => {
               snapPoints={[85]}
             >
               <Sheet.Overlay
-                bg="$shadow6"
+                bg="rgba(0, 0, 0, 0.5)"
                 transition="quick"
                 enterStyle={{ opacity: 0 }}
                 exitStyle={{ opacity: 0 }}
@@ -630,7 +637,7 @@ export const ChoreHomePage = memo(() => {
                 bg="$color2"
                 boxShadow="0 0 10px $shadow4"
               >
-                <ScrollView flex={1} contentContainerStyle={{ padding: 24 }}>
+                <ScrollView flex={1} contentContainerStyle={{ p: 24 }}>
                   <YStack gap="$4">
                     <SectionLabel>Edit chore</SectionLabel>
 
@@ -706,27 +713,22 @@ export const ChoreHomePage = memo(() => {
           {hasNoChores ? (
             <YStack
               testID="chore-board-empty"
-              borderRadius="$4"
+              rounded="$4"
               bg="$color2"
               pt="$8"
               pb="$6"
               items="center"
               gap="$3"
             >
-              <SizableText
-                fontFamily="$heading"
-                size="$7"
-                color="$color8"
-                textAlign="center"
-              >
+              <SizableText fontFamily="$heading" size="$7" color="$color8" text="center">
                 Nothing due yet
               </SizableText>
               <Paragraph
                 fontFamily="$body"
                 size="$3"
                 color="$color8"
-                textAlign="center"
-                maxWidth={400}
+                text="center"
+                maxW={400}
               >
                 Create a chore to start tracking your household tasks.
               </Paragraph>

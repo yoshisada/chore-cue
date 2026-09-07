@@ -44,7 +44,7 @@ export const LoginPage = () => {
         width="100%"
         items="center"
         bg="$background"
-        borderRadius="$4"
+        rounded="$4"
         p={isWeb ? '$6' : '$4'}
         maxW={isWeb ? 400 : '90%'}
       >

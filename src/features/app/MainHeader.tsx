@@ -79,7 +79,7 @@ export const MainHeaderMenu = memo(() => {
     <>
       <Button
         variant="transparent"
-        minHeight={0}
+        minH={0}
         icon={<ListIcon size="$1" color="$color" />}
         aria-label="Menu"
         onPress={() => setOpen(true)}
@@ -94,7 +94,7 @@ export const MainHeaderMenu = memo(() => {
         snapPoints={[50]}
       >
         <Sheet.Overlay
-          bg="$shadow6"
+          bg="rgba(0, 0, 0, 0.5)"
           transition="quick"
           enterStyle={{ opacity: 0 }}
           exitStyle={{ opacity: 0 }}

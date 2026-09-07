@@ -152,7 +152,7 @@ export const Link = ({
       }}
       focusVisibleStyle={{
         outlineWidth: 2,
-        outlineColor: '$color02',
+        outlineColor: '$accentColor',
         outlineOffset: 1,
         outlineStyle: 'solid',
         rounded: '$4',

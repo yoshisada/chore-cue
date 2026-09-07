@@ -21,7 +21,7 @@ export function PhotoThumbnail({ label }: { label: string }) {
         size="$1"
         color="$color8"
         numberOfLines={1}
-        maxWidth={48}
+        maxW={48}
       >
         {label}
       </SizableText>

@@ -26,8 +26,8 @@
     "preserveConstEnums": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "types": ["node", "react", "vite/client", "bun", "one/env"],
-    "lib": ["dom", "esnext"]
+    "types": ["node", "react", "vite/client", "bun", "one/env", "vitest/globals"],
+    "lib": ["dom", "dom.iterable", "esnext"]
   },
   "include": ["./src", "./scripts", "./app"],
   "exclude": ["./packages"],

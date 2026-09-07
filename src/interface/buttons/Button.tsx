@@ -4,9 +4,10 @@ export const Button = styled(TamaguiButton, {
   render: 'button',
   borderWidth: 0,
   cursor: 'pointer',
-  fontFamily: '$body',
-  minHeight: 48,
-  borderRadius: '$4',
+  // the label is rendered by Button.Text (a SizableText), which already
+  // defaults to `$body` — setting fontFamily on the frame does nothing.
+  minH: 48,
+  rounded: '$4',
   transition: 'playfulQuick',
 
   focusVisibleStyle: {

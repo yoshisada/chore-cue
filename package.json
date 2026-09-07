@@ -16,7 +16,7 @@
     "backend": "bun run migrate:build && docker compose up --remove-orphans",
     "build": "one build",
     "check": "bun run lint && bun run format:check",
-    "check:all": "bun run lint && bun run format:check",
+    "check:all": "bun run lint && bun run format:check && bun run typecheck",
     "postinstall": "bun run ./scripts/postinstall.ts",
     "ci": "NODE_ENV=production dotenvx run -f .env .env.production -- bun scripts/ci/release.ts",
     "clean": "rm -rf dist .expo .docker",
@@ -39,6 +39,7 @@
     "test:unit": "bun run:dev vitest run -c ./src/test/vitest.config.ts",
     "test:unit:coverage": "bun run:dev vitest run -c ./src/test/vitest.config.ts --coverage",
     "test": "bun run test:unit && bun run test:integration",
+    "typecheck": "bun run ./scripts/check/types.ts",
     "zero:generate": "on-zero generate --after 'bun lint:fix'"
   },
   "overrides": {

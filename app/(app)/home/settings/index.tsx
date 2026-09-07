@@ -57,7 +57,7 @@ export function ProfileSettingsPage() {
     <Container
       flex={1}
       bg="$background"
-      {...(!isWeb && { contentContainerStyle: { paddingBottom: insets.bottom + 40 } })}
+      {...(!isWeb && { contentContainerStyle: { pb: insets.bottom + 40 } })}
     >
       <PageContainer>
         <YStack gap="$6" py="$5">
@@ -133,13 +133,13 @@ export function ProfileSettingsPage() {
             snapPoints={[40]}
           >
             <Sheet.Overlay
-              bg="$shadow6"
+              bg="rgba(0, 0, 0, 0.5)"
               transition="quick"
               enterStyle={{ opacity: 0 }}
               exitStyle={{ opacity: 0 }}
             />
             <Sheet.Frame bg="$color2" boxShadow="0 0 10px $shadow4">
-              <ScrollView flex={1} contentContainerStyle={{ padding: 24 }}>
+              <ScrollView flex={1} contentContainerStyle={{ p: 24 }}>
                 <YStack gap="$4">
                   <SectionLabel>Rename Household</SectionLabel>
                   <Separator />
@@ -177,7 +177,7 @@ export function ProfileSettingsPage() {
             <SectionLabel>Account</SectionLabel>
             <Separator />
             <YStack pt="$2">
-              <Button variant="outlined" onPress={logout}>
+              <Button variant="outlined" onPress={() => void logout()}>
                 Log out
               </Button>
             </YStack>

@@ -40,7 +40,7 @@ export function NavigationTabs() {
               px="$4"
               py="$2"
               bg={isActive ? '$color3' : 'transparent'}
-              borderRadius="$3"
+              rounded="$3"
               hoverStyle={{ bg: '$color2' }}
               pressStyle={{ scale: 0.95, opacity: 0.85 }}
             >

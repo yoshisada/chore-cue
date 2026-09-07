@@ -103,6 +103,13 @@ export const playfulHouseholdThemes = {
   dark: playfulDarkTheme,
 } as const
 
+/**
+ * A raw (non-token) color literal. Tamagui accepts `#...` strings anywhere a
+ * `$token` is accepted, but not a widened `string`, so the helpers that read
+ * the palettes below must preserve this shape.
+ */
+export type HexColor = `#${string}`
+
 // Chore state color tokens (Contract 6)
 export const choreStateColors = {
   light: {
