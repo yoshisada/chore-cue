@@ -43,16 +43,17 @@ test('edge: each member takes the accent colour for its roster position', async 
   }
 })
 
-test('edge: the accent palette gives six households members six distinct colours', () => {
+test('edge: the accent palette gives six household members six distinct colours', () => {
+  // the roster assignment is `palette[index % palette.length]`, so these two
+  // invariants are what make the first six members distinguishable. the old
+  // third assertion rebuilt the palette from itself and re-checked uniqueness
+  // of the copy, which could not fail; it is gone.
   expect(memberAccentColors.length).toBe(6)
-  expect(new Set(memberAccentColors).size).toBe(6)
+  expect(new Set(memberAccentColors).size, 'palette entries must not repeat').toBe(6)
 
-  // the assignment is `index % palette.length`, so the first six are unique
-  const assigned = Array.from(
-    { length: 6 },
-    (_, index) => memberAccentColors[index % memberAccentColors.length]
-  )
-  expect(new Set(assigned).size).toBe(6)
+  for (const accent of memberAccentColors) {
+    expect(accent, `${accent} must be a 6-digit hex colour`).toMatch(/^#[0-9a-fA-F]{6}$/)
+  }
 })
 
 test('edge: a member with no photo falls back to the user icon', async ({ page }) => {

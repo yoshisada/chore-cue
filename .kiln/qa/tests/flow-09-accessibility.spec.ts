@@ -5,7 +5,10 @@ import {
   computedStyle,
   contrastRatio,
   effectiveBackgroundColor,
+  hexToRgb,
   parseRgb,
+  playfulDarkTheme,
+  playfulLightTheme,
 } from './support/ui'
 
 /**
@@ -13,9 +16,10 @@ import {
  *
  * the old placeholders here asserted only that `<body>` was visible while
  * their titles claimed contrast measurements; they now measure the rendered
- * colours. the secondary/metadata token (`$color8`, #9E9690) sits at 2.76:1 on
- * the light background — below AA for body text — so it is reported by the
- * "secondary text" test rather than quietly asserted at a passing threshold.
+ * colours. the secondary/metadata token (`$color8`) used to sit at 2.76:1 on
+ * the light background — below AA for body text — and is now darkened to
+ * #766F69; the "secondary text" test below guards that at the real 4.5:1 bar
+ * instead of describing a failure.
  */
 test.use({
   video: 'retain-on-failure',
@@ -49,6 +53,27 @@ test('a11y: primary text clears AA contrast in dark mode', async ({ page }) => {
   const background = parseRgb(await effectiveBackgroundColor(page))
 
   expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(AA_TEXT)
+})
+
+test('a11y: secondary text ($color8) clears AA contrast in both modes', () => {
+  // metadata lines — due dates, assignee names, empty-state copy — render at
+  // body size in $color8, so WCAG 1.4.3 asks for 4.5:1 against the surface
+  // they sit on. light 4.70, dark 6.03.
+  expect(
+    contrastRatio(
+      hexToRgb(playfulLightTheme.color8),
+      hexToRgb(playfulLightTheme.background)
+    ),
+    `${playfulLightTheme.color8} on the light background`
+  ).toBeGreaterThanOrEqual(AA_TEXT)
+
+  expect(
+    contrastRatio(
+      hexToRgb(playfulDarkTheme.color8),
+      hexToRgb(playfulDarkTheme.background)
+    ),
+    `${playfulDarkTheme.color8} on the dark background`
+  ).toBeGreaterThanOrEqual(AA_TEXT)
 })
 
 test('a11y: button labels clear AA contrast against their own background', async ({

@@ -76,15 +76,14 @@ test('US-1: light-mode state colours are distinct and separated from the backgro
     values.length
   )
 
-  // measured against the soft-white background: overdue 3.85, due 2.52,
-  // done 4.79, upcoming 3.20. the amber "due" token is the weakest and sits
-  // below the 3:1 WCAG 1.4.11 target for non-text UI — recorded here as the
-  // floor this suite guards, not as an endorsement of 2.5:1.
+  // state colours paint borders, dots and tints — graphical objects, so WCAG
+  // 1.4.11 asks for 3:1. measured against the soft-white background: overdue
+  // 3.85, due 3.47, done 4.80, upcoming 3.20.
   for (const value of values) {
     expect(
       contrastRatio(hexToRgb(value), background),
       `${value} vs background`
-    ).toBeGreaterThan(2.5)
+    ).toBeGreaterThanOrEqual(3)
   }
 })
 
