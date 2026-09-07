@@ -13,8 +13,12 @@ export const useIconProps = ({
   const theme = useTheme()
   const sizeValue = getIconSize(size)
 
+  // `$`-prefixed values are theme tokens; anything else is already a resolved
+  // color (react-navigation's tab tints, for instance) and is used verbatim.
   // use .get() for css var() instead of hardcoded value for ssr
-  const colorValue = theme[color]?.get() || theme.color11.get()
+  const colorValue = color.startsWith('$')
+    ? theme[color as ColorTokens]?.get() || theme.color11.get()
+    : color
 
   return {
     width: sizeValue,

@@ -1,4 +1,3 @@
-import { isWeb, useEmitter, useEmitterValue } from '@take-out/helpers'
 import {
   ToastProvider as TamaguiToastProvider,
   Toast,
@@ -7,7 +6,10 @@ import {
   useToastState,
 } from '@tamagui/toast'
 import { useState, type ReactNode } from 'react'
+import { isWeb } from 'tamagui'
 import { YStack } from 'tamagui'
+
+import { useEmitter, useEmitterValue } from '~/helpers/emitter'
 
 import { Z_INDICES } from '../constants'
 import { toastEmitter } from './emitter'
@@ -73,28 +75,20 @@ const ToastDisplay = () => {
       y={20}
       opacity={1}
       scale={1}
-      transition="quick"
-      maxW={250}
+      transition="playfulQuick"
+      maxW={280}
       overflow="hidden"
       viewportName={currentToast?.viewportName}
-      bg="$color2"
-      py="$2.5"
-      px="$4"
-      theme={
-        toastType === 'error'
-          ? 'red'
-          : toastType === 'warn'
-            ? 'yellow'
-            : toastType === 'success'
-              ? 'green'
-              : null
-      }
-      shadowColor="$shadow2"
-      shadowRadius={8}
-      shadowOffset={{ height: 4, width: 0 }}
+      bg="$background"
+      py="$3"
+      px="$5"
+      borderWidth={1}
+      borderColor="$borderColor"
+      shadowColor="$shadowColor"
+      shadowRadius={6}
+      shadowOffset={{ height: 3, width: 0 }}
       // @ts-ignore web-only
-      boxShadow="0 4px 8px var(--shadow2), 0 16px 40px var(--shadow4)"
-      rounded="$8"
+      boxShadow="0 3px 6px var(--shadowColor)"
     >
       <YStack>
         <Toast.Title numberOfLines={1} size="$3" color="$color12">

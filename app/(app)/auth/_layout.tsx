@@ -1,9 +1,10 @@
 import { Slot, Stack } from 'one'
+import { isWeb } from 'tamagui'
 
 export function AuthAndOnboardingLayout() {
   return (
     <>
-      {process.env.VITE_PLATFORM === 'web' ? (
+      {isWeb ? (
         <Slot />
       ) : (
         <Stack screenOptions={{ headerShown: false }} initialRouteName="login">

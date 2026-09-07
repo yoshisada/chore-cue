@@ -1,6 +1,6 @@
 // Brand
-export const APP_NAME = 'Takeout'
-export const APP_NAME_LOWERCASE = 'takeout'
+export const APP_NAME = 'ChoreCue'
+export const APP_NAME_LOWERCASE = 'chorecue'
 
 // Domain
 export const DOMAIN = 'takeout.tamagui.dev'

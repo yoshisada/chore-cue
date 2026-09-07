@@ -26,6 +26,9 @@ jobs:
       - name: Check
         run: bun check:all
 
+      - name: Unit Tests
+        run: bun run test:unit:coverage
+
   integration:
     if: "!contains(github.event.commits[0].message, 'docs:')"
     timeout-minutes: 20

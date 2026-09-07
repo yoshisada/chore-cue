@@ -26,7 +26,11 @@ dist
 .claude/skills/takeout-*
 
 .env
+.env.development
 .env.production
+
+# QA test credentials — never commit
+.kiln/qa/config/.env.test
 
 # local env files
 .env.local

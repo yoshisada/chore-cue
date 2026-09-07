@@ -19,5 +19,8 @@ const { values } = parseArgs({
 if (values.watch) {
   await $`tsc --noEmit --watch`
 } else {
-  await $`tsc --noEmit`
+  // `.nothrow()` keeps a failing check to tsc's own diagnostics — a thrown
+  // ShellError would bury them under a bun stack trace.
+  const { exitCode } = await $`tsc --noEmit`.nothrow()
+  process.exit(exitCode)
 }

@@ -1,5 +1,7 @@
 import { useState, useEffect, type ReactNode } from 'react'
-import { AlertDialog, Button, XStack, YStack } from 'tamagui'
+import { AlertDialog, XStack, YStack } from 'tamagui'
+
+import { Button } from '~/interface/buttons/Button'
 
 type DialogState = {
   type: 'error' | 'confirm' | null
@@ -61,8 +63,6 @@ export function DialogProvider({ children }: { children: ReactNode }) {
             exitStyle={{ opacity: 0 }}
           />
           <AlertDialog.Content
-            bordered
-            elevate
             key="content"
             enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
             exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
@@ -72,25 +72,29 @@ export function DialogProvider({ children }: { children: ReactNode }) {
             y={0}
             width="90%"
             maxW={400}
+            bg="$background"
+            borderWidth={1}
+            borderColor="$borderColor"
+            p="$5"
           >
             <YStack gap="$4">
-              <AlertDialog.Title size="$6">{state.title}</AlertDialog.Title>
-              <AlertDialog.Description size="$3" color="$color11">
+              <AlertDialog.Title size="$6" fontFamily="$heading">
+                {state.title}
+              </AlertDialog.Title>
+              <AlertDialog.Description size="$3" color="$color8" fontFamily="$body">
                 {state.description}
               </AlertDialog.Description>
 
               <XStack gap="$3" justify="flex-end">
                 {state.type === 'confirm' ? (
                   <>
-                    <Button onPress={() => handleClose(false)}>Cancel</Button>
-                    <Button theme="blue" onPress={() => handleClose(true)}>
-                      Confirm
+                    <Button variant="outlined" onPress={() => handleClose(false)}>
+                      Cancel
                     </Button>
+                    <Button onPress={() => handleClose(true)}>Confirm</Button>
                   </>
                 ) : (
-                  <Button theme="blue" onPress={() => handleClose(false)}>
-                    OK
-                  </Button>
+                  <Button onPress={() => handleClose(false)}>OK</Button>
                 )}
               </XStack>
             </YStack>

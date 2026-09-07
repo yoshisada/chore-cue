@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm'
 
 import { DEMO_EMAIL } from '~/constants/app'
+import { householdActions } from '~/data/server/actions/householdActions'
 import { getDb } from '~/database'
 import { user as userTable } from '~/database/schema-private'
 import { userPublic, userState } from '~/database/schema-public'
@@ -71,6 +72,9 @@ export async function afterCreateUser(user: { id: string; email: string }) {
 
     console.info(`[afterCreateUser] Creating userPublic record`)
     await db.insert(userPublic).values(userRow)
+
+    // Ensure the user has a household
+    await householdActions.ensureHouseholdForUser({ id: userId, role: undefined }, userId)
 
     console.info(`[afterCreateUser] ✅ User ${email} setup complete`)
     return userPrivate

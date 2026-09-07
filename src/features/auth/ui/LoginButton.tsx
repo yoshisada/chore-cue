@@ -7,7 +7,7 @@ export const LoginButton = ({ listItem }: { listItem?: boolean }) => {
 
   return (
     <Link href={loginLink}>
-      <Button>{loginText}</Button>
+      <Button size="$5">{loginText}</Button>
     </Link>
   )
 }

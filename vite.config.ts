@@ -50,12 +50,16 @@ export default {
         bundlerOptions: {
           watchman: false,
           babelConfigOverrides: (config) => {
+            // strip react compiler from native - tamagui's styled() components
+            // use internal ref mutation patterns incompatible with its object freezing
+            const plugins = (config?.plugins || []).filter((p) => {
+              const name = Array.isArray(p) ? p[0] : p
+              return typeof name !== 'string' || !name.includes('react-compiler')
+            })
             return {
               ...config,
               plugins: [
-                // react compiler for automatic memoization - must run first
-                'babel-plugin-react-compiler',
-                ...(config?.plugins || []),
+                ...plugins,
                 // reanimated worklet compilation - MUST be last
                 'react-native-reanimated/plugin',
               ],

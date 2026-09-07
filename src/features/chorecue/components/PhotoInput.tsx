@@ -12,19 +12,18 @@ export function PhotoInput({
   onClear: () => void
 }) {
   return (
-    <YStack gap="$2">
-      <Paragraph opacity={0.8}>
+    <YStack gap="$3">
+      <Paragraph fontFamily="$body" color="$color8" size="$2">
         {photoLabel ? `Attached photo: ${photoLabel}` : 'No photo attached'}
       </Paragraph>
-      <XStack gap="$2" flexWrap="wrap">
+      <XStack gap="$3" flexWrap="wrap">
         <Button size="$4" variant="outlined" onPress={onPickSample}>
           Attach sample photo
         </Button>
-        <Button size="$4" theme="gray" variant="outlined" onPress={onClear}>
+        <Button size="$4" variant="outlined" onPress={onClear}>
           Clear photo
         </Button>
       </XStack>
     </YStack>
   )
 }
-

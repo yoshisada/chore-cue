@@ -4,6 +4,8 @@ import { getDb } from '~/database'
 import { user as userTable } from '~/database/schema-private'
 import { todo, userPublic, userState } from '~/database/schema-public'
 
+import { householdActions } from './householdActions'
+
 import type { AuthData } from '~/features/auth/types'
 
 export const userActions = {
@@ -36,6 +38,11 @@ async function onboardUser(authData: AuthData, userId: string) {
     .where(eq(userTable.id, userId))
 
   if (existingUser.length === 1) {
+    // an account onboarded before the chore domain existed has a userPublic
+    // row but may have no household membership — without this backfill the
+    // household-scoped permissions would leave it on a permanently empty,
+    // read-only board
+    await householdActions.ensureHouseholdForUser(authData, userId)
     return userPrivate
   }
 
@@ -68,6 +75,9 @@ async function onboardUser(authData: AuthData, userId: string) {
   }
 
   await db.insert(userPublic).values(userRow)
+
+  // Ensure the user has a household
+  await householdActions.ensureHouseholdForUser(authData, userId)
 
   return userPrivate
 }

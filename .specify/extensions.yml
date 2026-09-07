@@ -1,0 +1,8 @@
+hooks:
+  after_implement:
+    - extension: speckit-test
+      command: speckit.test
+      description: Run the full testing workflow (unit → Playwright web → mobile) immediately after implementation completes.
+      prompt: "Implementation is complete. Run the testing workflow now: unit tests first, then Playwright web integration tests, then mobile verification."
+      enabled: true
+      optional: false

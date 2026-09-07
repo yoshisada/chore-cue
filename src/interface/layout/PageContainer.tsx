@@ -5,7 +5,7 @@ export const PageContainer = styled(YStack, {
   mx: 'auto',
   flex: 1,
   flexBasis: 'auto',
-  px: '$4',
+  px: '$6',
   width: '100%',
   minW: 380,
 

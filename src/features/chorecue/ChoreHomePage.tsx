@@ -1,40 +1,319 @@
-import { memo } from 'react'
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { memo, useState } from 'react'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import {
-  Card,
   Paragraph,
   ScrollView,
   Separator,
+  Sheet,
   SizableText,
-  Theme,
+  Spinner,
+  View,
   XStack,
   YStack,
+  isWeb,
+  useThemeName,
 } from 'tamagui'
 
+import { useHouseholdContext } from '~/features/auth/client/useHouseholdContext'
+import { Avatar } from '~/interface/avatars/Avatar'
 import { Button } from '~/interface/buttons/Button'
 import { Input } from '~/interface/forms/Input'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { H1, H3 } from '~/interface/text/Headings'
-import { useHouseholdContext } from '~/features/auth/client/useHouseholdContext'
+import { showToast } from '~/interface/toast/helpers'
+import {
+  choreStateColors,
+  errorTextColors,
+  memberAccentColors,
+  type HexColor,
+} from '~/tamagui/themes/playfulHousehold'
 
+import { CheckIcon } from './components/CheckIcon'
 import { PhotoInput } from './components/PhotoInput'
+import { PhotoThumbnail } from './components/PhotoThumbnail'
 import { useChoreBoard } from './useChoreBoard'
-import type { ChoreCard, RecurrenceSummary } from './types'
+
+import type { BumpBlockedReason } from './choreRules'
+import type { ChoreCard, DueBucket, RecurrenceSummary } from './types'
+
+function useStateColor(bucket: DueBucket): HexColor {
+  const themeName = useThemeName()
+  const mode = themeName.startsWith('dark') ? 'dark' : 'light'
+  const key = bucket === 'dueSoon' ? 'due' : bucket
+  return choreStateColors[mode][key]
+}
+
+const BUMP_BLOCKED_LABELS: Record<BumpBlockedReason, string> = {
+  archived: 'Archived',
+  self: 'Assigned to you',
+  unassigned: 'No assignee',
+  'inactive-assignee': 'Assignee is inactive',
+  'daily-limit': 'Daily limit reached',
+  'invalid-template': 'Unavailable',
+}
+
+function getMemberAccentColor(name: string, memberNames: string[]): HexColor {
+  const index = memberNames.indexOf(name)
+  return (
+    memberAccentColors[(index >= 0 ? index : 0) % memberAccentColors.length] ??
+    memberAccentColors[0]
+  )
+}
 
 const recurrenceOptions: RecurrenceSummary[] = ['Every N days', 'Weekly', 'Daily time']
 
+/** names the filters that are hiding everything, so they can be undone knowingly */
+export function describeActiveFilters(
+  searchQuery: string,
+  selectedTags: ReadonlySet<string>
+): string {
+  const parts: string[] = []
+  const trimmed = searchQuery.trim()
+  if (trimmed) parts.push(`search “${trimmed}”`)
+  if (selectedTags.size > 0) {
+    parts.push(
+      `${selectedTags.size === 1 ? 'tag' : 'tags'} ${[...selectedTags].join(', ')}`
+    )
+  }
+  if (parts.length === 0) return 'Nothing matches the current view.'
+  return `Nothing matches ${parts.join(' and ')}.`
+}
+
+function TagInput({
+  tags,
+  onAdd,
+  onRemove,
+}: {
+  tags: string[]
+  onAdd: (tag: string) => void
+  onRemove: (tag: string) => void
+}) {
+  const [input, setInput] = useState('')
+
+  const handleAdd = () => {
+    const trimmed = input.trim()
+    if (trimmed && !tags.includes(trimmed)) {
+      onAdd(trimmed)
+      setInput('')
+    }
+  }
+
+  return (
+    <YStack gap="$2">
+      <SectionLabel>Tags</SectionLabel>
+      <XStack gap="$2" items="center">
+        <Input
+          flex={1}
+          placeholder="Add a tag"
+          value={input}
+          onChangeText={setInput}
+          onSubmitEditing={handleAdd}
+        />
+        <Button size="$3" onPress={handleAdd}>
+          Add
+        </Button>
+      </XStack>
+      {tags.length > 0 ? (
+        <XStack gap="$2" flexWrap="wrap">
+          {tags.map((tag) => (
+            <Button key={tag} size="$3" variant="outlined" onPress={() => onRemove(tag)}>
+              {tag} ×
+            </Button>
+          ))}
+        </XStack>
+      ) : null}
+    </YStack>
+  )
+}
+
+function SectionLabel({ children, accent }: { children: string; accent?: boolean }) {
+  return (
+    <SizableText
+      fontFamily="$body"
+      size="$2"
+      fontWeight="600"
+      letterSpacing={3}
+      textTransform="uppercase"
+      color={accent ? '$accentColor' : '$color8'}
+    >
+      {children}
+    </SizableText>
+  )
+}
+
+/** inline, in-place feedback for a write the board refused to make */
+function FormError({ testID, message }: { testID: string; message: string | null }) {
+  const themeName = useThemeName()
+  const color = errorTextColors[themeName.startsWith('dark') ? 'dark' : 'light']
+
+  if (!message) {
+    return null
+  }
+
+  return (
+    <SizableText testID={testID} fontFamily="$body" size="$2" color={color}>
+      {message}
+    </SizableText>
+  )
+}
+
+function SectionHeader({
+  title,
+  count,
+  stateColor,
+}: {
+  title: string
+  count: number
+  stateColor?: HexColor
+}) {
+  return (
+    <XStack justify="space-between" items="center" pt="$4" pb="$2">
+      <XStack items="center" gap="$2">
+        {stateColor && <View width={8} height={8} rounded={4} bg={stateColor} />}
+        <SizableText fontFamily="$heading" size="$5" fontWeight="600" color="$color">
+          {title}
+        </SizableText>
+      </XStack>
+      <View bg="$color3" px="$2" py="$1" rounded="$2">
+        <SizableText
+          testID="chore-section-count"
+          fontFamily="$body"
+          size="$1"
+          color="$color8"
+        >
+          {count}
+        </SizableText>
+      </View>
+    </XStack>
+  )
+}
+
+function ChoreCardItem({
+  item,
+  memberNames,
+  onComplete,
+  onBump,
+  onEdit,
+  onArchive,
+}: {
+  item: ChoreCard
+  memberNames: string[]
+  onComplete: (choreId: string) => void
+  onBump: (choreId: string) => void
+  onEdit: (choreId: string) => void
+  onArchive: (choreId: string) => void
+}) {
+  const stateColor = useStateColor(item.dueBucket)
+  const accentColor = getMemberAccentColor(item.assigneeName, memberNames)
+  const [justCompleted, setJustCompleted] = useState(false)
+
+  const handleComplete = () => {
+    setJustCompleted(true)
+    onComplete(item.id)
+    setTimeout(() => setJustCompleted(false), 500)
+  }
+
+  return (
+    <XStack
+      testID="chore-card"
+      rounded="$4"
+      borderLeftWidth={4}
+      borderLeftColor={stateColor}
+      bg={`${stateColor}10`}
+      p="$3"
+      gap="$3"
+      items="center"
+      transition="playfulQuick"
+      hoverStyle={{ bg: '$color2', scale: 1.01 }}
+      pressStyle={{ scale: 0.98, opacity: 0.9 }}
+    >
+      <Avatar
+        testID="chore-card-avatar"
+        image={null}
+        name={item.assigneeName}
+        size="md"
+        accentColor={accentColor}
+      />
+
+      <YStack flex={1} gap="$1">
+        <XStack items="baseline" gap="$2" flexWrap="wrap">
+          <H3 size="$5">{item.title}</H3>
+          <SizableText fontFamily="$body" size="$2" color="$color8">
+            {item.dueLabel}
+          </SizableText>
+        </XStack>
+
+        <SizableText fontFamily="$body" size="$2" color="$color8">
+          {item.tags.join(', ')} — {item.assigneeName} · {item.recurrenceSummary}
+          {item.lastCompletedLabel ? ` · ${item.lastCompletedLabel}` : ''}
+        </SizableText>
+
+        <XStack gap="$2" pt="$1" flexWrap="wrap">
+          <Button size="$3" onPress={handleComplete}>
+            {justCompleted ? (
+              <View
+                transition="playfulBounce"
+                enterStyle={{ scale: 0, opacity: 0 }}
+                scale={1}
+                opacity={1}
+              >
+                <CheckIcon size={16} />
+              </View>
+            ) : (
+              'Complete'
+            )}
+          </Button>
+          <Button size="$3" variant="outlined" onPress={() => onEdit(item.id)}>
+            Edit
+          </Button>
+          <YStack gap="$1">
+            <Button
+              testID="chore-bump-button"
+              size="$3"
+              variant="outlined"
+              disabled={!item.canBump}
+              onPress={() => onBump(item.id)}
+            >
+              {item.canBump ? 'Bump' : 'No bump'}
+            </Button>
+            {item.bumpBlockedReason ? (
+              <SizableText
+                testID="chore-bump-blocked-reason"
+                fontFamily="$body"
+                size="$1"
+                color="$color8"
+              >
+                {BUMP_BLOCKED_LABELS[item.bumpBlockedReason]}
+              </SizableText>
+            ) : null}
+          </YStack>
+          <Button size="$3" variant="outlined" onPress={() => onArchive(item.id)}>
+            Archive
+          </Button>
+        </XStack>
+      </YStack>
+
+      {item.photoLabel ? <PhotoThumbnail label={item.photoLabel} /> : null}
+    </XStack>
+  )
+}
+
 function Section({
   title,
+  testID,
   items,
-  themeName,
+  stateColor,
+  memberNames,
   onComplete,
   onBump,
   onEdit,
   onArchive,
 }: {
   title: string
+  testID: string
   items: ChoreCard[]
-  themeName: 'red' | 'yellow' | 'green'
+  stateColor?: HexColor
+  memberNames: string[]
   onComplete: (choreId: string) => void
   onBump: (choreId: string) => void
   onEdit: (choreId: string) => void
@@ -45,70 +324,81 @@ function Section({
   }
 
   return (
-    <YStack gap="$3">
-      <Theme name={themeName}>
-        <XStack justify="space-between" items="center">
-          <H3 color="$color11">{title}</H3>
-          <SizableText size="$3" color="$color11">
-            {items.length} chore{items.length === 1 ? '' : 's'}
-          </SizableText>
-        </XStack>
-      </Theme>
+    // testID for native; the explicit data-testid spread survives on web, where
+    // the optimizing compiler flattens this YStack and drops a *dynamic* testID
+    // prop (literal ones elsewhere are extracted fine)
+    <YStack testID={testID} {...{ 'data-testid': testID }} gap="$2">
+      <SectionHeader title={title} count={items.length} stateColor={stateColor} />
 
       {items.map((item) => (
-        <Card key={item.id} elevate bordered>
-          <Card.Header padded>
-            <YStack gap="$2">
-              <XStack justify="space-between" items="center" gap="$3">
-                <YStack gap="$1" flex={1}>
-                  <H3>{item.title}</H3>
-                  <Paragraph opacity={0.75}>
-                    {item.category} | {item.assigneeName}
-                  </Paragraph>
-                </YStack>
-                <Theme name={themeName}>
-                  <SizableText size="$3" color="$color11">
-                    {item.dueLabel}
-                  </SizableText>
-                </Theme>
-              </XStack>
-
-              <Paragraph opacity={0.8}>{item.recurrenceSummary}</Paragraph>
-              {item.lastCompletedLabel ? (
-                <Paragraph opacity={0.7}>{item.lastCompletedLabel}</Paragraph>
-              ) : (
-                <Paragraph opacity={0.6}>No completion history yet</Paragraph>
-              )}
-              {item.photoLabel ? (
-                <Paragraph opacity={0.7}>Photo: {item.photoLabel}</Paragraph>
-              ) : (
-                <Paragraph opacity={0.6}>No photo attached</Paragraph>
-              )}
-
-              <XStack gap="$2" pt="$1" flexWrap="wrap">
-                <Button theme="green" size="$4" onPress={() => onComplete(item.id)}>
-                  Complete
-                </Button>
-                <Button size="$4" variant="outlined" onPress={() => onEdit(item.id)}>
-                  Edit
-                </Button>
-                <Button
-                  theme={item.canBump ? 'orange' : 'gray'}
-                  size="$4"
-                  variant="outlined"
-                  disabled={!item.canBump}
-                  onPress={() => onBump(item.id)}
-                >
-                  {item.canBump ? 'Send bump' : 'No bump needed'}
-                </Button>
-                <Button theme="red" size="$4" variant="outlined" onPress={() => onArchive(item.id)}>
-                  Archive
-                </Button>
-              </XStack>
-            </YStack>
-          </Card.Header>
-        </Card>
+        <ChoreCardItem
+          key={item.id}
+          item={item}
+          memberNames={memberNames}
+          onComplete={onComplete}
+          onBump={onBump}
+          onEdit={onEdit}
+          onArchive={onArchive}
+        />
       ))}
+    </YStack>
+  )
+}
+
+function ChoreSections({
+  sections,
+  memberNames,
+  onComplete,
+  onBump,
+  onEdit,
+  onArchive,
+}: {
+  sections: { overdue: ChoreCard[]; dueSoon: ChoreCard[]; upcoming: ChoreCard[] }
+  memberNames: string[]
+  onComplete: (choreId: string) => void
+  onBump: (choreId: string) => void
+  onEdit: (choreId: string) => void
+  onArchive: (choreId: string) => void
+}) {
+  const overdueColor = useStateColor('overdue')
+  const dueColor = useStateColor('dueSoon')
+  const upcomingColor = useStateColor('upcoming')
+
+  return (
+    <YStack gap="$6">
+      <Section
+        title="Overdue"
+        testID="chore-section-overdue"
+        items={sections.overdue}
+        stateColor={overdueColor}
+        memberNames={memberNames}
+        onComplete={onComplete}
+        onBump={onBump}
+        onEdit={onEdit}
+        onArchive={onArchive}
+      />
+      <Section
+        title="Due Soon"
+        testID="chore-section-dueSoon"
+        items={sections.dueSoon}
+        stateColor={dueColor}
+        memberNames={memberNames}
+        onComplete={onComplete}
+        onBump={onBump}
+        onEdit={onEdit}
+        onArchive={onArchive}
+      />
+      <Section
+        title="Upcoming"
+        testID="chore-section-upcoming"
+        items={sections.upcoming}
+        stateColor={upcomingColor}
+        memberNames={memberNames}
+        onComplete={onComplete}
+        onBump={onBump}
+        onEdit={onEdit}
+        onArchive={onArchive}
+      />
     </YStack>
   )
 }
@@ -116,16 +406,27 @@ function Section({
 export const ChoreHomePage = memo(() => {
   const insets = useSafeAreaInsets()
   const household = useHouseholdContext()
+  const [createOpen, setCreateOpen] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
+  const [editError, setEditError] = useState<string | null>(null)
   const {
     sections,
+    memberNames,
+    allTags,
+    selectedTags,
+    searchQuery,
+    setSearchQuery,
     composer,
     editor,
     bumpCount,
+    isLoading,
+    hasAnyChores,
     updateComposer,
     addChore,
     completeChore,
     sendBump,
     beginEdit,
+    cancelEdit,
     updateEditor,
     saveEdit,
     archiveChore,
@@ -133,76 +434,266 @@ export const ChoreHomePage = memo(() => {
     clearComposerPhoto,
     attachEditorPhoto,
     clearEditorPhoto,
+    toggleTag,
+    clearTagFilter,
   } = useChoreBoard()
 
+  const Container = isWeb ? YStack : ScrollView
+
+  const hasVisibleChores =
+    sections.overdue.length > 0 ||
+    sections.dueSoon.length > 0 ||
+    sections.upcoming.length > 0
+
+  // an empty board means one of three different things, and they need three
+  // different answers: still syncing, genuinely empty, or filtered to nothing
+  const showLoading = isLoading && !hasVisibleChores
+  const showFilteredEmpty = !showLoading && !hasVisibleChores && hasAnyChores
+  const showEmpty = !showLoading && !hasVisibleChores && !hasAnyChores
+
+  const clearFilters = () => {
+    setSearchQuery('')
+    clearTagFilter()
+  }
+
+  // every write is a Zero mutator now, so these all return promises; the board
+  // re-renders from the synced query rather than from the promise resolving —
+  // but a refusal only ever reaches the user through the awaited result
+  const handleAddChore = async () => {
+    const result = await addChore()
+    if (!result.ok) {
+      const reason = result.reason ?? 'Could not create that chore'
+      setCreateError(reason)
+      showToast(reason, { type: 'error' })
+      return
+    }
+    setCreateError(null)
+    setCreateOpen(false)
+  }
+
+  const handleCreateOpenChange = (open: boolean) => {
+    if (!open) setCreateError(null)
+    setCreateOpen(open)
+  }
+
+  const handleBeginEdit = (choreId: string) => {
+    setEditError(null)
+    beginEdit(choreId)
+  }
+
+  const handleSaveEdit = async () => {
+    const result = await saveEdit()
+    if (!result.ok) {
+      const reason = result.reason ?? 'Could not save those changes'
+      setEditError(reason)
+      showToast(reason, { type: 'error' })
+      return
+    }
+    setEditError(null)
+  }
+
+  // dismissing the sheet discards the draft; only the Save button writes
+  const handleCancelEdit = () => {
+    setEditError(null)
+    cancelEdit()
+  }
+
+  const handleArchiveFromEdit = async () => {
+    const result = await archiveChore(editor.choreId as string)
+    if (!result.ok) {
+      const reason = result.reason ?? 'Could not archive that chore'
+      setEditError(reason)
+      showToast(reason, { type: 'error' })
+      return
+    }
+    setEditError(null)
+  }
+
+  const handleComplete = async (choreId: string) => {
+    const result = await completeChore(choreId)
+    if (!result.ok) {
+      showToast(result.reason ?? 'Could not complete that chore', { type: 'error' })
+    }
+  }
+
+  const handleBump = async (choreId: string) => {
+    const result = await sendBump(choreId)
+    if (!result.ok) {
+      showToast(result.reason ?? 'Bump not sent', { type: 'error' })
+    }
+  }
+
+  const handleArchive = async (choreId: string) => {
+    const result = await archiveChore(choreId)
+    if (!result.ok) {
+      showToast(result.reason ?? 'Could not archive that chore', { type: 'error' })
+    }
+  }
+
+  const addComposerTag = (tag: string) => {
+    updateComposer('tags', [...composer.tags, tag])
+  }
+
+  const removeComposerTag = (tag: string) => {
+    updateComposer(
+      'tags',
+      composer.tags.filter((t) => t !== tag)
+    )
+  }
+
+  const addEditorTag = (tag: string) => {
+    updateEditor('tags', [...editor.tags, tag])
+  }
+
+  const removeEditorTag = (tag: string) => {
+    updateEditor(
+      'tags',
+      editor.tags.filter((t) => t !== tag)
+    )
+  }
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView flex={1} contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}>
-        <PageContainer>
-          <YStack gap="$6" py="$4">
-            <YStack gap="$2">
-              <Paragraph theme="alt2" size="$5">
-                ChoreCue Phase 1 on Takeout
-              </Paragraph>
-              <H1 size="$8">Shared chores with clearer due states and gentler reminders</H1>
-              <Paragraph size="$5" opacity={0.8} maxWidth={760}>
-                The stock Takeout todo demo has been replaced with a ChoreCue household board.
-                This screen demonstrates the Phase 1 loop: create recurring chores, scan
-                overdue and upcoming work, complete chores, and keep bumps polite.
-              </Paragraph>
-              <Paragraph opacity={0.7}>
-                Household: {household.householdId} | Member: {household.displayName}
-              </Paragraph>
+    <Container
+      testID="chore-board"
+      flex={1}
+      bg="$background"
+      {...(!isWeb && {
+        contentContainerStyle: {
+          pt: insets.top,
+          pb: insets.bottom + 40,
+        },
+      })}
+    >
+      <PageContainer>
+        <YStack gap="$6" py="$5">
+          {/* Hero — compact */}
+          <XStack justify="space-between" items="flex-end" flexWrap="wrap" gap="$3">
+            <YStack gap="$1" flex={1}>
+              <H1 size="$8">
+                Welcome to{' '}
+                <SizableText
+                  fontFamily="$heading"
+                  size="$8"
+                  fontWeight="700"
+                  color="$accentColor"
+                >
+                  {household.householdName}
+                </SizableText>
+              </H1>
+              <SizableText fontFamily="$body" size="$2" color="$color8">
+                {household.displayName}
+              </SizableText>
             </YStack>
+            <Button size="$4" onPress={() => setCreateOpen(true)}>
+              Create a chore
+            </Button>
+          </XStack>
 
-            <Card bordered elevate>
-              <Card.Header padded>
-                <YStack gap="$3">
-                  <H3>Create a chore</H3>
-                  <XStack gap="$2" flexWrap="wrap">
-                    <Input
-                      flex={1}
-                      minWidth={220}
-                      placeholder="Chore title"
-                      value={composer.title}
-                      onChangeText={(value) => updateComposer('title', value)}
-                    />
-                    <Input
-                      flex={1}
-                      minWidth={180}
-                      placeholder="Category"
-                      value={composer.category}
-                      onChangeText={(value) => updateComposer('category', value)}
-                    />
-                  </XStack>
+          {/* Search bar */}
+          <Input
+            placeholder="Search chores..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
 
-                  <XStack gap="$2" flexWrap="wrap">
-                    {(['Sam', 'Alex'] as const).map((name) => (
-                      <Button
-                        key={name}
-                        size="$4"
-                        theme={composer.assigneeName === name ? 'blue' : 'gray'}
-                        variant={composer.assigneeName === name ? undefined : 'outlined'}
-                        onPress={() => updateComposer('assigneeName', name)}
-                      >
-                        {name}
-                      </Button>
-                    ))}
-                  </XStack>
+          {/* Tag filter bar */}
+          {allTags.length > 0 ? (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <XStack gap="$2" py="$1">
+                <Button
+                  size="$3"
+                  variant={selectedTags.size === 0 ? undefined : 'outlined'}
+                  onPress={clearTagFilter}
+                >
+                  All
+                </Button>
+                {allTags.map((tag) => (
+                  <Button
+                    key={tag}
+                    size="$3"
+                    variant={selectedTags.has(tag) ? undefined : 'outlined'}
+                    onPress={() => toggleTag(tag)}
+                  >
+                    {tag}
+                  </Button>
+                ))}
+              </XStack>
+            </ScrollView>
+          ) : null}
 
-                  <XStack gap="$2" flexWrap="wrap">
-                    {recurrenceOptions.map((option) => (
-                      <Button
-                        key={option}
-                        size="$4"
-                        theme={composer.recurrenceSummary === option ? 'green' : 'gray'}
-                        variant={composer.recurrenceSummary === option ? undefined : 'outlined'}
-                        onPress={() => updateComposer('recurrenceSummary', option)}
-                      >
-                        {option}
-                      </Button>
-                    ))}
-                  </XStack>
+          {/* Create Sheet */}
+          <Sheet
+            open={createOpen}
+            onOpenChange={handleCreateOpenChange}
+            transition="medium"
+            modal
+            dismissOnSnapToBottom
+            snapPoints={[85]}
+          >
+            <Sheet.Overlay
+              bg="rgba(0, 0, 0, 0.5)"
+              transition="quick"
+              enterStyle={{ opacity: 0 }}
+              exitStyle={{ opacity: 0 }}
+            />
+            <Sheet.Frame
+              testID="chore-create-sheet"
+              bg="$color2"
+              boxShadow="0 0 10px $shadow4"
+            >
+              <ScrollView flex={1} contentContainerStyle={{ p: 24 }}>
+                <YStack gap="$4">
+                  <SectionLabel>Create a chore</SectionLabel>
+
+                  <Separator />
+
+                  <Input
+                    placeholder="Chore title"
+                    value={composer.title}
+                    onChangeText={(value) => updateComposer('title', value)}
+                  />
+
+                  <TagInput
+                    tags={composer.tags}
+                    onAdd={addComposerTag}
+                    onRemove={removeComposerTag}
+                  />
+
+                  <YStack gap="$2">
+                    <SectionLabel>Assignee</SectionLabel>
+                    <XStack gap="$3" flexWrap="wrap">
+                      {memberNames.map((name) => (
+                        <Button
+                          key={name}
+                          size="$4"
+                          variant={
+                            composer.assigneeName === name ? undefined : 'outlined'
+                          }
+                          onPress={() => updateComposer('assigneeName', name)}
+                        >
+                          {name}
+                        </Button>
+                      ))}
+                    </XStack>
+                  </YStack>
+
+                  <YStack gap="$2">
+                    <SectionLabel>Recurrence</SectionLabel>
+                    <XStack gap="$3" flexWrap="wrap">
+                      {recurrenceOptions.map((option) => (
+                        <Button
+                          key={option}
+                          size="$4"
+                          variant={
+                            composer.recurrenceSummary === option ? undefined : 'outlined'
+                          }
+                          onPress={() => updateComposer('recurrenceSummary', option)}
+                        >
+                          {option}
+                        </Button>
+                      ))}
+                    </XStack>
+                  </YStack>
 
                   <PhotoInput
                     photoLabel={composer.photoLabel}
@@ -210,67 +701,95 @@ export const ChoreHomePage = memo(() => {
                     onClear={clearComposerPhoto}
                   />
 
+                  <FormError testID="chore-create-error" message={createError} />
+
                   <XStack justify="space-between" items="center" gap="$3" flexWrap="wrap">
-                    <Paragraph opacity={0.7}>
-                      {bumpCount} of 5 daily bumps used in this local screen state
-                    </Paragraph>
-                    <Button theme="blue" onPress={addChore}>
-                      Add chore
-                    </Button>
+                    <SizableText fontFamily="$body" size="$2" color="$color8">
+                      {bumpCount} of 5 daily bumps used
+                    </SizableText>
+                    <Button onPress={() => void handleAddChore()}>Add chore</Button>
                   </XStack>
                 </YStack>
-              </Card.Header>
-            </Card>
+              </ScrollView>
+            </Sheet.Frame>
+          </Sheet>
 
-            {editor.choreId ? (
-              <Card bordered elevate>
-                <Card.Header padded>
-                  <YStack gap="$3">
-                    <H3>Edit chore</H3>
-                    <XStack gap="$2" flexWrap="wrap">
-                      <Input
-                        flex={1}
-                        minWidth={220}
-                        placeholder="Chore title"
-                        value={editor.title}
-                        onChangeText={(value) => updateEditor('title', value)}
-                      />
-                      <Input
-                        flex={1}
-                        minWidth={180}
-                        placeholder="Category"
-                        value={editor.category}
-                        onChangeText={(value) => updateEditor('category', value)}
-                      />
-                    </XStack>
+          {/* Edit Sheet */}
+          {editor.choreId ? (
+            <Sheet
+              open={!!editor.choreId}
+              onOpenChange={(open: boolean) => {
+                if (!open) handleCancelEdit()
+              }}
+              transition="medium"
+              modal
+              dismissOnSnapToBottom
+              snapPoints={[85]}
+            >
+              <Sheet.Overlay
+                bg="rgba(0, 0, 0, 0.5)"
+                transition="quick"
+                enterStyle={{ opacity: 0 }}
+                exitStyle={{ opacity: 0 }}
+              />
+              <Sheet.Frame
+                testID="chore-edit-sheet"
+                bg="$color2"
+                boxShadow="0 0 10px $shadow4"
+              >
+                <ScrollView flex={1} contentContainerStyle={{ p: 24 }}>
+                  <YStack gap="$4">
+                    <SectionLabel>Edit chore</SectionLabel>
 
-                    <XStack gap="$2" flexWrap="wrap">
-                      {(['Sam', 'Alex'] as const).map((name) => (
-                        <Button
-                          key={name}
-                          size="$4"
-                          theme={editor.assigneeName === name ? 'blue' : 'gray'}
-                          variant={editor.assigneeName === name ? undefined : 'outlined'}
-                          onPress={() => updateEditor('assigneeName', name)}
-                        >
-                          {name}
-                        </Button>
-                      ))}
-                    </XStack>
+                    <Separator />
 
-                    <XStack gap="$2" flexWrap="wrap">
-                      {recurrenceOptions.map((option) => (
-                        <Button
-                          key={option}
-                          size="$4"
-                          theme={editor.recurrenceSummary === option ? 'green' : 'gray'}
-                          variant={editor.recurrenceSummary === option ? undefined : 'outlined'}
-                          onPress={() => updateEditor('recurrenceSummary', option)}
-                        >
-                          {option}
-                        </Button>
-                      ))}
-                    </XStack>
+                    <Input
+                      placeholder="Chore title"
+                      value={editor.title}
+                      onChangeText={(value) => updateEditor('title', value)}
+                    />
+
+                    <TagInput
+                      tags={editor.tags}
+                      onAdd={addEditorTag}
+                      onRemove={removeEditorTag}
+                    />
+
+                    <YStack gap="$2">
+                      <SectionLabel>Assignee</SectionLabel>
+                      <XStack gap="$3" flexWrap="wrap">
+                        {memberNames.map((name) => (
+                          <Button
+                            key={name}
+                            size="$4"
+                            variant={
+                              editor.assigneeName === name ? undefined : 'outlined'
+                            }
+                            onPress={() => updateEditor('assigneeName', name)}
+                          >
+                            {name}
+                          </Button>
+                        ))}
+                      </XStack>
+                    </YStack>
+
+                    <YStack gap="$2">
+                      <SectionLabel>Recurrence</SectionLabel>
+                      <XStack gap="$3" flexWrap="wrap">
+                        {recurrenceOptions.map((option) => (
+                          <Button
+                            key={option}
+                            size="$4"
+                            variant={
+                              editor.recurrenceSummary === option ? undefined : 'outlined'
+                            }
+                            onPress={() => updateEditor('recurrenceSummary', option)}
+                          >
+                            {option}
+                          </Button>
+                        ))}
+                      </XStack>
+                    </YStack>
 
                     <PhotoInput
                       photoLabel={editor.photoLabel}
@@ -278,51 +797,103 @@ export const ChoreHomePage = memo(() => {
                       onClear={clearEditorPhoto}
                     />
 
-                    <XStack gap="$2" flexWrap="wrap">
-                      <Button theme="blue" onPress={saveEdit}>
-                        Save changes
+                    <FormError testID="chore-edit-error" message={editError} />
+
+                    <XStack gap="$3" flexWrap="wrap">
+                      <Button onPress={() => void handleSaveEdit()}>Save changes</Button>
+                      <Button variant="outlined" onPress={handleCancelEdit}>
+                        Cancel
                       </Button>
-                      <Button theme="red" variant="outlined" onPress={() => archiveChore(editor.choreId as string)}>
+                      <Button
+                        variant="outlined"
+                        onPress={() => void handleArchiveFromEdit()}
+                      >
                         Archive chore
                       </Button>
                     </XStack>
                   </YStack>
-                </Card.Header>
-              </Card>
-            ) : null}
+                </ScrollView>
+              </Sheet.Frame>
+            </Sheet>
+          ) : null}
 
-            <Separator />
-
-            <Section
-              title="Overdue"
-              items={sections.overdue}
-              themeName="red"
-              onComplete={completeChore}
-              onBump={sendBump}
-              onEdit={beginEdit}
-              onArchive={archiveChore}
+          {/* Chore sections */}
+          {showLoading ? (
+            <YStack
+              testID="chore-board-loading"
+              rounded="$4"
+              bg="$color2"
+              pt="$8"
+              pb="$6"
+              items="center"
+              gap="$3"
+            >
+              <Spinner size="large" color="$accentColor" />
+              <SizableText fontFamily="$body" size="$3" color="$color8" text="center">
+                Loading your chores…
+              </SizableText>
+            </YStack>
+          ) : showFilteredEmpty ? (
+            <YStack
+              testID="chore-board-no-matches"
+              rounded="$4"
+              bg="$color2"
+              pt="$8"
+              pb="$6"
+              items="center"
+              gap="$3"
+            >
+              <SizableText fontFamily="$heading" size="$7" color="$color8" text="center">
+                No chores match your filters
+              </SizableText>
+              <Paragraph
+                fontFamily="$body"
+                size="$3"
+                color="$color8"
+                text="center"
+                maxW={400}
+              >
+                {describeActiveFilters(searchQuery, selectedTags)}
+              </Paragraph>
+              <Button testID="chore-clear-filters" size="$3" onPress={clearFilters}>
+                Clear filters
+              </Button>
+            </YStack>
+          ) : showEmpty ? (
+            <YStack
+              testID="chore-board-empty"
+              rounded="$4"
+              bg="$color2"
+              pt="$8"
+              pb="$6"
+              items="center"
+              gap="$3"
+            >
+              <SizableText fontFamily="$heading" size="$7" color="$color8" text="center">
+                Nothing due yet
+              </SizableText>
+              <Paragraph
+                fontFamily="$body"
+                size="$3"
+                color="$color8"
+                text="center"
+                maxW={400}
+              >
+                Create a chore to start tracking your household tasks.
+              </Paragraph>
+            </YStack>
+          ) : (
+            <ChoreSections
+              sections={sections}
+              memberNames={memberNames}
+              onComplete={handleComplete}
+              onBump={handleBump}
+              onEdit={handleBeginEdit}
+              onArchive={handleArchive}
             />
-            <Section
-              title="Due Soon"
-              items={sections.due}
-              themeName="yellow"
-              onComplete={completeChore}
-              onBump={sendBump}
-              onEdit={beginEdit}
-              onArchive={archiveChore}
-            />
-            <Section
-              title="Upcoming"
-              items={sections.upcoming}
-              themeName="green"
-              onComplete={completeChore}
-              onBump={sendBump}
-              onEdit={beginEdit}
-              onArchive={archiveChore}
-            />
-          </YStack>
-        </PageContainer>
-      </ScrollView>
-    </SafeAreaView>
+          )}
+        </YStack>
+      </PageContainer>
+    </Container>
   )
 })

@@ -4,39 +4,72 @@ export const Button = styled(TamaguiButton, {
   render: 'button',
   borderWidth: 0,
   cursor: 'pointer',
+  // the label is rendered by Button.Text (a SizableText), which already
+  // defaults to `$body` — setting fontFamily on the frame does nothing.
+  minH: 48,
+  rounded: '$4',
+  transition: 'playfulQuick',
 
   focusVisibleStyle: {
     outlineWidth: 2,
     outlineStyle: 'solid',
-    outlineColor: '$color8',
+    outlineColor: '$accentColor',
+  },
+
+  pressStyle: {
+    scale: 0.97,
   },
 
   variants: {
     variant: {
       default: {
-        bg: '$color3',
-        hoverStyle: { bg: '$color4' },
-        pressStyle: { bg: '$color2', opacity: 0.8 },
+        bg: '$color12',
+        color: '$color1',
+        hoverStyle: {
+          bg: '$accentBackground',
+          color: '$accentForeground',
+        },
+        pressStyle: {
+          bg: '$accentBackground',
+          color: '$accentForeground',
+          scale: 0.97,
+        },
       },
       outlined: {
         bg: 'transparent',
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: '$color6',
-        hoverStyle: { borderColor: '$color8' },
-        pressStyle: { borderColor: '$color4', opacity: 0.8 },
+        hoverStyle: {
+          bg: '$color3',
+          borderColor: '$color8',
+        },
+        pressStyle: {
+          bg: '$color2',
+          borderColor: '$color6',
+          scale: 0.97,
+        },
       },
       transparent: {
         bg: 'transparent',
         hoverStyle: { bg: '$color2' },
-        pressStyle: { bg: '$color1', opacity: 0.8 },
+        pressStyle: { bg: '$color1', opacity: 0.8, scale: 0.97 },
       },
       floating: {
-        bg: '$color4',
-        shadowColor: '$shadow2',
-        shadowRadius: 5,
-        shadowOffset: { height: 2, width: 0 },
-        hoverStyle: { bg: '$color5' },
-        pressStyle: { bg: '$color3', opacity: 0.9 },
+        bg: '$color12',
+        color: '$color1',
+        shadowColor: '$shadowColor',
+        shadowRadius: 8,
+        shadowOffset: { height: 3, width: 0 },
+        hoverStyle: {
+          bg: '$accentBackground',
+          color: '$accentForeground',
+          shadowRadius: 12,
+        },
+        pressStyle: {
+          bg: '$accentBackground',
+          color: '$accentForeground',
+          scale: 0.97,
+        },
       },
     },
   } as const,

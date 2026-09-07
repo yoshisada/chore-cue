@@ -34,10 +34,11 @@ export function ThemeSwitch({ size = '$2' }: { size?: SizeTokens }) {
     <View items="center" gap="$1">
       <Button
         onPress={onPress}
-        transition="medium"
-        circular
+        transition="playfulQuick"
+        variant="transparent"
+        minH={0}
         pressStyle={{ scale: 0.9, opacity: 0.8 }}
-        hoverStyle={{ scale: 1.05 }}
+        hoverStyle={{ scale: 1.05, bg: '$color2' }}
         aria-label="Toggle theme"
       >
         <IconContainer active={setting === 'light'}>

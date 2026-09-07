@@ -1,4 +1,4 @@
-import { createEmitter } from '@take-out/helpers'
+import { createEmitter } from '~/helpers/emitter'
 
 import type { ToastOptions } from './types'
 

@@ -1,6 +1,6 @@
 import { router } from 'one'
 import { useState } from 'react'
-import { Circle, isWeb, Spinner, XStack, YStack } from 'tamagui'
+import { isWeb, Spinner, View, XStack, YStack } from 'tamagui'
 
 import { APP_NAME } from '~/constants/app'
 import { signInAsDemo } from '~/features/auth/client/signInAsDemo'
@@ -27,21 +27,24 @@ export const LoginPage = () => {
       items="center"
       $platform-web={{ minHeight: '100vh' }}
     >
-      <Circle
-        size={80}
+      <View
+        width={80}
+        height={80}
         my="$4"
-        transition="medium"
+        items="center"
+        justify="center"
+        transition="playfulBounce"
         enterStyle={{ scale: 0.95, opacity: 0 }}
       >
         <LogoIcon size={42} />
-      </Circle>
+      </View>
 
       <YStack
         gap="$6"
         width="100%"
         items="center"
         bg="$background"
-        rounded="$8"
+        rounded="$4"
         p={isWeb ? '$6' : '$4'}
         maxW={isWeb ? 400 : '90%'}
       >
@@ -68,13 +71,11 @@ export const LoginPage = () => {
             >
               <Button
                 size="$5"
-                theme="dark_blue"
                 variant="floating"
                 pressStyle={{
                   scale: 0.97,
                   opacity: 0.9,
                 }}
-                transition="200ms"
                 enterStyle={{ opacity: 0, scale: 0.95 }}
               >
                 Continue with Email
@@ -102,7 +103,6 @@ export const LoginPage = () => {
                 pressStyle={{
                   scale: 0.97,
                 }}
-                transition="200ms"
                 enterStyle={{ opacity: 0, scale: 0.95 }}
               >
                 {demoLoading ? <Spinner size="small" /> : 'Login as Demo User'}
@@ -121,7 +121,6 @@ export const LoginPage = () => {
               hoverStyle={{
                 bg: '$color2',
               }}
-              transition="200ms"
               enterStyle={{ opacity: 0, scale: 0.95 }}
               icon={<GoogleIcon size={18} />}
             />
@@ -136,7 +135,6 @@ export const LoginPage = () => {
               hoverStyle={{
                 bg: '$color2',
               }}
-              transition="200ms"
               enterStyle={{ opacity: 0, scale: 0.95 }}
               icon={<AppleIcon size={20} />}
             />

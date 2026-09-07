@@ -1,10 +1,10 @@
 import { expo } from '@better-auth/expo'
-import { time } from '@take-out/helpers'
 import { betterAuth } from 'better-auth'
 import { admin, bearer, jwt, magicLink } from 'better-auth/plugins'
 
 import { DOMAIN } from '~/constants/app'
 import { database } from '~/database/database'
+import { time } from '~/helpers/time'
 import { BETTER_AUTH_SECRET, BETTER_AUTH_URL } from '~/server/env-server'
 
 import { APP_SCHEME } from '../constants'

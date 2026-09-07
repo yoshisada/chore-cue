@@ -28,7 +28,13 @@ export default defineConfig({
       reportsDirectory: 'coverage',
       include: [
         'src/features/chorecue/boardState.ts',
+        'src/features/chorecue/choreMapping.ts',
+        'src/features/chorecue/choreRules.ts',
+        'src/features/chorecue/recurrence.ts',
+        'src/features/chorecue/starterChores.ts',
+        'src/features/chorecue/timezone.ts',
         'src/features/auth/householdContext.ts',
+        'src/features/members/memberState.ts',
       ],
       thresholds: {
         lines: 80,

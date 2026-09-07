@@ -4,6 +4,7 @@ import { H3, Separator, Sheet, Spacer, View, XStack, YStack } from 'tamagui'
 
 import { useAuth } from '~/features/auth/client/authClient'
 import { useLogout } from '~/features/auth/useLogout'
+import { useMemberBoard } from '~/features/members/useMemberBoard'
 import { Logo } from '~/interface/app/Logo'
 import { Avatar } from '~/interface/avatars/Avatar'
 import { Button } from '~/interface/buttons/Button'
@@ -13,11 +14,13 @@ import { GearIcon } from '~/interface/icons/phosphor/GearIcon'
 import { ListIcon } from '~/interface/icons/phosphor/ListIcon'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { ThemeSwitch } from '~/interface/theme/ThemeSwitch'
+import { memberAccentColors } from '~/tamagui/themes/playfulHousehold'
 
 import { NavigationTabs } from './NavigationTabs'
 
 export const MainHeader = () => {
-  const { user } = useAuth()
+  const { members } = useMemberBoard()
+
   return (
     <ScrollHeader>
       <PageContainer>
@@ -27,6 +30,18 @@ export const MainHeader = () => {
               <Link href="/" aria-label="Home">
                 <Logo height={20} />
               </Link>
+              <XStack gap="$1" ml="$2">
+                {members.slice(0, 4).map((member, index) => (
+                  <Avatar
+                    key={member.id}
+                    testID="header-member-avatar"
+                    image={null}
+                    name={member.name}
+                    size="sm"
+                    accentColor={memberAccentColors[index % memberAccentColors.length]}
+                  />
+                ))}
+              </XStack>
             </XStack>
 
             <Spacer flex={1} />
@@ -41,27 +56,6 @@ export const MainHeader = () => {
               <View pointerEvents="auto">
                 <NavigationTabs />
               </View>
-            </XStack>
-
-            <XStack gap="$2.5" items="center" display="none" $md={{ display: 'flex' }}>
-              {user && (
-                <Button circular cursor="pointer">
-                  <Avatar
-                    disableBorder
-                    size={28}
-                    image={user.image}
-                    name={user.name ?? 'User'}
-                  />
-                </Button>
-              )}
-
-              <ThemeSwitch />
-              <Button
-                circular
-                onPress={() => router.push('/home/settings')}
-                icon={<GearIcon size={18} />}
-                aria-label="Settings"
-              />
             </XStack>
 
             <MainHeaderMenu />
@@ -85,8 +79,8 @@ export const MainHeaderMenu = memo(() => {
     <>
       <Button
         variant="transparent"
-        circular
-        icon={<ListIcon size="$1" />}
+        minH={0}
+        icon={<ListIcon size="$1" color="$color" />}
         aria-label="Menu"
         onPress={() => setOpen(true)}
         $md={{ display: 'none' }}
@@ -100,7 +94,7 @@ export const MainHeaderMenu = memo(() => {
         snapPoints={[50]}
       >
         <Sheet.Overlay
-          bg="$shadow6"
+          bg="rgba(0, 0, 0, 0.5)"
           transition="quick"
           enterStyle={{ opacity: 0 }}
           exitStyle={{ opacity: 0 }}
@@ -119,11 +113,12 @@ export const MainHeaderMenu = memo(() => {
             <YStack flex={1} p="$3" gap="$2">
               <XStack
                 p="$3"
-                rounded="$4"
                 gap="$3"
                 items="center"
-                hoverStyle={{ bg: '$color3' }}
-                pressStyle={{ bg: '$color4' }}
+                borderBottomWidth={1}
+                borderBottomColor="$borderColor"
+                hoverStyle={{ bg: '$color2' }}
+                pressStyle={{ bg: '$color3' }}
                 cursor="pointer"
                 onPress={() => {
                   setOpen(false)
@@ -131,21 +126,26 @@ export const MainHeaderMenu = memo(() => {
                 }}
               >
                 <GearIcon />
-                <H3 size="$3">Settings</H3>
+                <H3 size="$3" fontFamily="$body">
+                  Settings
+                </H3>
               </XStack>
 
               <XStack
                 p="$3"
-                rounded="$4"
                 gap="$3"
                 items="center"
-                hoverStyle={{ bg: '$color3' }}
-                pressStyle={{ bg: '$color4' }}
+                borderBottomWidth={1}
+                borderBottomColor="$borderColor"
+                hoverStyle={{ bg: '$color2' }}
+                pressStyle={{ bg: '$color3' }}
                 cursor="pointer"
                 onPress={handleLogout}
               >
                 <DoorIcon />
-                <H3 size="$3">Logout</H3>
+                <H3 size="$3" fontFamily="$body">
+                  Logout
+                </H3>
               </XStack>
             </YStack>
 

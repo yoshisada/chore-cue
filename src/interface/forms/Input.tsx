@@ -8,16 +8,23 @@ import {
 export const Input = styled(TamaguiInput, {
   height: 50,
   size: '$5',
-  borderWidth: 0.5,
+  bg: '$color2',
+  borderWidth: 1,
+  borderColor: '$color6',
+  rounded: '$4',
   placeholderTextColor: '$color8',
+  fontFamily: '$body',
+  transition: 'playfulQuick',
 
   focusVisibleStyle: {
-    outlineWidth: 3,
-    outlineStyle: 'solid',
-    outlineColor: '$background04',
-    outlineOffset: 1,
-    borderWidth: 0.5,
-    borderColor: '$color5',
+    outlineWidth: 0,
+    borderWidth: 2,
+    borderColor: '$accentColor',
+  },
+
+  focusStyle: {
+    borderWidth: 2,
+    borderColor: '$accentColor',
   },
 })
 

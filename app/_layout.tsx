@@ -2,12 +2,20 @@ import './root.css'
 
 import { Slot, Stack } from 'one'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { isWeb } from 'tamagui'
 import { YStack } from 'tamagui'
 
+import { usePlayfulFonts } from '~/features/fonts/useFonts'
 import { PlatformSpecificRootProvider } from '~/interface/platform/PlatformSpecificRootProvider'
 import { TamaguiRootProvider } from '~/tamagui/TamaguiRootProvider'
 
 export function Layout() {
+  const { fontsLoaded } = usePlayfulFonts()
+
+  if (!fontsLoaded) {
+    return null
+  }
+
   return (
     <html lang="en-US">
       <head>
@@ -23,6 +31,10 @@ export function Layout() {
           content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
         />
         <link rel="icon" href="/favicon.svg" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        />
       </head>
 
       <body>
@@ -30,7 +42,7 @@ export function Layout() {
           <PlatformSpecificRootProvider>
             <TamaguiRootProvider>
               <SafeAreaProvider>
-                {process.env.VITE_PLATFORM === 'web' ? (
+                {isWeb ? (
                   <YStack flex={1}>
                     <Slot />
                   </YStack>

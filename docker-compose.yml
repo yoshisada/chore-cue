@@ -36,6 +36,11 @@ services:
     environment:
       - RUN=1
       - ALLOW_MISSING_ENV=1
+      # demo user seeding is opt-in and off by default (the demo account has a
+      # well-known password and is a household admin). local dev only:
+      #   SEED_DEMO_USER=1 bun backend
+      # never set this in CI, staging or production.
+      - SEED_DEMO_USER=${SEED_DEMO_USER:-}
       - ZERO_UPSTREAM_DB=postgresql://user:password@pgdb:5432/postgres
       - ZERO_CVR_DB=postgresql://user:password@pgdb:5432/zero_cvr
       - ZERO_CHANGE_DB=postgresql://user:password@pgdb:5432/zero_cdb

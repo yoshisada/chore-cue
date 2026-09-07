@@ -1,0 +1,88 @@
+# Plan: Replace `category` with multi-tag system + filter bar
+
+## Summary
+Replace the single `category: string` field with `tags: string[]` across the entire data model, and add a horizontal filter bar at the top of the home page that lets users filter chores by tag.
+
+## Changes
+
+### 1. Data Model — `types.ts`
+- `ChoreCard`: `category: string` → `tags: string[]`
+- `ChoreComposerState`: `category: string` → `tags: string[]`
+- `ChoreEditorState`: inherits from composer, no extra change needed
+
+### 2. Board State — `boardState.ts`
+- `initialChores`: replace `category: 'Kitchen'` with `tags: ['Kitchen']`, etc. Give some chores multiple tags (e.g., `['Kitchen', 'Quick']`)
+- `emptyComposer`: `category: ''` → `tags: []`
+- `addChoreToBoard`: validation changes from `!composer.category.trim()` to `composer.tags.length === 0`; map `tags` instead of `category`
+- `beginEditForBoard`: map `tags` instead of `category`
+- `saveEditedChore`: map `tags` instead of `category`
+- New pure function `collectAllTags(chores: ChoreCard[]): string[]` — returns sorted unique tags from all visible chores
+- New pure function `filterByTags(chores: ChoreCard[], selectedTags: Set<string>): ChoreCard[]` — returns chores matching ANY selected tag (empty set = show all)
+
+### 3. Hook — `useChoreBoard.ts`
+- Add `selectedTags` state (`Set<string>`)
+- Add `toggleTag(tag: string)` — toggle a tag in/out of the set
+- Add `clearTagFilter()` — reset to empty set (show all)
+- Derive `allTags` from `sorted` via `collectAllTags`
+- Apply `filterByTags` between `sortVisibleChores` and `createSections`
+- Expose `allTags`, `selectedTags`, `toggleTag`, `clearTagFilter`
+
+### 4. UI — `ChoreHomePage.tsx`
+
+**Filter bar** (between hero and sections):
+- Horizontal `ScrollView` (horizontal, showsHorizontalScrollIndicator=false) wrapping `XStack gap="$2"`
+- "All" chip (always first, selected when `selectedTags` is empty)
+- One chip per tag from `allTags`, using `Button size="$3"` with `variant="outlined"` when unselected, default variant when selected
+- Tapping a tag calls `toggleTag(tag)`, tapping "All" calls `clearTagFilter()`
+
+**Create sheet** — replace the Category `<Input>` with:
+- A tag input section: `<Input>` to type a new tag + "Add" button
+- Below: chip display of currently added tags, each with an "×" remove button
+- Local state manages tag input string; on add, push to `composer.tags`
+
+**Edit sheet** — same pattern as create sheet for tags
+
+**Card metadata line** — replace `{item.category} —` with `{item.tags.join(', ')} —`
+
+### 5. Test Fixtures — `fixtures.ts`
+- `defaults`: `category: 'Test'` → `tags: ['Test']`
+- `buildComposer`: `category: 'Kitchen'` → `tags: ['Kitchen']`
+- `buildEditor`: `category: 'Test'` → `tags: ['Test']`
+
+### 6. Test Updates
+All tests referencing `category` need updating:
+- `boardState.test.ts`: validation tests (empty category → empty tags), addChore mapping, edit mapping
+- `useChoreBoard.create.test.ts`: `updateComposer('category', ...)` → tag operations
+- `useChoreBoard.edit-archive.test.ts`: editor category → tags
+- `useChoreBoard.sections.test.ts`: composer category → tags
+- `useChoreBoard.test.ts`: initial composer state
+- `ChoreHomePage.sections.test.tsx`: metadata rendering test
+- `ChoreHomePage.create.test.tsx`: form placeholder test
+- `ChoreHomePage.edit-archive.test.tsx`: editor fixture
+- `PhotoInput.test.ts`: composer setup
+
+**New tests to add:**
+- `boardState.test.ts`: `collectAllTags` and `filterByTags` pure function tests
+- `useChoreBoard.test.ts` or new file: tag filter toggle, clear, multi-select behavior
+- `ChoreHomePage.sections.test.tsx`: filter bar renders tags, clicking filters chores, "All" clears filter
+
+### 7. Playwright verification
+- Take screenshot showing the filter bar with tag chips
+- Verify clicking a tag filters the visible chores
+
+## File change list
+1. `src/features/chorecue/types.ts`
+2. `src/features/chorecue/boardState.ts`
+3. `src/features/chorecue/useChoreBoard.ts`
+4. `src/features/chorecue/ChoreHomePage.tsx`
+5. `src/test/unit/chorecue/fixtures.ts`
+6. `src/test/unit/chorecue/boardState.test.ts`
+7. `src/test/unit/chorecue/useChoreBoard.test.ts`
+8. `src/test/unit/chorecue/useChoreBoard.create.test.ts`
+9. `src/test/unit/chorecue/useChoreBoard.edit-archive.test.ts`
+10. `src/test/unit/chorecue/useChoreBoard.sections.test.ts`
+11. `src/test/unit/chorecue/ChoreHomePage.sections.test.tsx`
+12. `src/test/unit/chorecue/ChoreHomePage.create.test.tsx`
+13. `src/test/unit/chorecue/ChoreHomePage.edit-archive.test.tsx`
+14. `src/test/unit/chorecue/PhotoInput.test.ts`
+15. `src/test/integration/layout-visual.spec.ts`
