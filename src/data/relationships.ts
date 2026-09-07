@@ -37,11 +37,17 @@ export const householdRelationships = relationships(tables.household, ({ many })
     destSchema: tables.householdMember,
     destField: ['householdId'],
   }),
+  chores: many({
+    sourceField: ['id'],
+    destSchema: tables.chore,
+    destField: ['householdId'],
+  }),
 }))
 
 export const householdMemberRelationships = relationships(
   tables.householdMember,
-  ({ one }) => ({
+  ({ many, one }) => ({
+    // the `household` edge is what `inCallerHousehold` walks
     household: one({
       sourceField: ['householdId'],
       destSchema: tables.household,
@@ -52,8 +58,59 @@ export const householdMemberRelationships = relationships(
       destSchema: tables.userPublic,
       destField: ['id'],
     }),
+    assignedChores: many({
+      sourceField: ['id'],
+      destSchema: tables.chore,
+      destField: ['assigneeMemberId'],
+    }),
   })
 )
+
+export const choreRelationships = relationships(tables.chore, ({ many, one }) => ({
+  household: one({
+    sourceField: ['householdId'],
+    destSchema: tables.household,
+    destField: ['id'],
+  }),
+  assignee: one({
+    sourceField: ['assigneeMemberId'],
+    destSchema: tables.householdMember,
+    destField: ['id'],
+  }),
+  creator: one({
+    sourceField: ['createdByMemberId'],
+    destSchema: tables.householdMember,
+    destField: ['id'],
+  }),
+  bumps: many({
+    sourceField: ['id'],
+    destSchema: tables.bumpEvent,
+    destField: ['choreId'],
+  }),
+}))
+
+export const bumpEventRelationships = relationships(tables.bumpEvent, ({ one }) => ({
+  household: one({
+    sourceField: ['householdId'],
+    destSchema: tables.household,
+    destField: ['id'],
+  }),
+  chore: one({
+    sourceField: ['choreId'],
+    destSchema: tables.chore,
+    destField: ['id'],
+  }),
+  sender: one({
+    sourceField: ['senderMemberId'],
+    destSchema: tables.householdMember,
+    destField: ['id'],
+  }),
+  recipient: one({
+    sourceField: ['recipientMemberId'],
+    destSchema: tables.householdMember,
+    destField: ['id'],
+  }),
+}))
 
 export const allRelationships = [
   userRelationships,
@@ -61,4 +118,6 @@ export const allRelationships = [
   userStateRelationships,
   householdRelationships,
   householdMemberRelationships,
+  choreRelationships,
+  bumpEventRelationships,
 ]

@@ -1,4 +1,12 @@
-import type { Todo, User, UserState } from './generated/types'
+import type {
+  BumpEvent,
+  Chore,
+  Household,
+  HouseholdMember,
+  Todo,
+  User,
+  UserState,
+} from './generated/types'
 
 export type * from './generated/types'
 
@@ -13,4 +21,24 @@ export type UserWithRelations = User & {
 
 export type TodoWithUser = Todo & {
   user?: User
+}
+
+export type HouseholdMemberWithUser = HouseholdMember & {
+  user?: User
+}
+
+export type HouseholdWithMembers = Household & {
+  members?: readonly HouseholdMember[]
+}
+
+export type ChoreWithRelations = Chore & {
+  assignee?: HouseholdMember
+  creator?: HouseholdMember
+  bumps?: readonly BumpEvent[]
+}
+
+export type BumpEventWithRelations = BumpEvent & {
+  chore?: Chore
+  sender?: HouseholdMember
+  recipient?: HouseholdMember
 }

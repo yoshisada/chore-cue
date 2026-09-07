@@ -1,24 +1,28 @@
-import { serverWhere, zql } from 'on-zero'
+import { zql } from 'on-zero'
 
-const permission = serverWhere('household', (_, auth) => {
-  return _.cmpLit(auth?.id || '', '!=', '')
-})
-
-const memberPermission = serverWhere('householdMember', (_, auth) => {
-  return _.cmp('userId', auth?.id || '')
-})
+import { callerIsHouseholdMember, inCallerHousehold } from '../where/household'
 
 export const householdsByUserId = (props: { userId: string }) => {
   return zql.householdMember
-    .where(memberPermission)
+    .where(inCallerHousehold)
     .where('userId', props.userId)
-    .related('household', (q) => q.where(permission).one())
+    .related('household', (q) => q.where(callerIsHouseholdMember).one())
 }
 
 export const householdById = (props: { householdId: string }) => {
   return zql.household
-    .where(permission)
+    .where(callerIsHouseholdMember)
     .where('id', props.householdId)
-    .related('members', (q) => q.where(memberPermission))
+    .related('members', (q) => q.where(inCallerHousehold))
     .one()
+}
+
+/** the household roster — impossible before, when a member could only see their own row */
+export const membersByHouseholdId = (props: { householdId: string }) => {
+  return zql.householdMember
+    .where(inCallerHousehold)
+    .where('householdId', props.householdId)
+    .orderBy('joinedAt', 'asc')
+    .orderBy('id', 'asc')
+    .related('user', (q) => q.one())
 }

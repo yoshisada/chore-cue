@@ -5,19 +5,80 @@ import * as v from 'valibot'
 
 import * as Queries from './groupedQueries'
 
+const bump = {
+  bumpsForChore: defineQuery(
+    v.object({
+      choreId: v.string(),
+      limit: v.optional(v.number()),
+    }),
+    ({ args }) => Queries.bump.bumpsForChore(args)
+  ),
+  bumpsSentOnDate: defineQuery(
+    v.object({
+      senderMemberId: v.string(),
+      sentOnDate: v.string(),
+    }),
+    ({ args }) => Queries.bump.bumpsSentOnDate(args)
+  ),
+}
+
+const chore = {
+  archivedChores: defineQuery(
+    v.object({
+      householdId: v.string(),
+      limit: v.optional(v.number()),
+    }),
+    ({ args }) => Queries.chore.archivedChores(args)
+  ),
+  choreBoard: defineQuery(
+    v.object({
+      householdId: v.string(),
+      limit: v.optional(v.number()),
+    }),
+    ({ args }) => Queries.chore.choreBoard(args)
+  ),
+  choreById: defineQuery(
+    v.object({
+      choreId: v.string(),
+    }),
+    ({ args }) => Queries.chore.choreById(args)
+  ),
+}
+
+const household = {
+  householdById: defineQuery(
+    v.object({
+      householdId: v.string(),
+    }),
+    ({ args }) => Queries.household.householdById(args)
+  ),
+  householdsByUserId: defineQuery(
+    v.object({
+      userId: v.string(),
+    }),
+    ({ args }) => Queries.household.householdsByUserId(args)
+  ),
+  membersByHouseholdId: defineQuery(
+    v.object({
+      householdId: v.string(),
+    }),
+    ({ args }) => Queries.household.membersByHouseholdId(args)
+  ),
+}
+
 const todo = {
+  todoById: defineQuery(
+    v.object({
+      todoId: v.string(),
+    }),
+    ({ args }) => Queries.todo.todoById(args)
+  ),
   todosByUserId: defineQuery(
     v.object({
       userId: v.string(),
       limit: v.optional(v.number()),
     }),
     ({ args }) => Queries.todo.todosByUserId(args)
-  ),
-  todoById: defineQuery(
-    v.object({
-      todoId: v.string(),
-    }),
-    ({ args }) => Queries.todo.todoById(args)
   ),
 }
 
@@ -36,22 +97,9 @@ const user = {
   ),
 }
 
-const household = {
-  householdsByUserId: defineQuery(
-    v.object({
-      userId: v.string(),
-    }),
-    ({ args }) => Queries.household.householdsByUserId(args)
-  ),
-  householdById: defineQuery(
-    v.object({
-      householdId: v.string(),
-    }),
-    ({ args }) => Queries.household.householdById(args)
-  ),
-}
-
 export const queries = defineQueries({
+  bump,
+  chore,
   household,
   todo,
   user,
