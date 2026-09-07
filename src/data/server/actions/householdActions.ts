@@ -10,7 +10,10 @@ import type { AuthData } from '~/features/auth/types'
 import type { MemberRole } from '~/features/members/types'
 
 function generateHouseholdId(userId: string): string {
-  return `household-${userId.slice(0, 8)}`
+  // the full user id: a truncated prefix collides across users, and the
+  // conflict-tolerant insert below would then silently admit the second
+  // user into the first user's household as an admin
+  return `household-${userId}`
 }
 
 export const householdActions = {

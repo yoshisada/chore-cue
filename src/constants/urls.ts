@@ -1,11 +1,5 @@
 import { getURL } from 'one'
 
-// TODO
-
-// Server URLs configuration
-// Force localhost on client to avoid 0.0.0.0 CORS issues
-const rawServerUrl = process.env.ONE_SERVER_URL || 'http://localhost:8081'
-
 // getURL() returns this when the bundle is not served by a dev server, i.e. a release build.
 const RELEASE_BUILD_URL = 'http://one-server.example.com'
 
@@ -20,12 +14,13 @@ export const SERVER_URL = (() => {
 
   // FIXME?: [One] prod ONE_SERVER_URL not working in metro
   if (url === RELEASE_BUILD_URL) {
-    // No default here on purpose: a release build must be told where its own backend
-    // lives, rather than silently pointing auth/API traffic at someone else's server.
-    const configured = import.meta.env.VITE_PUBLIC_SERVER
+    // No fallback to a server we don't control: a release build must be told
+    // where its own backend lives. ONE_SERVER_URL is the variable the repo's
+    // production config documents; VITE_PUBLIC_SERVER wins when both are set.
+    const configured = import.meta.env.VITE_PUBLIC_SERVER || process.env.ONE_SERVER_URL
     if (!configured) {
       throw new Error(
-        `Missing VITE_PUBLIC_SERVER: a release build must set the server URL.`
+        `Missing server URL: a release build must set VITE_PUBLIC_SERVER or ONE_SERVER_URL.`
       )
     }
     return configured

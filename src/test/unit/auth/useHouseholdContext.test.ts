@@ -15,7 +15,7 @@ describe('deriveHouseholdContext', () => {
       })
     ).toEqual({
       userId: 'abcdef123456',
-      householdId: 'household-abcdef12',
+      householdId: 'household-abcdef123456',
       householdName: 'My Household',
       displayName: 'Alex',
       isAuthenticated: true,
@@ -35,7 +35,7 @@ describe('deriveHouseholdContext', () => {
       })
     ).toEqual({
       userId: 'demo-user',
-      householdId: 'household-demo-use',
+      householdId: 'household-demo-user',
       householdName: 'My Household',
       displayName: 'sammy',
       isAuthenticated: false,
@@ -48,7 +48,7 @@ describe('deriveHouseholdContext', () => {
   it('uses the generic demo member label when no user data exists', () => {
     expect(deriveHouseholdContext({})).toEqual({
       userId: 'demo-user',
-      householdId: 'household-demo-use',
+      householdId: 'household-demo-user',
       householdName: 'My Household',
       displayName: 'Demo Member',
       isAuthenticated: false,

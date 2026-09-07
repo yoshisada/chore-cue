@@ -38,6 +38,11 @@ async function onboardUser(authData: AuthData, userId: string) {
     .where(eq(userTable.id, userId))
 
   if (existingUser.length === 1) {
+    // an account onboarded before the chore domain existed has a userPublic
+    // row but may have no household membership — without this backfill the
+    // household-scoped permissions would leave it on a permanently empty,
+    // read-only board
+    await householdActions.ensureHouseholdForUser(authData, userId)
     return userPrivate
   }
 

@@ -57,7 +57,9 @@ export interface HouseholdAuthSnapshot {
 }
 
 export function deriveServerHouseholdId(userId: string) {
-  return `household-${userId.slice(0, 8) || 'demo'}`
+  // mirrors the server's generateHouseholdId: the full user id, never a
+  // truncated prefix that could collide across users
+  return `household-${userId || 'demo'}`
 }
 
 export function deriveHouseholdContext(auth: HouseholdAuthSnapshot): HouseholdContext {
