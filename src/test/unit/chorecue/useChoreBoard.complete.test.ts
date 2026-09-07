@@ -1,71 +1,127 @@
 import { describe, expect, it } from 'vitest'
 
-import { buildChore, buildMixedBoard, buildOverdueChore } from './fixtures'
+import { advanceNextDueAt } from '~/features/chorecue/recurrence'
+
+import {
+  buildMixedRows,
+  buildOverdueRow,
+  DAY_MS,
+  FIXED_NOW,
+  VIEWER_MEMBER_ID,
+} from './fixtures'
 import { createBoardDriver } from './renderHelpers'
 
-describe('useChoreBoard – complete-chore state transitions', () => {
-  it('moves a completed chore to upcoming bucket', () => {
-    const board = createBoardDriver(buildMixedBoard())
-    board.completeChore('overdue-1')
+describe('useChoreBoard – completing a chore advances its schedule', () => {
+  it('moves a completed overdue chore out of the overdue bucket', async () => {
+    const board = createBoardDriver(buildMixedRows())
+    await board.completeChore('overdue-1')
 
     const completed = board.chores.find((c) => c.id === 'overdue-1')
-    expect(completed?.dueBucket).toBe('upcoming')
+    expect(completed?.dueBucket).not.toBe('overdue')
   })
 
-  it('sets the due label to reset message after completion', () => {
-    const board = createBoardDriver(buildMixedBoard())
-    board.completeChore('due-1')
+  it('advances nextDueAt exactly as the recurrence rule says', async () => {
+    const rows = buildMixedRows()
+    const target = rows.find((r) => r.id === 'overdue-1')!
+    const board = createBoardDriver(rows)
 
-    const completed = board.chores.find((c) => c.id === 'due-1')
-    expect(completed?.dueLabel).toBe('Reset for the next cycle')
+    await board.completeChore('overdue-1')
+
+    const expected = advanceNextDueAt(
+      {
+        type: 'interval_days',
+        intervalDays: 3,
+        timeMinutes: 9 * 60,
+        timezone: 'UTC',
+      },
+      { previousDueAt: target.nextDueAt, completedAt: FIXED_NOW }
+    )
+
+    expect(board.rows.find((r) => r.id === 'overdue-1')?.nextDueAt).toBe(expected)
   })
 
-  it('sets last completed label to just now', () => {
-    const board = createBoardDriver(buildMixedBoard())
-    board.completeChore('overdue-1')
+  it('never leaves a just-completed chore already overdue', async () => {
+    const board = createBoardDriver([
+      buildOverdueRow({ id: 'stale', nextDueAt: FIXED_NOW - 40 * DAY_MS }),
+    ])
 
-    const completed = board.chores.find((c) => c.id === 'overdue-1')
-    expect(completed?.lastCompletedLabel).toBe('Completed just now')
+    await board.completeChore('stale')
+
+    const chore = board.chores.find((c) => c.id === 'stale')
+    expect(chore?.nextDueAt).toBeGreaterThan(FIXED_NOW)
+    expect(chore?.dueBucket).not.toBe('overdue')
   })
 
-  it('does not affect other chores when completing one', () => {
-    const board = createBoardDriver(buildMixedBoard())
-    const beforeDue = board.chores.find((c) => c.id === 'due-1')
-    board.completeChore('overdue-1')
-    const afterDue = board.chores.find((c) => c.id === 'due-1')
+  it('records who completed it and when', async () => {
+    const board = createBoardDriver(buildMixedRows())
+    await board.completeChore('due-1')
 
-    expect(afterDue).toEqual(beforeDue)
+    const row = board.rows.find((r) => r.id === 'due-1') as any
+    expect(row.lastCompletedAt).toBe(FIXED_NOW)
+    expect(row.lastCompletedByMemberId).toBe(VIEWER_MEMBER_ID)
+    expect(board.chores.find((c) => c.id === 'due-1')?.lastCompletedLabel).toBe(
+      'Last done today at 9:00 AM'
+    )
   })
 
-  it('moves completed chore from overdue section to upcoming', () => {
-    const board = createBoardDriver(buildMixedBoard())
+  it('is idempotent under a double tap: the schedule advances once', async () => {
+    const board = createBoardDriver(buildMixedRows())
+
+    await board.completeChore('overdue-1')
+    const afterFirst = board.rows.find((r) => r.id === 'overdue-1')?.nextDueAt
+
+    // the second call still carries the *original* expectedDueAt in a real
+    // double-tap; here the driver re-reads it, so assert both paths hold
+    const ctx = board.store.context('user-sam')
+    const { mutate } = await import('~/data/models/chore')
+    await mutate.complete(ctx, {
+      choreId: 'overdue-1',
+      expectedDueAt: FIXED_NOW - 2 * DAY_MS,
+      now: FIXED_NOW + 1000,
+    })
+
+    expect(board.rows.find((r) => r.id === 'overdue-1')?.nextDueAt).toBe(afterFirst)
+  })
+
+  it('does not affect other chores when completing one', async () => {
+    const board = createBoardDriver(buildMixedRows())
+    const before = { ...(board.rows.find((r) => r.id === 'due-1') as any) }
+
+    await board.completeChore('overdue-1')
+
+    expect(board.rows.find((r) => r.id === 'due-1')).toEqual(before)
+  })
+
+  it('moves the completed chore between sections', async () => {
+    const board = createBoardDriver(buildMixedRows())
     expect(board.sections.overdue).toHaveLength(1)
 
-    board.completeChore('overdue-1')
+    await board.completeChore('overdue-1')
 
     expect(board.sections.overdue).toHaveLength(0)
     expect(board.sections.upcoming).toHaveLength(2)
   })
 
-  it('preserves canBump based on assignee after completion', () => {
-    const chores = [
-      buildChore({ id: 'alex-chore', assigneeName: 'Alex', dueBucket: 'overdue' }),
-      buildChore({ id: 'sam-chore', assigneeName: 'Sam', dueBucket: 'overdue' }),
-    ]
-    const board = createBoardDriver(chores)
+  it('re-derives bump eligibility from the assignee, not the completion', async () => {
+    const board = createBoardDriver([
+      buildOverdueRow({ id: 'mine', assigneeMemberId: VIEWER_MEMBER_ID }),
+      buildOverdueRow({ id: 'theirs' }),
+    ])
 
-    board.completeChore('alex-chore')
-    board.completeChore('sam-chore')
+    await board.completeChore('mine')
+    await board.completeChore('theirs')
 
-    expect(board.chores.find((c) => c.id === 'alex-chore')?.canBump).toBe(false)
-    expect(board.chores.find((c) => c.id === 'sam-chore')?.canBump).toBe(true)
+    expect(board.chores.find((c) => c.id === 'mine')?.canBump).toBe(false)
+    expect(board.chores.find((c) => c.id === 'theirs')?.canBump).toBe(true)
   })
 
-  it('handles completing a chore that does not exist gracefully', () => {
-    const board = createBoardDriver(buildMixedBoard())
-    const before = [...board.chores]
-    board.completeChore('nonexistent')
+  it('reports a failure for a chore that does not exist', async () => {
+    const board = createBoardDriver(buildMixedRows())
+    const before = board.rows.map((r) => ({ ...r }))
 
-    expect(board.chores).toEqual(before)
+    const result = await board.completeChore('nonexistent')
+
+    expect(result.ok).toBe(false)
+    expect(board.rows).toEqual(before)
   })
 })

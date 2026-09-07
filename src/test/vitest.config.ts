@@ -28,6 +28,7 @@ export default defineConfig({
       reportsDirectory: 'coverage',
       include: [
         'src/features/chorecue/boardState.ts',
+        'src/features/chorecue/choreMapping.ts',
         'src/features/chorecue/choreRules.ts',
         'src/features/chorecue/recurrence.ts',
         'src/features/chorecue/starterChores.ts',

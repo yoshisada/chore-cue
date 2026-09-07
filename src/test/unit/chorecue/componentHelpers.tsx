@@ -6,15 +6,14 @@ import { TamaguiProvider } from 'tamagui'
 
 import {
   collectAllTags,
+  createSections,
   emptyComposer,
   emptyEditorState,
-  initialChores,
-  createSections,
   sortVisibleChores,
 } from '~/features/chorecue/boardState'
 import { config } from '~/tamagui/tamagui.config'
 
-import { buildMixedBoard } from './fixtures'
+import { buildMixedCards } from './fixtures'
 
 import type {
   ChoreCard,
@@ -27,6 +26,7 @@ export interface MockBoardState {
   sections: ReturnType<typeof createSections>
   allTags: string[]
   selectedTags: Set<string>
+  memberNames: string[]
   composer: ChoreComposerState
   editor: ChoreEditorState
   bumpCount: number
@@ -49,19 +49,20 @@ export interface MockBoardState {
 export function buildMockBoardState(
   overrides: Partial<MockBoardState> = {}
 ): MockBoardState {
-  const chores = buildMixedBoard()
+  const chores = buildMixedCards()
   const sorted = sortVisibleChores(chores)
   return {
     sections: createSections(sorted),
     allTags: collectAllTags(sorted),
     selectedTags: new Set<string>(),
+    memberNames: ['Sam', 'Alex'],
     composer: { ...emptyComposer },
     editor: { ...emptyEditorState },
     bumpCount: 2,
     updateComposer: vi.fn(),
     addChore: vi.fn(),
     completeChore: vi.fn(),
-    sendBump: vi.fn().mockReturnValue(true),
+    sendBump: vi.fn().mockResolvedValue(true),
     beginEdit: vi.fn(),
     updateEditor: vi.fn(),
     saveEdit: vi.fn(),

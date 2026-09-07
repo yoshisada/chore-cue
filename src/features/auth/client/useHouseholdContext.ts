@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { householdsByUserId } from '~/data/queries/household'
 import { useQuery } from '~/zero/client'
 
-import { deriveHouseholdContext } from '../householdContext'
+import { deriveHouseholdContext, withMembership } from '../householdContext'
 import { useAuth } from './authClient'
 
 export function useHouseholdContext() {
@@ -20,11 +20,7 @@ export function useHouseholdContext() {
   const primaryMembership = memberships?.[0]
 
   return useMemo(
-    () => ({
-      ...derived,
-      householdId: primaryMembership?.householdId ?? derived.householdId,
-      householdName: primaryMembership?.household?.name ?? derived.householdName,
-    }),
+    () => withMembership(derived, primaryMembership),
     [derived, primaryMembership]
   )
 }

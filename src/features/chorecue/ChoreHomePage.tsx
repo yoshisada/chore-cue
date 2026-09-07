@@ -14,7 +14,6 @@ import {
 } from 'tamagui'
 
 import { useHouseholdContext } from '~/features/auth/client/useHouseholdContext'
-import { useMemberBoard } from '~/features/members/useMemberBoard'
 import { Avatar } from '~/interface/avatars/Avatar'
 import { Button } from '~/interface/buttons/Button'
 import { Input } from '~/interface/forms/Input'
@@ -27,18 +26,23 @@ import { PhotoInput } from './components/PhotoInput'
 import { PhotoThumbnail } from './components/PhotoThumbnail'
 import { useChoreBoard } from './useChoreBoard'
 
-import type {
-  ChoreCard,
-  ChoreComposerState,
-  ChoreEditorState,
-  DueBucket,
-  RecurrenceSummary,
-} from './types'
+import type { BumpBlockedReason } from './choreRules'
+import type { ChoreCard, DueBucket, RecurrenceSummary } from './types'
 
 function useStateColor(bucket: DueBucket): string {
   const themeName = useThemeName()
   const mode = themeName.startsWith('dark') ? 'dark' : 'light'
-  return choreStateColors[mode][bucket]
+  const key = bucket === 'dueSoon' ? 'due' : bucket
+  return choreStateColors[mode][key]
+}
+
+const BUMP_BLOCKED_LABELS: Record<BumpBlockedReason, string> = {
+  archived: 'Archived',
+  self: 'Assigned to you',
+  unassigned: 'No assignee',
+  'inactive-assignee': 'Assignee is inactive',
+  'daily-limit': 'Daily limit reached',
+  'invalid-template': 'Unavailable',
 }
 
 function getMemberAccentColor(name: string, memberNames: string[]): string {
@@ -207,14 +211,21 @@ function ChoreCardItem({
           <Button size="$3" variant="outlined" onPress={() => onEdit(item.id)}>
             Edit
           </Button>
-          <Button
-            size="$3"
-            variant="outlined"
-            disabled={!item.canBump}
-            onPress={() => onBump(item.id)}
-          >
-            {item.canBump ? 'Bump' : 'No bump'}
-          </Button>
+          <YStack gap="$1">
+            <Button
+              size="$3"
+              variant="outlined"
+              disabled={!item.canBump}
+              onPress={() => onBump(item.id)}
+            >
+              {item.canBump ? 'Bump' : 'No bump'}
+            </Button>
+            {item.bumpBlockedReason ? (
+              <SizableText fontFamily="$body" size="$1" color="$color8">
+                {BUMP_BLOCKED_LABELS[item.bumpBlockedReason]}
+              </SizableText>
+            ) : null}
+          </YStack>
           <Button size="$3" variant="outlined" onPress={() => onArchive(item.id)}>
             Archive
           </Button>
@@ -276,7 +287,7 @@ function ChoreSections({
   onEdit,
   onArchive,
 }: {
-  sections: { overdue: ChoreCard[]; due: ChoreCard[]; upcoming: ChoreCard[] }
+  sections: { overdue: ChoreCard[]; dueSoon: ChoreCard[]; upcoming: ChoreCard[] }
   memberNames: string[]
   onComplete: (choreId: string) => void
   onBump: (choreId: string) => void
@@ -284,7 +295,7 @@ function ChoreSections({
   onArchive: (choreId: string) => void
 }) {
   const overdueColor = useStateColor('overdue')
-  const dueColor = useStateColor('due')
+  const dueColor = useStateColor('dueSoon')
   const upcomingColor = useStateColor('upcoming')
 
   return (
@@ -301,7 +312,7 @@ function ChoreSections({
       />
       <Section
         title="Due Soon"
-        items={sections.due}
+        items={sections.dueSoon}
         stateColor={dueColor}
         memberNames={memberNames}
         onComplete={onComplete}
@@ -327,9 +338,9 @@ export const ChoreHomePage = memo(() => {
   const insets = useSafeAreaInsets()
   const household = useHouseholdContext()
   const [createOpen, setCreateOpen] = useState(false)
-  const { memberNames } = useMemberBoard()
   const {
     sections,
+    memberNames,
     allTags,
     selectedTags,
     searchQuery,
@@ -357,11 +368,13 @@ export const ChoreHomePage = memo(() => {
 
   const hasNoChores =
     sections.overdue.length === 0 &&
-    sections.due.length === 0 &&
+    sections.dueSoon.length === 0 &&
     sections.upcoming.length === 0
 
+  // every write is a Zero mutator now, so these all return promises; the board
+  // re-renders from the synced query rather than from the promise resolving
   const handleAddChore = () => {
-    addChore()
+    void addChore()
     setCreateOpen(false)
   }
 
@@ -370,11 +383,23 @@ export const ChoreHomePage = memo(() => {
   }
 
   const handleSaveEdit = () => {
-    saveEdit()
+    void saveEdit()
   }
 
   const handleArchiveFromEdit = () => {
-    archiveChore(editor.choreId as string)
+    void archiveChore(editor.choreId as string)
+  }
+
+  const handleComplete = (choreId: string) => {
+    void completeChore(choreId)
+  }
+
+  const handleBump = (choreId: string) => {
+    void sendBump(choreId)
+  }
+
+  const handleArchive = (choreId: string) => {
+    void archiveChore(choreId)
   }
 
   const addComposerTag = (tag: string) => {
@@ -559,7 +584,7 @@ export const ChoreHomePage = memo(() => {
             <Sheet
               open
               onOpenChange={(open: boolean) => {
-                if (!open) saveEdit()
+                if (!open) void saveEdit()
               }}
               transition="medium"
               modal
@@ -677,10 +702,10 @@ export const ChoreHomePage = memo(() => {
             <ChoreSections
               sections={sections}
               memberNames={memberNames}
-              onComplete={completeChore}
-              onBump={sendBump}
+              onComplete={handleComplete}
+              onBump={handleBump}
               onEdit={handleBeginEdit}
-              onArchive={archiveChore}
+              onArchive={handleArchive}
             />
           )}
         </YStack>

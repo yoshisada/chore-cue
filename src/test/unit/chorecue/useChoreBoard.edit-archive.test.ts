@@ -1,142 +1,187 @@
 import { describe, expect, it } from 'vitest'
 
 import { emptyEditorState } from '~/features/chorecue/boardState'
+import { firstDueAt } from '~/features/chorecue/recurrence'
 
-import { buildMixedBoard } from './fixtures'
+import { buildMixedRows, FIXED_NOW, VIEWER_MEMBER_ID } from './fixtures'
 import { createBoardDriver } from './renderHelpers'
 
 describe('useChoreBoard – edit and archive flows', () => {
   describe('editing', () => {
-    it('begins edit by loading chore data into editor', () => {
-      const board = createBoardDriver(buildMixedBoard())
+    it('begins edit by loading chore data into the editor', () => {
+      const board = createBoardDriver(buildMixedRows())
       board.beginEdit('overdue-1')
 
       expect(board.editor.choreId).toBe('overdue-1')
       expect(board.editor.title).toBe('Overdue chore')
     })
 
-    it('returns empty editor for unknown chore id', () => {
-      const board = createBoardDriver(buildMixedBoard())
+    it('returns an empty editor for an unknown chore id', () => {
+      const board = createBoardDriver(buildMixedRows())
       board.beginEdit('nonexistent')
 
       expect(board.editor).toEqual(emptyEditorState)
     })
 
-    it('saves edited title and tags', () => {
-      const board = createBoardDriver(buildMixedBoard())
+    it('saves edited title and tags', async () => {
+      const board = createBoardDriver(buildMixedRows())
       board.beginEdit('due-1')
       board.updateEditor('title', 'Updated title')
       board.updateEditor('tags', ['Updated tag'])
-      board.saveEdit()
+      await board.saveEdit()
 
       const chore = board.chores.find((c) => c.id === 'due-1')
       expect(chore?.title).toBe('Updated title')
       expect(chore?.tags).toEqual(['Updated tag'])
     })
 
-    it('clears editor state after saving', () => {
-      const board = createBoardDriver(buildMixedBoard())
+    it('clears editor state after saving', async () => {
+      const board = createBoardDriver(buildMixedRows())
       board.beginEdit('due-1')
-      board.saveEdit()
+      await board.saveEdit()
 
       expect(board.editor).toEqual(emptyEditorState)
     })
 
-    it('does nothing when saving with no active editor', () => {
-      const board = createBoardDriver(buildMixedBoard())
-      const before = [...board.chores]
-      board.saveEdit()
+    it('does nothing when saving with no active editor', async () => {
+      const board = createBoardDriver(buildMixedRows())
+      const before = board.rows.map((r) => ({ ...r }))
 
-      expect(board.chores).toEqual(before)
+      const result = await board.saveEdit()
+
+      expect(result.ok).toBe(false)
+      expect(board.rows).toEqual(before)
     })
 
-    it('saves changed assignee', () => {
-      const board = createBoardDriver(buildMixedBoard())
+    it('saves a changed assignee and re-derives bump eligibility from it', async () => {
+      const board = createBoardDriver(buildMixedRows())
       board.beginEdit('overdue-1')
-      board.updateEditor('assigneeName', 'Alex')
-      board.saveEdit()
+      board.updateEditor('assigneeName', 'Sam')
+      await board.saveEdit()
 
       const chore = board.chores.find((c) => c.id === 'overdue-1')
-      expect(chore?.assigneeName).toBe('Alex')
+      expect(chore?.assigneeName).toBe('Sam')
+      expect(chore?.assigneeMemberId).toBe(VIEWER_MEMBER_ID)
+      expect(chore?.canBump).toBe(false)
+      expect(chore?.bumpBlockedReason).toBe('self')
     })
 
-    it('saves changed recurrence type', () => {
-      const board = createBoardDriver(buildMixedBoard())
+    it('leaves nextDueAt alone when the recurrence is unchanged', async () => {
+      const rows = buildMixedRows()
+      const before = rows.find((r) => r.id === 'overdue-1')!.nextDueAt
+      const board = createBoardDriver(rows)
+
+      board.beginEdit('overdue-1')
+      board.updateEditor('title', 'Renamed only')
+      await board.saveEdit()
+
+      expect(board.rows.find((r) => r.id === 'overdue-1')?.nextDueAt).toBe(before)
+    })
+
+    it('re-anchors nextDueAt deterministically when the recurrence changes', async () => {
+      const board = createBoardDriver(buildMixedRows())
       board.beginEdit('overdue-1')
       board.updateEditor('recurrenceSummary', 'Daily time')
-      board.saveEdit()
+      await board.saveEdit()
 
-      const chore = board.chores.find((c) => c.id === 'overdue-1')
-      expect(chore?.recurrenceSummary).toBe('Daily time')
+      const expected = firstDueAt(
+        { type: 'daily_time', timeMinutes: 19 * 60, timezone: 'UTC' },
+        FIXED_NOW
+      )
+
+      expect(board.rows.find((r) => r.id === 'overdue-1')?.nextDueAt).toBe(expected)
+      expect(board.chores.find((c) => c.id === 'overdue-1')?.recurrenceSummary).toBe(
+        'Daily time'
+      )
     })
 
-    it('clears photo when editor photo label is empty', () => {
-      const board = createBoardDriver(buildMixedBoard())
+    it('clears the photo when the editor photo label is emptied', async () => {
+      const board = createBoardDriver(buildMixedRows())
       board.beginEdit('overdue-1')
       board.updateEditor('photoLabel', 'photo.jpg')
-      board.saveEdit()
+      await board.saveEdit()
 
       board.beginEdit('overdue-1')
       board.updateEditor('photoLabel', '')
-      board.saveEdit()
+      await board.saveEdit()
 
-      const chore = board.chores.find((c) => c.id === 'overdue-1')
-      expect(chore?.photoLabel).toBeNull()
+      expect(board.chores.find((c) => c.id === 'overdue-1')?.photoLabel).toBeNull()
     })
 
-    it('updates canBump based on new assignee', () => {
-      const board = createBoardDriver(buildMixedBoard())
+    it('refuses to edit an archived chore', async () => {
+      const board = createBoardDriver(buildMixedRows())
       board.beginEdit('overdue-1')
-      board.updateEditor('assigneeName', 'Alex')
-      board.saveEdit()
+      await board.archiveChore('overdue-1')
 
-      expect(board.chores.find((c) => c.id === 'overdue-1')?.canBump).toBe(false)
+      board.beginEdit('overdue-1')
+      board.updateEditor('title', 'Should not stick')
+      const result = await board.saveEdit()
+
+      expect(result.ok).toBe(false)
+      expect(board.chores.find((c) => c.id === 'overdue-1')?.title).toBe('Overdue chore')
     })
   })
 
   describe('archiving', () => {
-    it('marks a chore as archived', () => {
-      const board = createBoardDriver(buildMixedBoard())
-      board.archiveChore('overdue-1')
+    it('marks a chore as archived and stamps archivedAt', async () => {
+      const board = createBoardDriver(buildMixedRows())
+      await board.archiveChore('overdue-1')
 
-      const chore = board.chores.find((c) => c.id === 'overdue-1')
-      expect(chore?.archived).toBe(true)
+      expect(board.chores.find((c) => c.id === 'overdue-1')?.archived).toBe(true)
+      expect(board.rows.find((r) => r.id === 'overdue-1')?.archivedAt).toBe(FIXED_NOW)
     })
 
-    it('sets canBump to false on archived chore', () => {
-      const board = createBoardDriver(buildMixedBoard())
-      board.archiveChore('overdue-1')
+    it('sets canBump to false on an archived chore', async () => {
+      const board = createBoardDriver(buildMixedRows())
+      await board.archiveChore('overdue-1')
 
-      const chore = board.chores.find((c) => c.id === 'overdue-1')
-      expect(chore?.canBump).toBe(false)
+      expect(board.chores.find((c) => c.id === 'overdue-1')?.canBump).toBe(false)
     })
 
-    it('clears editor when the archived chore is being edited', () => {
-      const board = createBoardDriver(buildMixedBoard())
+    it('is idempotent', async () => {
+      const board = createBoardDriver(buildMixedRows())
+      await board.archiveChore('overdue-1')
+      const after = { ...(board.rows.find((r) => r.id === 'overdue-1') as any) }
+
+      const second = await board.archiveChore('overdue-1')
+
+      expect(second.ok).toBe(true)
+      expect(board.rows.find((r) => r.id === 'overdue-1')).toEqual(after)
+    })
+
+    it('never deletes the row', async () => {
+      const board = createBoardDriver(buildMixedRows())
+      await board.archiveChore('overdue-1')
+
+      expect(board.rows).toHaveLength(3)
+    })
+
+    it('clears the editor when the archived chore is being edited', async () => {
+      const board = createBoardDriver(buildMixedRows())
       board.beginEdit('overdue-1')
       expect(board.editor.choreId).toBe('overdue-1')
 
-      board.archiveChore('overdue-1')
+      await board.archiveChore('overdue-1')
 
       expect(board.editor).toEqual(emptyEditorState)
     })
 
-    it('preserves editor when archiving a different chore', () => {
-      const board = createBoardDriver(buildMixedBoard())
+    it('preserves the editor when archiving a different chore', async () => {
+      const board = createBoardDriver(buildMixedRows())
       board.beginEdit('due-1')
 
-      board.archiveChore('overdue-1')
+      await board.archiveChore('overdue-1')
 
       expect(board.editor.choreId).toBe('due-1')
     })
 
-    it('removes the chore from visible sections', () => {
-      const board = createBoardDriver(buildMixedBoard())
-      board.archiveChore('overdue-1')
+    it('removes the chore from visible sections', async () => {
+      const board = createBoardDriver(buildMixedRows())
+      await board.archiveChore('overdue-1')
 
       const sections = board.sections
-      const allVisible = [...sections.overdue, ...sections.due, ...sections.upcoming]
-      expect(allVisible.find((c) => c.id === 'overdue-1')).toBeUndefined()
+      const visible = [...sections.overdue, ...sections.dueSoon, ...sections.upcoming]
+      expect(visible.find((c) => c.id === 'overdue-1')).toBeUndefined()
     })
   })
 })

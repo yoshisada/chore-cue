@@ -62,7 +62,7 @@ function MemberCard({
       </YStack>
 
       <Button size="$3" variant="outlined" onPress={() => onRemove(member.id)}>
-        Remove
+        Deactivate
       </Button>
     </XStack>
   )
@@ -75,9 +75,15 @@ export const MembersPage = memo(() => {
 
   const Container = isWeb ? YStack : ScrollView
 
+  // members are deactivated, never deleted: chore assignee FKs are
+  // ON DELETE RESTRICT, so removing a row would orphan history
   const handleAdd = () => {
-    addMember()
+    void addMember()
     setAddOpen(false)
+  }
+
+  const handleRemove = (memberId: string) => {
+    void removeMember(memberId)
   }
 
   return (
@@ -201,7 +207,7 @@ export const MembersPage = memo(() => {
                   key={member.id}
                   member={member}
                   index={index}
-                  onRemove={removeMember}
+                  onRemove={handleRemove}
                 />
               ))}
             </YStack>
