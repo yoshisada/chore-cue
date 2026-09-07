@@ -156,14 +156,16 @@ describe('ChoreHomePage – write failures are surfaced, never swallowed', () =>
   it('toasts when a bump is rejected', async () => {
     setBoard({
       sections: createSections([buildDueChore({ id: 'd1' })]),
-      sendBump: vi.fn().mockResolvedValue(false),
+      sendBump: vi
+        .fn()
+        .mockResolvedValue({ ok: false, reason: 'Daily bump limit reached' }),
     })
 
     renderWithProviders(<ChoreHomePage />)
     fireEvent.click(screen.getByText('Bump'))
 
     await waitFor(() => expect(showToast).toHaveBeenCalledOnce())
-    expect(showToast.mock.calls[0]?.[0]).toContain('Bump not sent')
+    expect(showToast.mock.calls[0]?.[0]).toBe('Daily bump limit reached')
   })
 
   it('stays quiet when a bump is accepted', async () => {
@@ -276,7 +278,9 @@ describe('ChoreHomePage – empty, loading and filtered-empty are distinct', () 
     })
 
     renderWithProviders(<ChoreHomePage />)
+    // both chips must survive an active search — before the fix, allTags was
+    // derived from the post-search list and the whole chip row vanished
     expect(screen.getByText('Bathroom')).toBeTruthy()
-    expect(screen.getAllByText('Kitchen').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getByText('No chores match your filters')).toBeTruthy()
   })
 })

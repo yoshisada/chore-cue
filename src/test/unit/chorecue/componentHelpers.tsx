@@ -71,7 +71,7 @@ export function buildMockBoardState(
     updateComposer: vi.fn(),
     addChore: vi.fn().mockResolvedValue({ ok: true }),
     completeChore: vi.fn().mockResolvedValue({ ok: true }),
-    sendBump: vi.fn().mockResolvedValue(true),
+    sendBump: vi.fn().mockResolvedValue({ ok: true }),
     beginEdit: vi.fn(),
     cancelEdit: vi.fn(),
     updateEditor: vi.fn(),

@@ -18,7 +18,9 @@ import {
  * their titles claimed contrast measurements; they now measure the rendered
  * colours. the secondary/metadata token (`$color8`) used to sit at 2.76:1 on
  * the light background — below AA for body text — and is now darkened to
- * #766F69; the "secondary text" test below guards that at the real 4.5:1 bar
+ * #6F6862; the "secondary text" test below guards that at the real 4.5:1 bar
+ * against BOTH the page background and the $color2 panel/sheet surface most of
+ * that text actually sits on
  * instead of describing a failure.
  */
 test.use({
@@ -58,24 +60,22 @@ test('a11y: primary text clears AA contrast in dark mode', async ({ page }) => {
 test('a11y: secondary text ($color8) clears AA contrast in both modes', () => {
   // metadata lines — due dates, assignee names, empty-state copy — render at
   // body size in $color8, so WCAG 1.4.3 asks for 4.5:1 against the surface
-  // they sit on. light 4.70, dark 6.03.
-  expect(
-    contrastRatio(
-      hexToRgb(playfulLightTheme.color8),
-      hexToRgb(playfulLightTheme.background)
-    ),
-    `${playfulLightTheme.color8} on the light background`
-  ).toBeGreaterThanOrEqual(AA_TEXT)
+  // they sit on — which is usually the $color2 panel/sheet, not the page
+  // background. light: 5.21 on bg, 4.91 on $color2; dark: 6.03 on bg, 5.5 on $color2.
+  const surfaces = [
+    [playfulLightTheme.color8, playfulLightTheme.background, 'light background'],
+    [playfulLightTheme.color8, playfulLightTheme.color2, 'light panel surface ($color2)'],
+    [playfulDarkTheme.color8, playfulDarkTheme.background, 'dark background'],
+    [playfulDarkTheme.color8, playfulDarkTheme.color2, 'dark panel surface ($color2)'],
+  ] as const
 
-  expect(
-    contrastRatio(
-      hexToRgb(playfulDarkTheme.color8),
-      hexToRgb(playfulDarkTheme.background)
-    ),
-    `${playfulDarkTheme.color8} on the dark background`
-  ).toBeGreaterThanOrEqual(AA_TEXT)
+  for (const [text, surface, label] of surfaces) {
+    expect(
+      contrastRatio(hexToRgb(text), hexToRgb(surface)),
+      `${text} on the ${label}`
+    ).toBeGreaterThanOrEqual(AA_TEXT)
+  }
 })
-
 test('a11y: button labels clear AA contrast against their own background', async ({
   page,
 }) => {

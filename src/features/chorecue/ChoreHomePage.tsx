@@ -23,6 +23,7 @@ import { H1, H3 } from '~/interface/text/Headings'
 import { showToast } from '~/interface/toast/helpers'
 import {
   choreStateColors,
+  errorTextColors,
   memberAccentColors,
   type HexColor,
 } from '~/tamagui/themes/playfulHousehold'
@@ -142,7 +143,8 @@ function SectionLabel({ children, accent }: { children: string; accent?: boolean
 
 /** inline, in-place feedback for a write the board refused to make */
 function FormError({ testID, message }: { testID: string; message: string | null }) {
-  const color = useStateColor('overdue')
+  const themeName = useThemeName()
+  const color = errorTextColors[themeName.startsWith('dark') ? 'dark' : 'light']
 
   if (!message) {
     return null
@@ -440,7 +442,6 @@ export const ChoreHomePage = memo(() => {
     sections.dueSoon.length > 0 ||
     sections.upcoming.length > 0
 
-  const hasActiveFilters = searchQuery.trim().length > 0 || selectedTags.size > 0
   // an empty board means one of three different things, and they need three
   // different answers: still syncing, genuinely empty, or filtered to nothing
   const showLoading = isLoading && !hasVisibleChores
@@ -513,11 +514,9 @@ export const ChoreHomePage = memo(() => {
   }
 
   const handleBump = async (choreId: string) => {
-    const sent = await sendBump(choreId)
-    if (!sent) {
-      showToast('Bump not sent — check the daily limit and the assignee', {
-        type: 'error',
-      })
+    const result = await sendBump(choreId)
+    if (!result.ok) {
+      showToast(result.reason ?? 'Bump not sent', { type: 'error' })
     }
   }
 

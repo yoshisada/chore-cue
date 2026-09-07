@@ -28,7 +28,7 @@ describe('useChoreBoard – bump quota and eligibility', () => {
     const board = renderBoard({ chores: buildMixedRows() })
     const accepted = await board.sendBump('overdue-1')
 
-    expect(accepted).toBe(true)
+    expect(accepted.ok).toBe(true)
     expect(board.board().bumpCount).toBe(1)
 
     const [bump] = board.bumps()
@@ -52,7 +52,7 @@ describe('useChoreBoard – bump quota and eligibility', () => {
     const board = renderBoard({ chores: buildMixedRows() })
 
     for (let i = 0; i < 5; i++) {
-      expect(await board.sendBump('overdue-1')).toBe(true)
+      expect((await board.sendBump('overdue-1')).ok).toBe(true)
     }
 
     expect(board.board().bumpCount).toBe(5)
@@ -66,7 +66,8 @@ describe('useChoreBoard – bump quota and eligibility', () => {
       await board.sendBump('overdue-1')
     }
 
-    expect(await board.sendBump('overdue-1')).toBe(false)
+    const rejected = await board.sendBump('overdue-1')
+    expect(rejected).toEqual({ ok: false, reason: 'Daily bump limit reached' })
     expect(board.board().bumpCount).toBe(5)
     expect(board.zero.mutate.bumpEvent.send).toHaveBeenCalledTimes(5)
   })
@@ -153,7 +154,10 @@ describe('useChoreBoard – bump quota and eligibility', () => {
       chores: [buildOverdueRow({ id: 'mine', assigneeMemberId: VIEWER_MEMBER_ID })],
     })
 
-    expect(await board.sendBump('mine')).toBe(false)
+    expect(await board.sendBump('mine')).toEqual({
+      ok: false,
+      reason: "You can't bump your own chore",
+    })
     expect(board.card('mine')?.bumpBlockedReason).toBe('self')
     expect(board.board().bumpCount).toBe(0)
     expect(board.zero.mutate.bumpEvent.send).not.toHaveBeenCalled()
@@ -164,7 +168,8 @@ describe('useChoreBoard – bump quota and eligibility', () => {
     await board.archiveChore('overdue-1')
 
     expect(board.card('overdue-1')).toBeUndefined()
-    expect(await board.sendBump('overdue-1')).toBe(false)
+    const rejected = await board.sendBump('overdue-1')
+    expect(rejected).toEqual({ ok: false, reason: 'Chore not found' })
     expect(board.zero.mutate.bumpEvent.send).not.toHaveBeenCalled()
   })
 

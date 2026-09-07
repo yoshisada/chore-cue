@@ -11,7 +11,7 @@ const SOFT_WHITE = '#FAF9F7'
 const WARM_CREAM = '#F0EDE8'
 // Secondary/metadata text. 4.70:1 on SOFT_WHITE — clears WCAG AA (4.5:1) for
 // body text while staying a muted warm gray.
-const WARM_GRAY = '#766F69'
+const WARM_GRAY = '#6F6862'
 const DEEP_CHARCOAL = '#2C2825'
 
 // Teal accent — warm, approachable replacement for gold
@@ -128,6 +128,17 @@ export type HexColor = `#${string}`
  *
  * `overdue` is additionally used as error text (MembersPage) at body size.
  */
+/**
+ * body-size error text. `overdue` is a graphical-object colour (3:1 bar) and
+ * fails AA (4.5:1) as body text, so errors get their own darker token:
+ * light #B33A3A is 5.25:1 on the $color2 sheet surface; dark reuses the
+ * overdue tone, which already clears 5.5:1 on dark sheets.
+ */
+export const errorTextColors = {
+  light: '#B33A3A',
+  dark: '#F28B82',
+} as const
+
 export const choreStateColors = {
   light: {
     overdue: '#D94F4F',

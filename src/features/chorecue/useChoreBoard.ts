@@ -21,7 +21,7 @@ import {
   sortVisibleChores,
 } from './boardState'
 import { toChoreCard } from './choreMapping'
-import { bumpEligibility } from './choreRules'
+import { bumpEligibility, BumpRejected, describeBumpBlocked } from './choreRules'
 import { toRule } from './recurrence'
 import { localDateKey } from './timezone'
 import { useNowTick } from './useNowTick'
@@ -191,9 +191,9 @@ export function useChoreBoard(options: { now?: number } = {}) {
   )
 
   const sendBump = useCallback(
-    async (choreId: string): Promise<boolean> => {
+    async (choreId: string): Promise<BoardActionResult> => {
       const chore = chores.find((item) => item.id === choreId)
-      if (!chore) return false
+      if (!chore) return { ok: false, reason: 'Chore not found' }
 
       // the same predicate the server runs — checked here only to avoid a
       // pointless round trip and to keep the button honest
@@ -201,7 +201,9 @@ export function useChoreBoard(options: { now?: number } = {}) {
         viewerMemberId,
         bumpsUsedToday: bumpCount,
       })
-      if (!verdict.canBump) return false
+      if (!verdict.canBump) {
+        return { ok: false, reason: describeBumpBlocked(verdict.reason) }
+      }
 
       try {
         await zero.mutate.bumpEvent.send({
@@ -210,9 +212,13 @@ export function useChoreBoard(options: { now?: number } = {}) {
           messageType: 'gentle_nudge',
           now,
         })
-        return true
-      } catch {
-        return false
+        return OK
+      } catch (error) {
+        // the server refuses with a typed BumpRejected — surface its rule
+        if (error instanceof BumpRejected) {
+          return { ok: false, reason: describeBumpBlocked(error.reason) }
+        }
+        return failure(error)
       }
     },
     [chores, viewerMemberId, bumpCount, now]

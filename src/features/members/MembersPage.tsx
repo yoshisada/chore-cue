@@ -17,7 +17,7 @@ import { Input } from '~/interface/forms/Input'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { H1, H3 } from '~/interface/text/Headings'
 import { showToast } from '~/interface/toast/helpers'
-import { choreStateColors, memberAccentColors } from '~/tamagui/themes/playfulHousehold'
+import { errorTextColors, memberAccentColors } from '~/tamagui/themes/playfulHousehold'
 
 import { useMemberBoard } from './useMemberBoard'
 
@@ -54,7 +54,7 @@ function FormError({ message }: { message: string | null }) {
       testID="member-add-error"
       fontFamily="$body"
       size="$2"
-      color={choreStateColors[mode].overdue}
+      color={errorTextColors[mode]}
     >
       {message}
     </SizableText>

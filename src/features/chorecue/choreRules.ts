@@ -57,6 +57,24 @@ export type BumpBlockedReason =
   | 'daily-limit'
   | 'invalid-template'
 
+/** the toast/inline copy for each way a bump can be refused */
+export function describeBumpBlocked(reason: BumpBlockedReason): string {
+  switch (reason) {
+    case 'archived':
+      return 'This chore is archived'
+    case 'self':
+      return "You can't bump your own chore"
+    case 'unassigned':
+      return 'This chore has no assignee to bump'
+    case 'inactive-assignee':
+      return 'The assignee is no longer an active member'
+    case 'daily-limit':
+      return 'Daily bump limit reached'
+    case 'invalid-template':
+      return 'That bump message is not available'
+  }
+}
+
 export class BumpRejected extends Error {
   readonly reason: BumpBlockedReason
 
