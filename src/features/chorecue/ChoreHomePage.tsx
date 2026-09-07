@@ -132,7 +132,12 @@ function SectionHeader({
         </SizableText>
       </XStack>
       <View bg="$color3" px="$2" py="$1" borderRadius="$2">
-        <SizableText fontFamily="$body" size="$1" color="$color8">
+        <SizableText
+          testID="chore-section-count"
+          fontFamily="$body"
+          size="$1"
+          color="$color8"
+        >
           {count}
         </SizableText>
       </View>
@@ -167,6 +172,7 @@ function ChoreCardItem({
 
   return (
     <XStack
+      testID="chore-card"
       borderRadius="$4"
       borderLeftWidth={4}
       borderLeftColor={stateColor}
@@ -178,7 +184,13 @@ function ChoreCardItem({
       hoverStyle={{ bg: '$color2', scale: 1.01 }}
       pressStyle={{ scale: 0.98, opacity: 0.9 }}
     >
-      <Avatar image={null} name={item.assigneeName} size="md" accentColor={accentColor} />
+      <Avatar
+        testID="chore-card-avatar"
+        image={null}
+        name={item.assigneeName}
+        size="md"
+        accentColor={accentColor}
+      />
 
       <YStack flex={1} gap="$1">
         <XStack items="baseline" gap="$2" flexWrap="wrap">
@@ -213,6 +225,7 @@ function ChoreCardItem({
           </Button>
           <YStack gap="$1">
             <Button
+              testID="chore-bump-button"
               size="$3"
               variant="outlined"
               disabled={!item.canBump}
@@ -221,7 +234,12 @@ function ChoreCardItem({
               {item.canBump ? 'Bump' : 'No bump'}
             </Button>
             {item.bumpBlockedReason ? (
-              <SizableText fontFamily="$body" size="$1" color="$color8">
+              <SizableText
+                testID="chore-bump-blocked-reason"
+                fontFamily="$body"
+                size="$1"
+                color="$color8"
+              >
                 {BUMP_BLOCKED_LABELS[item.bumpBlockedReason]}
               </SizableText>
             ) : null}
@@ -239,6 +257,7 @@ function ChoreCardItem({
 
 function Section({
   title,
+  testID,
   items,
   stateColor,
   memberNames,
@@ -248,6 +267,7 @@ function Section({
   onArchive,
 }: {
   title: string
+  testID: string
   items: ChoreCard[]
   stateColor?: string
   memberNames: string[]
@@ -261,7 +281,7 @@ function Section({
   }
 
   return (
-    <YStack gap="$2">
+    <YStack testID={testID} gap="$2">
       <SectionHeader title={title} count={items.length} stateColor={stateColor} />
 
       {items.map((item) => (
@@ -302,6 +322,7 @@ function ChoreSections({
     <YStack gap="$6">
       <Section
         title="Overdue"
+        testID="chore-section-overdue"
         items={sections.overdue}
         stateColor={overdueColor}
         memberNames={memberNames}
@@ -312,6 +333,7 @@ function ChoreSections({
       />
       <Section
         title="Due Soon"
+        testID="chore-section-dueSoon"
         items={sections.dueSoon}
         stateColor={dueColor}
         memberNames={memberNames}
@@ -322,6 +344,7 @@ function ChoreSections({
       />
       <Section
         title="Upcoming"
+        testID="chore-section-upcoming"
         items={sections.upcoming}
         stateColor={upcomingColor}
         memberNames={memberNames}
@@ -426,6 +449,7 @@ export const ChoreHomePage = memo(() => {
 
   return (
     <Container
+      testID="chore-board"
       flex={1}
       bg="$background"
       {...(!isWeb && {
@@ -507,7 +531,11 @@ export const ChoreHomePage = memo(() => {
               enterStyle={{ opacity: 0 }}
               exitStyle={{ opacity: 0 }}
             />
-            <Sheet.Frame bg="$color2" boxShadow="0 0 10px $shadow4">
+            <Sheet.Frame
+              testID="chore-create-sheet"
+              bg="$color2"
+              boxShadow="0 0 10px $shadow4"
+            >
               <ScrollView flex={1} contentContainerStyle={{ padding: 24 }}>
                 <YStack gap="$4">
                   <SectionLabel>Create a chore</SectionLabel>
@@ -597,7 +625,11 @@ export const ChoreHomePage = memo(() => {
                 enterStyle={{ opacity: 0 }}
                 exitStyle={{ opacity: 0 }}
               />
-              <Sheet.Frame bg="$color2" boxShadow="0 0 10px $shadow4">
+              <Sheet.Frame
+                testID="chore-edit-sheet"
+                bg="$color2"
+                boxShadow="0 0 10px $shadow4"
+              >
                 <ScrollView flex={1} contentContainerStyle={{ padding: 24 }}>
                   <YStack gap="$4">
                     <SectionLabel>Edit chore</SectionLabel>
@@ -673,6 +705,7 @@ export const ChoreHomePage = memo(() => {
           {/* Chore sections */}
           {hasNoChores ? (
             <YStack
+              testID="chore-board-empty"
               borderRadius="$4"
               bg="$color2"
               pt="$8"

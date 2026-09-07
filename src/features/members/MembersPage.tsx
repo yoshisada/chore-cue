@@ -43,6 +43,7 @@ function MemberCard({
 
   return (
     <XStack
+      testID="member-card"
       borderRadius="$4"
       bg="$color2"
       p="$4"
@@ -52,7 +53,13 @@ function MemberCard({
       pressStyle={{ scale: 0.98, opacity: 0.9 }}
       transition="playfulQuick"
     >
-      <Avatar image={null} name={member.name} size="lg" accentColor={accentColor} />
+      <Avatar
+        testID="member-avatar"
+        image={null}
+        name={member.name}
+        size="lg"
+        accentColor={accentColor}
+      />
 
       <YStack flex={1} gap="$1">
         <H3 size="$5">{member.name}</H3>
@@ -88,6 +95,7 @@ export const MembersPage = memo(() => {
 
   return (
     <Container
+      testID="members-page"
       flex={1}
       bg="$background"
       {...(!isWeb && {
@@ -137,7 +145,11 @@ export const MembersPage = memo(() => {
               enterStyle={{ opacity: 0 }}
               exitStyle={{ opacity: 0 }}
             />
-            <Sheet.Frame bg="$color2" boxShadow="0 0 10px $shadow4">
+            <Sheet.Frame
+              testID="member-add-sheet"
+              bg="$color2"
+              boxShadow="0 0 10px $shadow4"
+            >
               <ScrollView flex={1} contentContainerStyle={{ padding: 24 }}>
                 <YStack gap="$4">
                   <SectionLabel>Add a member</SectionLabel>
@@ -175,6 +187,7 @@ export const MembersPage = memo(() => {
           {/* Member List */}
           {members.length === 0 ? (
             <YStack
+              testID="members-empty"
               borderRadius="$4"
               bg="$color2"
               pt="$8"

@@ -1,5 +1,18 @@
 import { test, expect } from '@playwright/test'
 
+import { LIGHT_BACKGROUND, backgroundColorsInUse, hexToCssRgb } from './support/ui'
+
+/**
+ * post-migration runtime smoke tests.
+ *
+ * three cases were removed from this file: the two "luxury editorial preserved"
+ * assertions (zero border radius, serif headings) describe the design the
+ * playful-household redesign replaced — rounded corners and Inter are now the
+ * contract, asserted in flow-04 and flow-08 — and the skipped "Zero sync
+ * round-trip" placeholder carried no assertions. that round trip is now covered
+ * for real by `src/test/integration/chorecue/chore-create.spec.ts`
+ * ("a created chore survives a page reload").
+ */
 test.use({
   video: 'retain-on-failure',
   trace: 'retain-on-failure',
@@ -45,64 +58,16 @@ test('kit/SC-003: No app-level JS console errors on initial load after migration
   ).toHaveLength(0)
 })
 
-test('kit/SC-008: Luxury editorial theme preserved — warm background, no pure white/black', async ({
+test('kit/SC-008: the warm palette survived the migration — no pure white', async ({
   page,
 }) => {
+  await page.emulateMedia({ colorScheme: 'light' })
   await page.goto('http://localhost:8081')
-  // Step 1: Verify page renders with luxury editorial background (not pure white)
-  // Step 2: Verify charcoal text (not pure black)
   await expect(page.locator('body')).toBeVisible()
-  // Check background is not #FFFFFF
+
   const bgColor = await page.evaluate(
     () => window.getComputedStyle(document.body).backgroundColor
   )
-  // Pure white is rgb(255, 255, 255)
   expect(bgColor, 'Background should not be pure white').not.toBe('rgb(255, 255, 255)')
-})
-
-test('kit/SC-008: Luxury editorial theme preserved — zero border radius on interactive elements', async ({
-  page,
-}) => {
-  await page.goto('http://localhost:8081')
-  // Step 1: Find buttons and check border-radius is 0
-  const buttons = page.locator('button')
-  const count = await buttons.count()
-  if (count > 0) {
-    const borderRadius = await buttons
-      .first()
-      .evaluate((el) => window.getComputedStyle(el).borderRadius)
-    expect(borderRadius, 'Buttons should have 0 border radius').toBe('0px')
-  }
-})
-
-test('kit/SC-008: Luxury editorial theme preserved — serif font used for headings', async ({
-  page,
-}) => {
-  await page.goto('http://localhost:8081')
-  // Step 1: Find heading elements, check font-family is a serif
-  const headings = page.locator('h1, h2, [role="heading"]')
-  const count = await headings.count()
-  if (count > 0) {
-    const fontFamily = await headings
-      .first()
-      .evaluate((el) => window.getComputedStyle(el).fontFamily)
-    // Should contain Playfair Display or a serif fallback
-    const isSerif =
-      fontFamily.toLowerCase().includes('playfair') ||
-      fontFamily.toLowerCase().includes('georgia') ||
-      fontFamily.toLowerCase().includes('times') ||
-      fontFamily.toLowerCase().includes('serif')
-    expect(isSerif, `Heading font-family "${fontFamily}" is not a serif`).toBe(true)
-  }
-})
-
-test.skip('kit/US-001: Zero sync connects and data flows after migration — requires credentials', async ({
-  page,
-}) => {
-  // blocked:credentials
-  // Step 1: Ensure backend is running (bun backend)
-  // Step 2: Log in
-  // Step 3: Create a chore
-  // Step 4: Verify chore syncs via Zero websocket
-  // Step 5: Reload and verify chore persists (confirms Zero sync round-trip)
+  expect(await backgroundColorsInUse(page)).toContain(hexToCssRgb(LIGHT_BACKGROUND))
 })

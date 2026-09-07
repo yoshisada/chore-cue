@@ -34,6 +34,7 @@ export const MainHeader = () => {
                 {members.slice(0, 4).map((member, index) => (
                   <Avatar
                     key={member.id}
+                    testID="header-member-avatar"
                     image={null}
                     name={member.name}
                     size="sm"

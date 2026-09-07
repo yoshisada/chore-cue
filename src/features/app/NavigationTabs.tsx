@@ -36,6 +36,7 @@ export function NavigationTabs() {
         return (
           <Link key={route.name} href={route.href}>
             <Pressable
+              testID={`nav-tab-${route.name}`}
               px="$4"
               py="$2"
               bg={isActive ? '$color3' : 'transparent'}
